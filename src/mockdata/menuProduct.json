@@ -1,0 +1,6 @@
+[
+  { "id": 1, "icon": "bar-chart-2", "title": "screen.module.product.tab_all","tab" :"all","colorActive" :"#ea6c45"},
+  { "id": 2, "icon": "tag", "title": "screen.module.product.tab_imei","tab" :"imei","colorActive" :"#e69c40"},
+  { "id": 3,"icon": "star","title": "screen.module.product.tab_master","tab" :"is_master","colorActive" :"#6297eb"},
+  { "id": 4, "icon": "twitch", "title":"screen.module.product.tab_low_stock","tab" :"low_stock","colorActive" :"#a3becb"}
+]

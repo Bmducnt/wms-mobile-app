@@ -1,0 +1,9 @@
+[
+    { "id": 1, "icon": "alert-circle", "title": "screen.module.putaway.status_awaiting_inbound","tab" :1,"colorActive" :"#fd0d37"},
+    { "id": 2, "icon": "check-circle", "title": "screen.module.putaway.status_done_inbound","tab" :2,"colorActive" :"#29bca7"},
+    { "id": 3,"icon": "clipboard","title": "screen.module.putaway.status_awaiting_rma","tab" :3,"colorActive" :"#fecc01"},
+    { "id": 4, "icon": "check-circle", "title": "screen.module.putaway.status_done_rma" ,"tab" :4,"colorActive" :"#45bd63"},
+    { "id": 5, "icon": "slash", "title": "screen.module.putaway.status_damaged_rma" ,"tab" :5,"colorActive" :"#fd0d37"},
+    { "id": 6, "icon": "repeat", "title": "screen.module.putaway.status_fail_picking" ,"tab" :6,"colorActive" :"#fd0d37"}
+]
+  

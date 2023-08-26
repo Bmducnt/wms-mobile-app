@@ -1,0 +1,39 @@
+{
+    "project_info": {
+      "project_number": "1028035357322",
+      "project_id": "merchant-center-1571193030830",
+      "storage_bucket": "merchant-center-1571193030830.appspot.com"
+    },
+    "client": [
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:1028035357322:android:3f59fded6174d041675b73",
+          "android_client_info": {
+            "package_name": "asia.boxme.wms"
+          }
+        },
+        "oauth_client": [
+          {
+            "client_id": "1028035357322-ebv50hrmt1bl5numnq46b6ihbqr58r5o.apps.googleusercontent.com",
+            "client_type": 3
+          }
+        ],
+        "api_key": [
+          {
+            "current_key": "AIzaSyD4IQQju7Zoql36Mt4FhQrUQvJ0CcixoEY"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": [
+              {
+                "client_id": "1028035357322-ebv50hrmt1bl5numnq46b6ihbqr58r5o.apps.googleusercontent.com",
+                "client_type": 3
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "configuration_version": "1"
+  }

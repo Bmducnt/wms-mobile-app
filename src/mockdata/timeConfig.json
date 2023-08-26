@@ -1,0 +1,6 @@
+[
+    { "id": 0, "icon": "circle", "title": "screen.module.packed.time_now","tab" :86820,"colorActive" :"#ea6c45"},
+    { "id": 1, "icon": "circle", "title": "screen.module.packed.time_7","tab" :691200,"colorActive" :"#ea6c45"},
+    { "id": 2, "icon": "circle", "title": "screen.module.packed.time_14","tab" :1296000,"colorActive" :"#e69c40"},
+    { "id": 3,"icon": "circle","title": "screen.module.packed.time_1_m","tab" :2678400,"colorActive" :"#6297eb"}
+  ]

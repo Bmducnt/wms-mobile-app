@@ -1,0 +1,4 @@
+[
+    { "id": 0,"icon": "target","title": "screen.module.pickup.detail.tab_2","tab" :0,"colorActive" :"#157aff"},
+    { "id": 1, "icon": "map-pin", "title": "screen.module.pickup.detail.tab_1","tab" :1,"colorActive" :"#e69c40"}
+  ]

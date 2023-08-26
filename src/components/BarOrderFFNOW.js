@@ -1,0 +1,93 @@
+import * as React from 'react';
+import PropTypes from 'prop-types';
+import moment from 'moment';
+import { 
+  StyleSheet, 
+  Text, 
+  TouchableOpacity, 
+  View,
+  ActivityIndicator 
+} from 'react-native';
+import { withNavigation } from 'react-navigation';
+
+import * as Animatable from "react-native-animatable";
+import { 
+  colors,
+  gStyle } from '../constants';
+class BarOrderFFNOW extends React.Component {
+
+  constructor() {
+    super();
+  }
+
+  render() {
+    const { 
+      navigation, 
+      orderffNow,
+      timeRequest,
+      loading } = this.props;
+    const { t } = this.props.screenProps;
+    return (
+      <View
+        style={styles.container}
+      >
+        <View style={[gStyle.flexRowSpace,gStyle.flexRowCenterAlign]}> 
+            <View style={{width:'70%'}}>
+              <Text style={{
+                  ...gStyle.textBoxme14,
+                    color: colors.white,
+                }}
+                numberOfLines={1}
+              >{t('screen.module.home.handover_total')} {orderffNow} {t('screen.module.home.report_order.ff_now')}</Text>
+              <Text style={{
+                    ...gStyle.textBoxme10,
+                    color: colors.greyInactive}}
+              >{moment(timeRequest).fromNow()}</Text>
+            </View>
+            <Animatable.View
+                        style={gStyle.flexRowCenterAlign}
+                        animation={ "flash"}
+                        iterationCount={10}
+                    >
+              <TouchableOpacity
+                activeOpacity={1}
+                style={{
+                  paddingHorizontal:6,
+                  paddingVertical:8,
+                  backgroundColor:colors.darkgreen,
+                  borderRadius:2
+                }}
+                onPress={() => navigation.navigate("ModelListStaff", {is_ff_now : true})}
+              >
+                {!loading ? <Text style={{
+                    fontSize:14,
+                    color: colors.white}}>{t('screen.module.home.report_order.tab_create_pk')}
+                </Text>:<ActivityIndicator/>}
+              </TouchableOpacity>
+            </Animatable.View>
+        </View>
+      </View>
+    );
+  }
+}
+
+BarOrderFFNOW.defaultProps = {
+  song: null
+};
+
+BarOrderFFNOW.propTypes = {
+  // required
+  navigation: PropTypes.object.isRequired,
+};
+
+const styles = StyleSheet.create({
+  container: {
+    alignSelf: 'center',
+    backgroundColor: colors.borderLight,
+    paddingVertical: 8,
+    paddingHorizontal:10,
+    width: '100%'
+  }
+});
+
+export default withNavigation(BarOrderFFNOW);

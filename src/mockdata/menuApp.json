@@ -1,0 +1,17 @@
+[
+  
+  
+  { "id": 2, "icon": "handover", "title": "screen.menu.handoverd",
+            "action" : "ListHandover","parram" : {"is_handover": true},"color": "#40e44e"},
+  { "id": 3,"icon": "rma","title": "screen.menu.received","action" : "ListHandover",
+            "parram" : {"is_handover": false},"color": "#2b64f8"},
+  { "id": 4, "icon": "putaway", "title": "screen.menu.putaway","action" : "PutawayLists","parram" : {},"color": "#61abdd"},
+  { "id": 6, "icon": "product", "title": "screen.menu.product","action" : "Products","parram" : {},"color": "#fa7ab8"},
+  { "id": 5, "icon": "move", "title": "screen.menu.move","action" : "MoveProducts","parram" : {},"color": "#feba31"},
+  { "id": 7, "icon": "inbound", "title": "screen.menu.quickmenu.pickup","action" : "ModelReceivedShipment","parram" : {},"color": "#fff"},
+  { "id": 8, "icon": "more", "title": "screen.menu.quickmenu.more",
+    "action" : "ModalImageBase","parram" : {"is_tracking": 1},"color": "#fff"},
+
+    { "id": 9, "icon": "quality_control", "title": "screen.menu.quickmenu.quality_control",
+    "action" : "QcScreens","parram" : {},"color": "#fff"}
+]

@@ -1,0 +1,33 @@
+
+[
+  {
+    "id": 1,
+    "icon": "circle",
+    "title": "Boxme HCM",
+    "lib": "FontAwesome"
+  },
+  {
+    "id": 2,
+    "icon": "circle",
+    "title": "Boxme HN",
+    "lib": "MaterialCommunityIcons"
+  },
+  {
+    "id": 3,
+    "icon": "circle",
+    "title": "Boxme Thailand",
+    "lib": "Entypo"
+  },
+  {
+    "id": 4,
+    "icon": "heart-o",
+    "title": "Boxme Indo",
+    "lib": "FontAwesome"
+  },
+  {
+    "id": 5,
+    "icon": "circle",
+    "title": "Boxme Philippines",
+    "lib": "MaterialIcons"
+  }
+]

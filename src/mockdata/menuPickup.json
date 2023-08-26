@@ -1,0 +1,5 @@
+[
+    { "id": 1, "icon": "alert-circle", "title": "screen.module.pickup.list.status_await","tab" :1,"colorActive" :"#45bd63"},
+    { "id": 2, "icon": "truck", "title": "screen.module.pickup.list.status_doing","tab" :2,"colorActive" :"#e69c40"},
+    { "id": 3,"icon": "clipboard","title": "screen.module.pickup.list.status_done","tab" :3,"colorActive" :"rgb(245, 84, 89)"}
+]

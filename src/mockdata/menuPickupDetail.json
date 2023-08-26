@@ -1,0 +1,5 @@
+[
+  { "id": 3,"icon": "circle","title": "screen.module.pickup.detail.tab_3","tab" :3,"colorActive" :"#ea465f"},
+  { "id": 1, "icon": "circle", "title": "screen.module.pickup.detail.tab_1","tab" :1,"colorActive" :"#e69c40"},
+  { "id": 4,"icon": "circle","title": "screen.module.pickup.detail.tab_4","tab" :4,"colorActive" :"#6d81f5"}
+]

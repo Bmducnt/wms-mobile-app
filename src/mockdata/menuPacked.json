@@ -1,0 +1,5 @@
+[
+    { "id": 1, "icon": "alert-circle", "title": "screen.module.packed.status_awaiting","tab" :402,"colorActive" :"#ffb822"},
+    { "id": 2, "icon": "alert-circle", "title": "screen.module.packed.status_doing","tab" :403,"colorActive" :"#45bd63"},
+    { "id": 3, "icon": "truck", "title": "screen.module.packed.status_done","tab" :405,"colorActive" :"#e69c40"}
+]
