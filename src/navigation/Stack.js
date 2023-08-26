@@ -1,5 +1,4 @@
-import { createAppContainer, createSwitchNavigator } from 'react-navigation'
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
 
 // navigation
@@ -32,84 +31,68 @@ import UpdateTasks from '../screens/tasks/UpdateTasks';
 import HandoverImages from '../screens/handover/HandoverImages';
 import QcScreens from '../screens/quality_control/QcScreens';
 
-const StackAuthNavigator =  createStackNavigator(
-  {
-    SignInMain: {
-      screen: SignInScreen
-    },
-    ModelWarehouseOption: {
-      screen: ModelWarehouseOption,
-      navigationOptions: {
-        cardStyle: { backgroundColor: colors.blackBg , opacity: 1}
-      }
-    }
-  },
-  {
-    headerMode: 'none',
-    navigationOptions: {
-      tabBarLabel: 'User'
-    },
-    screenOptions:{
-      gestureEnabled: true,
-      gestureDirection: 'horizontal'
-    }
-  }
-);
+const StackAuthNavigator = ()=> {
+    return(
+        <Stack.Navigator
+            initialRouteName="SignInScreen"
+            screenOptions={{
+                  gestureEnabled: true,
+                  gestureDirection: 'horizontal'
+            }}>
+            <Stack.Screen name="SignInScreen" component={SignInScreen} />
+            <Stack.Screen name="ModelWarehouseOption" component={ModelWarehouseOption} />
+        </Stack.Navigator>
+      )
+}
 
 
 
-const StackNavigator = createStackNavigator(
-  {
-    // Main Tab Navigation
-    // /////////////////////////////////////////////////////////////////////////
-    TabNavigation,
+const StackNavigator = ()=> {
+    return (
+        <Stack.Navigator
+            initialRouteName="TabNavigation"
+            screenOptions={{
+                gestureEnabled: true,
+                gestureDirection: 'horizontal',
+                animationEnabled: true,
+            }}>
+            <Stack.Screen name="ModalPutawayUpdate" component={ModalPutawayUpdate} />
+            <Stack.Screen name="ModalPickupUpdate" component={ModalPickupUpdate} />
+            <Stack.Screen name="ModalListCarrier" component={ModalListCarrier} />
+            <Stack.Screen name="ModelHandoverB2B" component={ModelHandoverB2B} />
+            <Stack.Screen name="ModalPickupQRCode" component={ModalPickupQRCode} />
+            <Stack.Screen name="ModalImageBase" component={ModalImageBase} />
+            <Stack.Screen name="UpdateException" component={UpdateException} />
+            <Stack.Screen name="ModelTimelineTracking" component={ModelTimelineTracking} />
+            <Stack.Screen name="ModelReceivedShipment" component={ModelReceivedShipment} />
+            <Stack.Screen name="ModelListStaff" component={ModelListStaff} />
+            <Stack.Screen name="CreateResquest" component={CreateResquest} />
+            <Stack.Screen name="UpdateRequest" component={UpdateRequest} />
+            <Stack.Screen name="SignatureScreenBase" component={SignatureScreenBase} />
+            <Stack.Screen name="RejectHandover" component={RejectHandover} />
+            <Stack.Screen name="MoveModel" component={MoveModel} />
+            <Stack.Screen name="ModalUpdatePacked" component={ModalUpdatePacked} />
+            <Stack.Screen name="AddTasks" component={AddTasks} />
+            <Stack.Screen name="ImagesViewList" component={ImagesViewList} />
+            <Stack.Screen name="UpdateTasks" component={UpdateTasks} />
+            <Stack.Screen name="HandoverImages" component={HandoverImages} />
+            <Stack.Screen name="QcScreens" component={QcScreens} />
+        </Stack.Navigator>
+    )
+}
 
-    // Modals
-    // /////////////////////////////////////////////////////////////////////////
-    ModalPutawayUpdate,
-    ModalPickupUpdate,
-    ModalListCarrier,
-    ModelHandoverB2B,
-    ModalPickupQRCode,
-    ModalQickAction,
-    ModalImageBase,
-    UpdateException,
-    SignatureScreenBase,
-    ModelTimelineTracking,
-    ModelReceivedShipment,
-    ModelListStaff,
-    CreateResquest,
-    UpdateRequest,
-    RejectHandover,
-    MoveModel,
-    ModalUpdatePacked,
-    AddTasks,
-    ImagesViewList,
-    UpdateTasks,
-    HandoverImages,
-    QcScreens
-  },
-  {
-    headerMode: 'none',
-    initialRouteName: 'TabNavigation',
-    mode: 'modal',
-    detachPreviousScreen : true,
-    screenOptions:{
-      gestureEnabled: true,
-      gestureDirection: 'horizontal',
-      animationEnabled: true,
-    }
-  },
-);
+const Stack = createStackNavigator();
+const MainStackNavigator = () => {
+    return (
+        <Stack.Navigator
+            initialRouteName="Auth"
+            screenOptions={{
+                headerShown: false,
+            }}>
+            <Stack.Screen name="App" component={StackNavigator} />
+            <Stack.Screen name="Auth" component={StackAuthNavigator} />
+        </Stack.Navigator>
+    );
+};
 
-const App = createAppContainer(createSwitchNavigator(
-    {
-        App: StackNavigator, 
-        Auth: StackAuthNavigator
-    }, 
-    {
-        initialRouteName: 'Auth'
-    }
-));
-
-export default App;
+export default MainStackNavigator

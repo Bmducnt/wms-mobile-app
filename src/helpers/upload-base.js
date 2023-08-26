@@ -1,5 +1,5 @@
 import mime from "mime";
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
     getRealPath
 } from 'react-native-compressor';

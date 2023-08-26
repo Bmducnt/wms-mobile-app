@@ -6,7 +6,7 @@ import {
   RefreshControl,
 } from "react-native";
 import { colors, gStyle } from "../../constants";
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // components
 import EmptySearch from "../../components/EmptySearch";
@@ -56,7 +56,7 @@ class TabInventoryCycle extends React.PureComponent {
       this._fetchListCycleHandler();
     };
 
-    
+
     sortColorLabel = (status_id, t, estimated_kpi) => {
       const statusLabels = {
         901: {
@@ -113,9 +113,9 @@ class TabInventoryCycle extends React.PureComponent {
               'created_date': result.created_date,
             };
           });
-          
+
           this.setState({ list_cycle_report: list_cycle_report_temp });
-        
+
       } else if (response.status === 403) {
         permissionDenied(this.props.navigation);
       }
@@ -123,7 +123,7 @@ class TabInventoryCycle extends React.PureComponent {
     };
 
     render() {
-      const { 
+      const {
         isloading,
         scrollY,
         list_cycle_report,

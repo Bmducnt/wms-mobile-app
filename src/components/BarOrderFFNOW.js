@@ -1,17 +1,17 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { 
-  StyleSheet, 
-  Text, 
-  TouchableOpacity, 
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
   View,
-  ActivityIndicator 
+  ActivityIndicator
 } from 'react-native';
-import { withNavigation } from 'react-navigation';
+import { NavigationContainer } from '@react-navigation/native';
 
 import * as Animatable from "react-native-animatable";
-import { 
+import {
   colors,
   gStyle } from '../constants';
 class BarOrderFFNOW extends React.Component {
@@ -21,8 +21,8 @@ class BarOrderFFNOW extends React.Component {
   }
 
   render() {
-    const { 
-      navigation, 
+    const {
+      navigation,
       orderffNow,
       timeRequest,
       loading } = this.props;
@@ -31,7 +31,7 @@ class BarOrderFFNOW extends React.Component {
       <View
         style={styles.container}
       >
-        <View style={[gStyle.flexRowSpace,gStyle.flexRowCenterAlign]}> 
+        <View style={[gStyle.flexRowSpace,gStyle.flexRowCenterAlign]}>
             <View style={{width:'70%'}}>
               <Text style={{
                   ...gStyle.textBoxme14,
@@ -90,4 +90,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default withNavigation(BarOrderFFNOW);
+export default NavigationContainer(BarOrderFFNOW);

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
 } from "react-native";
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import DatePicker from 'react-native-date-picker'
 import {_convertDatetimeToTimestamp} from '../../helpers/device-height';
 
@@ -20,14 +20,14 @@ const DatetimeDue = (props) => {
             setlocaleStaff('en_GB')
           };
         };
-        fetchDataStaff();     
+        fetchDataStaff();
       }, []);
 
     const onSelect = async (val) =>{
         props.onSelect(_convertDatetimeToTimestamp(val));
         props.onClose(3);
     };
-    
+
     return (
         <DatePicker
           modal
@@ -45,6 +45,6 @@ const DatetimeDue = (props) => {
 };
 
 const styles = StyleSheet.create({
-    
+
   });
 export default DatetimeDue;

@@ -1,16 +1,16 @@
 import * as React from 'react';
 import axios from 'axios';
-import { 
-  StyleSheet, 
-  Text, 
-  View, 
-  TextInput, 
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
   TouchableOpacity,
   Alert,
   Linking,
   Dimensions} from 'react-native';
 import * as Device from 'expo-device';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   KeyboardAwareScrollView
 } from 'react-native-keyboard-aware-scrollview';
@@ -24,9 +24,9 @@ import loginService from '../services/auth/login';
 import updateTokenApp from '../services/auth/update';
 import ComponentButton from '../components/Button';
 import TextAnimator from '../components/TextAnimator';
-import { 
-  colors, 
-  device, 
+import {
+  colors,
+  device,
   gStyle
 
 } from '../constants';
@@ -36,10 +36,10 @@ export default class SignInScreen extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
-          email: null, 
+          email: null,
           password: null,
           token_app : null,
-          isloading: false, 
+          isloading: false,
           error: false
       };
       this._signInHandler = this._signInHandler.bind(this);
@@ -77,7 +77,7 @@ export default class SignInScreen extends React.Component {
     }else{
       Linking.openURL('market://details?id=id=asia.boxme.wms');
     }
-      
+
   };
 
   _signInHandler = async () =>{
@@ -133,7 +133,7 @@ export default class SignInScreen extends React.Component {
           {cancelable: false},
         );
       }
-      
+
     }
     else {
       Alert.alert(
@@ -190,7 +190,7 @@ export default class SignInScreen extends React.Component {
       {cancelable: false},
     );
   };
-  
+
   render(){
     const { t } = this.props.screenProps;
     const {is_text}  = this.state;
@@ -205,16 +205,16 @@ export default class SignInScreen extends React.Component {
         enableAutomaticScroll={true}>
           <View style={[styles.container]}>
             <View style={{width:Dimensions.get("window").width-60}}>
-              
+
               <Text style={[styles.textLogo,{marginBottom:0}]}>{t('screen.module.authen.welcome')}</Text>
               <Text style={styles.textLogo}>{t('screen.module.authen.back')}</Text>
-              <TextAnimator 
+              <TextAnimator
                 content={t('screen.module.authen.welcome_text')}
                 textStyle={{
                   ...gStyle.textBoxmeBold14,
                   color:colors.white,
                   marginBottom:4,
-                  
+
                 }}
                 style={{
                   paddingLeft:device.iPhoneNotch ? 5:8,
@@ -226,7 +226,7 @@ export default class SignInScreen extends React.Component {
             </View>
             <View style={{alignItems:"center",justifyContent:"center",}}>
               <View style={styles.inputView} >
-                <TextInput  
+                <TextInput
                   style={styles.inputText}
                   value={this.state.email}
                   placeholder={t('screen.module.authen.placeholder_email')}
@@ -235,7 +235,7 @@ export default class SignInScreen extends React.Component {
                   onChangeText={text => this.setState({email:text})}/>
               </View>
               <View style={styles.inputView} >
-                <TextInput  
+                <TextInput
                   secureTextEntry
                   value={this.state.password}
                   style={styles.inputText}

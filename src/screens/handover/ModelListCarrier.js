@@ -8,7 +8,7 @@ import {
     TouchableOpacity,
     Text} from 'react-native';
 import { Feather} from '@expo/vector-icons';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors, gStyle,device} from '../../constants';
 
 // components
@@ -130,13 +130,13 @@ class ModalListCarrier extends React.PureComponent {
                     }
                 </View>
                 {handover_type === 2 ? <View style={styles.containerBottom}>
-                    <TouchableOpacity style={[styles.bottomButton,{backgroundColor:colors.boxmeBrand,width:'20%'}]} 
+                    <TouchableOpacity style={[styles.bottomButton,{backgroundColor:colors.boxmeBrand,width:'20%'}]}
                     onPress={() => this._confirmCreated(2,'b2b')}>
                         <Text style={styles.textButton} numberOfLines={1} ellipsizeMode="tail">
                         B2B
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.bottomButton,{width:'66%'}]} 
+                    <TouchableOpacity style={[styles.bottomButton,{width:'66%'}]}
                     onPress={() => this._confirmCreated(2,'b2c')}>
                         <Text style={styles.textButton} numberOfLines={1} ellipsizeMode="tail">
                         B2C
@@ -146,7 +146,7 @@ class ModalListCarrier extends React.PureComponent {
                     <View style={styles.containerBottom}>
                     <TouchableOpacity style={[styles.bottomButton,
                     {
-                        width:'90%'}]} 
+                        width:'90%'}]}
                     onPress={() => this._confirmCreated(0,'rma')}>
                         <Text style={styles.textButton} numberOfLines={1} ellipsizeMode="tail">{t('screen.module.handover.btn_rma_text')}</Text>
                     </TouchableOpacity>
@@ -190,6 +190,6 @@ const styles = StyleSheet.create({
         color:colors.white,
         ...gStyle.textBoxmeBold14,
     }
-  
+
 });
 export default React.memo(ModalListCarrier);

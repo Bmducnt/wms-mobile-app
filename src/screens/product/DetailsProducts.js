@@ -11,11 +11,11 @@ import {
   ActivityIndicator
 } from 'react-native';
 import { FontAwesome5} from "@expo/vector-icons";
-import { 
-  colors, 
-  device, 
+import {
+  colors,
+  device,
   gStyle,images } from '../../constants';
-import { withNavigation } from 'react-navigation';
+import { NavigationContainer } from '@react-navigation/native';
 
 // components
 import ScreenHeader from '../../components/ScreenHeader';
@@ -24,7 +24,7 @@ import LineBinStock from '../../components/LineBinStock';
 import {_getTimeDefaultFrom,_getTimeDefaultTo} from '../../helpers/device-height';
 
 
-//service api 
+//service api
 import getDetailFnsku from '../../services/products/detail';
 import getBinFnsku from '../../services/products/bin';
 
@@ -147,7 +147,7 @@ class DetailsProducts extends React.Component {
           {isloading && <ActivityIndicator/>}
         </View>
         <View style={styles.containerFixed}>
-            <Image  style={styles.imageReview} 
+            <Image  style={styles.imageReview}
               source={image_product ?
                 {uri:image_product}:
                 images['no_image_available']
@@ -203,11 +203,11 @@ class DetailsProducts extends React.Component {
                   {fnsku_info.outbound_type === 0 && 'fifo'}
                   {fnsku_info.outbound_type === 1 && 'lifo'}
                   {fnsku_info.outbound_type === 2 && 'fefo'}
-                  
+
                 </Text>
               </View>
             <View style={{height:1,backgroundColor:colors.borderLight,marginVertical:8}}></View>
-            
+
         </View>
 
         <Animated.ScrollView
@@ -223,7 +223,7 @@ class DetailsProducts extends React.Component {
           <View style={styles.containerSticky}>
           </View>
           <View style={styles.containerInfo}>
-            
+
             <View style={[gStyle.flexRow,{
                   backgroundColor:colors.boxmeBrand,
                   borderBottomLeftRadius:15,
@@ -240,7 +240,7 @@ class DetailsProducts extends React.Component {
                 </Text>
             </View>
             <View style={[styles.row]}>
-              
+
               <Text style={styles.stockText}>
                 {view_bin_stock ? t('screen.module.product.detail.list_bin'):t('screen.module.product.detail.list_transaction')}
               </Text>
@@ -331,4 +331,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default withNavigation(DetailsProducts);
+export default NavigationContainer(DetailsProducts);

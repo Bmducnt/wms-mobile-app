@@ -1,10 +1,10 @@
 import * as React from 'react';
 import DeviceInfo from 'react-native-device-info';
-import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { colors } from '../constants';
 
 // navigation stacks
-import StackTasks from './StackTasks'; 
+import StackTasks from './StackTasks';
 import StackSearch from './StackSearch';
 import StackLibrary from './StackLibrary';
 import StackCycle from './StackCycle';

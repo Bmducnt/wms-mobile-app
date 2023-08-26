@@ -13,7 +13,7 @@ import {
 import DataWedgeIntents from "react-native-datawedge-intents";
 import * as Print from "expo-print"
 import * as Device from "expo-device"
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {colors, device, gStyle} from "../../constants"
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview"
 
@@ -91,10 +91,10 @@ class CreatedHandoverList extends React.PureComponent {
 				if (this.state.order_type === 'b2b' && this.state.tracking_scan){
 					this._postOrderHandover(this.state.tracking_scan)
 				}
-				
+
 			}
 		);
-		
+
 	}
 
 	componentWillUnmount() {
@@ -232,7 +232,7 @@ class CreatedHandoverList extends React.PureComponent {
 					await this._postOrderHandover(code)
 				}
 			}
-			
+
 		}
 	}
 
@@ -354,7 +354,7 @@ class CreatedHandoverList extends React.PureComponent {
 				await this.setState({
 					textError: t("screen.module.handover.order_over_200"),
 				})
-			}  
+			}
 			else if (response.data.error === 10) {
 				await this.setState({list_tracking_error:response.data.data});
 				this.openListTracking(true);

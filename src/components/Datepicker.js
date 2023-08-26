@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from 'prop-types';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import DatePicker from 'react-native-date-picker'
 
 const DatePickerBase = props  => {
@@ -18,7 +18,7 @@ const DatePickerBase = props  => {
           setlocaleStaff('en_GB')
         };
       };
-      fetchDataStaff();     
+      fetchDataStaff();
     }, []);
 
 
@@ -46,7 +46,7 @@ const DatePickerBase = props  => {
 DatePickerBase.defaultProps = {
     typeLoad : false
 };
-  
+
 DatePickerBase.propTypes = {
   confirmText : PropTypes.string,
   headerText : PropTypes.string,

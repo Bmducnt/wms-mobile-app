@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { 
+import {
   colors,
 } from '../../constants';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import SLAPack from './SLAPack';
 import OutboundReport from './OutboundReport';
@@ -52,20 +52,20 @@ const OrderPending = props => {
     };
 
     React.useEffect(() => {
-        fetchOrderPeding();     
+        fetchOrderPeding();
     }, []);
 
 
     return (
         <React.Fragment>
-            <OutboundReport 
+            <OutboundReport
                 kpi_reports = {dataReportCarrier}
                 slaSync = {slaSync}
                 slaPack={slaPack}
                 kpi_total = {totalOrder}
                 t={props.t}
             />
-          
+
             {slaPack.length > 0 && <SLAPack slaPack={slaPack} t={props.t} />}
         </React.Fragment>
         );

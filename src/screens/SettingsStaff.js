@@ -1,9 +1,9 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { 
+import {
   Animated,
-  ActivityIndicator, 
-  StyleSheet, 
+  ActivityIndicator,
+  StyleSheet,
   View,
   Image,
   Text,
@@ -11,17 +11,17 @@ import {
   StatusBar
 } from 'react-native';
 import RNRestart from 'react-native-restart';
-import { 
+import {
   MaterialIcons,
   FontAwesome5,
-} from '@expo/vector-icons'; 
-import AsyncStorage from '@react-native-community/async-storage';
+} from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from "expo-image-picker";
-import { 
-  Image as Imagecompressor 
+import {
+  Image as Imagecompressor
 } from "react-native-compressor";
-import { 
-  device, 
+import {
+  device,
   gStyle,
   images,
   colors
@@ -82,11 +82,11 @@ const SettingsStaff = ({navigation,screenProps}) => {
       await setAvarta(JSON.parse(staff_profile).avatar)
       await setstaffID(JSON.parse(staff_profile).staff_id);
       await setstaffInfo(JSON.parse(staff_profile));
-      
+
     }
     fetchDataStaff();
   }, []);
-  
+
 
   return (
     <View style={gStyle.container}>
@@ -111,7 +111,7 @@ const SettingsStaff = ({navigation,screenProps}) => {
                 bottom:0,
                 right: 0,
                 zIndex:10,
-            
+
               }}>
               <MaterialIcons name="verified" size={25} color="#bafe01" />
             </View>
@@ -170,19 +170,19 @@ const SettingsStaff = ({navigation,screenProps}) => {
           </View>
 
           {/* Inbound */}
-          
+
           <InboundReportTeam t={t} />
           {/* Packed */}
-          
+
           <OutboundReportTeam t={t} />
 
           {/* Handover */}
-          
+
           <HandoverReportTeam t={t} />
-          
+
 
           {/* WH Controller */}
-          
+
           <ControllerReportTeam  t={t} />
 
 
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     borderWidth:3,
     borderColor:colors.whiteBg
   },
-  
+
 });
 
 export default SettingsStaff;

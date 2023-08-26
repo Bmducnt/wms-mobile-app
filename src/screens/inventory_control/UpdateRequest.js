@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { 
+import {
   StyleSheet,
   Text,
   View,
@@ -8,7 +8,7 @@ import {
   FlatList,
   Alert
 } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Feather} from '@expo/vector-icons';
 import { colors, gStyle } from '../../constants';
 
@@ -116,11 +116,11 @@ class UpdateRequest extends React.PureComponent {
             manufacturing_date : null,
           })
         );
-        
+
         if (response.status === 200) {
             handleSoundOkScaner();
             this.props.navigation.goBack(null);
-        } 
+        }
         else if (response.status === 400) {
             handleSoundScaner();
         }
@@ -162,7 +162,7 @@ class UpdateRequest extends React.PureComponent {
             }else{
               await this.setState({fnsku_quantity_scan : code});
             }
-            
+
         };
     };
 
@@ -209,7 +209,7 @@ class UpdateRequest extends React.PureComponent {
       }else{
         this._putStatusRequestCheckLocation(this.state.fnsku_code);
       }
-      
+
     }
     _renderHeaderScanner(t,navigation){
       return (
@@ -230,7 +230,7 @@ class UpdateRequest extends React.PureComponent {
     }
     render() {
         const { navigation } = this.props;
-        const { 
+        const {
           list_fnsku_outbound,
           is_loading,
           location_code,

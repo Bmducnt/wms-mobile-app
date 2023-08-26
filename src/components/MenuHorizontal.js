@@ -11,7 +11,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { withNavigation } from "react-navigation";
+import { NavigationContainer } from '@react-navigation/native';
 import { colors, gStyle, images, device } from "../constants";
 const MenuHorizontal = (props) => {
   const [data, setdata] = React.useState(props.data);
@@ -149,4 +149,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withNavigation(MenuHorizontal);
+export default NavigationContainer(MenuHorizontal);

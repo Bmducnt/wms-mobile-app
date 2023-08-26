@@ -13,7 +13,7 @@ import {
   ActivityIndicator
 } from 'react-native';
 import * as Device from 'expo-device';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { device, gStyle,colors ,images} from '../constants';
 import loginService from '../services/auth/login';
 import updateTokenApp from '../services/auth/update';
@@ -28,7 +28,7 @@ const ModelWarehouseOption = ({navigation,screenProps}) => {
   const token_app = navigation.getParam('token_app');
   const { t, locale,setLocale} = screenProps;
   const [loading, setLoading] = React.useState(false);
-  
+
   const adminReLogin = async (warehouse_code) => {
     await setLoading(true);
     const response = await loginService({
@@ -80,7 +80,7 @@ const ModelWarehouseOption = ({navigation,screenProps}) => {
   return (
     <React.Fragment>
       <SafeAreaView style={styles.containerSafeArea}>
-        
+
         <TouchableWithoutFeedback
           onPress={() => {
             navigation.goBack();
@@ -92,7 +92,7 @@ const ModelWarehouseOption = ({navigation,screenProps}) => {
             <ActivityIndicator />
           ):<Text style={styles.buttonText}>Cancel</Text>
           }
-            
+
           </View>
         </TouchableWithoutFeedback>
       </SafeAreaView>
@@ -108,7 +108,7 @@ const ModelWarehouseOption = ({navigation,screenProps}) => {
             <Image source={images['user']} style={styles.image} />
           </View>
           <View style={gStyle.flexRowCenterAlign}>
-            
+
           </View>
         </View>
         <View style={{marginHorizontal:10,marginTop:10}}>
@@ -126,8 +126,8 @@ const ModelWarehouseOption = ({navigation,screenProps}) => {
               />
             );
           })}
-        
-            
+
+
         </View>
         <View style={gStyle.spacer11} />
         <View style={gStyle.spacer11} />

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { BottomTabBar } from 'react-navigation-tabs';
+import { BottomTabBar } from '@react-navigation/bottom-tabs';
 import {
   Alert,
   Vibration
@@ -65,7 +65,7 @@ const CustomTabBar = (props) => {
     }
     setloading(false)
   };
-  
+
   _fetchOrderFF = async  () =>{
     const { t } = props.screenProps;
     const response = await getListNotifyByWarehouse({
@@ -112,11 +112,11 @@ const CustomTabBar = (props) => {
 
   return (
     <React.Fragment>
-      {orderffNow > 0 &&<BarOrderFFNOW 
-        {...props} 
-        orderffNow={orderffNow} 
-        timeRequest={timeRequest} 
-        createPickupFF={_createdPickupHandler} 
+      {orderffNow > 0 &&<BarOrderFFNOW
+        {...props}
+        orderffNow={orderffNow}
+        timeRequest={timeRequest}
+        createPickupFF={_createdPickupHandler}
         loading={loading}
       />}
       <BottomTabBar {...props} />

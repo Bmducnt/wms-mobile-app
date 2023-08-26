@@ -8,16 +8,16 @@ import {
 import {
   BarChart
 } from "react-native-chart-kit";
-import { withNavigation } from 'react-navigation';
+import { NavigationContainer } from '@react-navigation/native';
 import { colors} from '../constants';
 
 const StaffReportHorizontal = ({ data}) => (
   <View style={styles.container}>
-    <BarChart 
+    <BarChart
         data={data}
         width={Dimensions.get("window").width-20}
-        height={300} 
-        chartConfig={{ 
+        height={300}
+        chartConfig={{
           backgroundColor: colors.cardLight,
           backgroundGradientTo: colors.cardLight,
           backgroundGradientFromOpacity: 0,
@@ -25,7 +25,7 @@ const StaffReportHorizontal = ({ data}) => (
           backgroundGradientToOpacity: 1,
           color: (opacity = 1) => colors.white,
           barPercentage: 0.28,
-          barRadius : 5,  
+          barRadius : 5,
         }}
         withHorizontalLabels={true}
         fromZero={false}
@@ -54,4 +54,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default withNavigation(StaffReportHorizontal);
+export default NavigationContainer(StaffReportHorizontal);

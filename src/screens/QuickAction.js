@@ -7,10 +7,10 @@ import {
   Alert,
   ActivityIndicator
 } from "react-native";
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import LottieView from 'lottie-react-native';
-import { 
+import {
   Entypo,
   FontAwesome5,
   Feather,
@@ -18,8 +18,8 @@ import {
   Fontisto
 } from "@expo/vector-icons";
 import QRCode from 'react-native-qrcode-svg';
-import { 
-  colors, 
+import {
+  colors,
   gStyle,
   device,
   images
@@ -56,7 +56,7 @@ class ModalQickAction extends React.Component {
     };
   }
 
-  
+
   UNSAFE_componentWillMount = async () => {
     let email_login = await AsyncStorage.getItem('staff_profile');
     this.setState({role_id:JSON.parse(email_login).role});
@@ -108,15 +108,15 @@ class ModalQickAction extends React.Component {
               staff_error:response.data.results[0].assigner_by.email
             });
           }
-          
-          
+
+
         }else{
           this.setState({
             pickup_info:response.data.results,
             staff_error:response.data.results[0].assigner_by.email
           });
         }
-        
+
       }else{
 
         handleSoundScaner();
@@ -153,7 +153,7 @@ class ModalQickAction extends React.Component {
     this.setState({isloading:false});
   }
 
-  
+
 
   _confirmPackingByStaff = async ()=>{
     const { t } = this.props.screenProps;
@@ -177,7 +177,7 @@ class ModalQickAction extends React.Component {
           }
       ]
     }
-    
+
     Alert.alert(
       '',
       t('screen.module.pickup.detail.exception_alert'),
@@ -232,7 +232,7 @@ class ModalQickAction extends React.Component {
     return (
       <React.Fragment>
         <View style={[gStyle.container]}>
-          <ScreenHeader 
+          <ScreenHeader
             title={t('screen.module.putaway.list')}
             showBack={true}
             iconLeft={"chevron-down"}
@@ -251,7 +251,7 @@ class ModalQickAction extends React.Component {
                       }} source={require('../assets/icons/qr-scan')} autoPlay loop />
               <Text style={{...gStyle.textBoxme14,color:colors.white}}>{t('screen.module.pickup.detail.exception_help_1')}</Text>
               <Text style={{...gStyle.textBoxme14,color:colors.white}}>{t('screen.module.pickup.detail.exception_help_2')}</Text>
-              <Text style={{...gStyle.textBoxme14,color:colors.white}}>{t('screen.module.pickup.detail.exception_help_3')}</Text> 
+              <Text style={{...gStyle.textBoxme14,color:colors.white}}>{t('screen.module.pickup.detail.exception_help_3')}</Text>
           </View>}
           <ScrollView
             contentContainerStyle={[gStyle.flex1, gStyle.pB80]}
@@ -344,17 +344,17 @@ class ModalQickAction extends React.Component {
                 </View>
               </View>
             </View>}
-            {pickup_info.length > 0 && 
-              
+            {pickup_info.length > 0 &&
+
             <View style={[gStyle.flexRowCenter,styles.containerBottom]}>
                 <ButtonSwiper
                   isLeftToRight={true} // set false to move slider Right to Left
                   childrenContainer={{ backgroundColor: 'rgba(255,255,255,0.0)'}}
                   slideOverStyle={{backgroundColor:'#c4f8e4',
-                    borderBottomLeftRadius:0, 
-                    borderBottomRightRadius: 5, 
-                    borderTopLeftRadius: 0, 
-                    borderTopRightRadius: 5 
+                    borderBottomLeftRadius:0,
+                    borderBottomRightRadius: 5,
+                    borderTopLeftRadius: 0,
+                    borderTopRightRadius: 5
                   }}
                   onEndReached={() => this._confirmPackingByStaff(true)}
                   isOpacityChangeOnSlide={true}
@@ -385,10 +385,10 @@ class ModalQickAction extends React.Component {
               </ButtonSwiper>
             </View>}
 
-            {isVisible &&  pickup_info.length > 0 && <ModelConfirmXE 
-                t={t} 
-                onClose={this.onCloseModel} 
-                onSubmit ={null} 
+            {isVisible &&  pickup_info.length > 0 && <ModelConfirmXE
+                t={t}
+                onClose={this.onCloseModel}
+                onSubmit ={null}
                 pickup_id ={pickup_info[0].pickupbox_id}
                 pickup_code ={pickup_info[0].pickup_id.pickup_code}
                 index ={0}

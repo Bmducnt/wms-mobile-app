@@ -9,7 +9,7 @@ import {
   FlatList
 } from "react-native";
 import { colors, gStyle, device } from "../../constants";
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
   permissionDenied,
@@ -97,9 +97,9 @@ class DetailResquest extends React.PureComponent {
 
   render() {
     const { navigation } = this.props;
-    const { 
-      cycle_code, 
-      is_loading, 
+    const {
+      cycle_code,
+      is_loading,
       bin_item_stock,
       cycle_type,
       tracking_code,
@@ -118,7 +118,7 @@ class DetailResquest extends React.PureComponent {
           </View>
           <View style={styles.container}>
             {is_loading && <ActivityIndicator />}
-            
+
           </View>
           <View style={styles.containerScroll}>
             { bin_item_stock.length > 0? <FlatList
@@ -187,7 +187,7 @@ class DetailResquest extends React.PureComponent {
                   }}
                 >
                   <Text style={{color:colors.boxmeBrand,...gStyle.textBoxme14}}>{t('screen.module.cycle_check.detail.btn_inspection')}</Text>
-                </TouchableOpacity> 
+                </TouchableOpacity>
               </View>}
         </View>
       </React.Fragment>
