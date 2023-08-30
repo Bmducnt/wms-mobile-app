@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import DatePicker from 'react-native-date-picker'
 
 const DatePickerBase = props  => {
-    const [confirmText, setconfirmText] = useState(props.trans('screen.datetimepicker.btn_confirm'));
+    const [confirmText, setconfirmText] = useState(translate('screen.datetimepicker.btn_confirm'));
     const [headerText, setheaderText] = useState(props.headerText);
     const [localeStaff,setlocaleStaff] = useState('vi');
     const [dateNow, setdateNow] = useState(new Date())
@@ -33,8 +33,8 @@ const DatePickerBase = props  => {
           date={dateNow}
           mode="date"
           title={headerText}
-          confirmText={props.trans('base.confirm')}
-          cancelText={props.trans('base.back')}
+          confirmText={translate('base.confirm')}
+          cancelText={translate('base.back')}
           androidVariant = 'nativeAndroid'
           locale = {localeStaff}
           onConfirm={(date) => handleConfirm(date)}
@@ -54,7 +54,6 @@ DatePickerBase.propTypes = {
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
   typeLoad : PropTypes.bool.isRequired,
-  trans : PropTypes.func.isRequired
 };
 
 export default DatePickerBase;

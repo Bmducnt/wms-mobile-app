@@ -1,12 +1,10 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import {
-  Image,
-  StyleSheet,
   View,
   KeyboardAvoidingView,
 } from "react-native";
-import { 
+import {
   gStyle,
 } from "../../constants";
 
@@ -24,7 +22,8 @@ class ImagesViewList extends React.Component {
   }
 
   UNSAFE_componentWillMount = async () => {
-    this.fetchDetailImgTask(this.props.navigation.getParam("task_code"));
+      const { params } = this.props?.route;
+        await this.fetchDetailImgTask(params?.task_code);
   };
 
   onClose = async () =>{
@@ -39,13 +38,11 @@ class ImagesViewList extends React.Component {
     const response = await getImageTask(code);
     if (response.status === 200) {
         this.setState({ list_images: response.data.results });
-        
     }
   };
 
 
   render() {
-    const { navigation } = this.props;
     const {visible,list_images} = this.state;
     return (
       <View style={gStyle.container}>
@@ -69,11 +66,7 @@ class ImagesViewList extends React.Component {
 ImagesViewList.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired,
 };
 
-const styles = StyleSheet.create({
-    
-});
 
 export default ImagesViewList;

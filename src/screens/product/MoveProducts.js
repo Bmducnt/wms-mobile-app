@@ -6,7 +6,6 @@ import {
   Text,
   ActivityIndicator,
   View,
-  Switch,
 } from 'react-native';
 import { colors, device, gStyle } from '../../constants';
 import Badge from '../../components/Badge';
@@ -15,13 +14,13 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 // components
 import ScreenHeader from '../../components/ScreenHeader';
 import TextInputComponent from '../../components/TextInputComponent';
-import {_getTimeDefaultFrom,_getTimeDefaultTo} from '../../helpers/device-height';
 import {handleSoundScaner,permissionDenied,handleSoundOkScaner} from '../../helpers/async-storage';
 
-//service 
+//service
 import getBinFnsku from '../../services/products/bin';
 import findDetailFnskuMove from '../../services/products/find';
 import putNewLocationMove from '../../services/products/move';
+import {translate} from "../../i18n/locales/IMLocalized";
 
 const initialState = {
     isloading: false,
@@ -49,17 +48,18 @@ class MoveProducts extends React.Component {
   }
 
   UNSAFE_componentWillMount = async () =>{
-    if (this.props.navigation.getParam("location_code")){
-      await this.setState({barcode_stock : this.props.navigation.getParam("location_code"),bin_stock_info :[]})
+    const { params } = this.props?.route
+    if (params?.location_code){
+      await this.setState({barcode_stock : params?.location_code,bin_stock_info :[]})
     }
-    if (this.props.navigation.getParam("fnsku_code")){
-      await this.setState({fnsku_code : this.props.navigation.getParam("fnsku_code")})
+    if (params?.fnsku_code){
+      await this.setState({fnsku_code : params?.fnsku_code})
     }
-    if (this.props.navigation.getParam("location_code") && this.props.navigation.getParam("fnsku_code")){
-      this._findProductMove(this.props.navigation.getParam("fnsku_code"),
-      {"location":this.props.navigation.getParam("location_code")},0)
+    if (params?.location_code && params?.fnsku_code){
+      await this._findProductMove(params?.fnsku_code,
+          {"location": params?.location_code}, 0)
     }
-    
+
   }
 
   _fetchBinProductHandler = async  (code) =>{
@@ -81,12 +81,11 @@ class MoveProducts extends React.Component {
 };
 
   _findProductMove = async  (code,parram,find_id) =>{
-    const { t } = this.props.screenProps;
     this.setState({isloading:true});
     const response = await findDetailFnskuMove(code,parram);
     if (response.status === 403){
       permissionDenied(this.props.navigation);
-    };
+    }
     if (response.status === 200){
       handleSoundOkScaner();
       if (find_id === 0){
@@ -100,13 +99,13 @@ class MoveProducts extends React.Component {
       }else{
         this.setState({bin_stock_info:response.data})
       }
-      
+
     }else {
       handleSoundScaner();
       if (response.data.error_code === 1){
         Alert.alert(
           '',
-          t('screen.module.product.move.bin_fail'),
+          translate('screen.module.product.move.bin_fail'),
           [
             {
               text: t("base.confirm"),
@@ -118,7 +117,7 @@ class MoveProducts extends React.Component {
       }else {
         Alert.alert(
           '',
-          t('screen.module.product.move.fnsku_fail'),
+          translate('screen.module.product.move.fnsku_fail'),
           [
             {
               text: t("base.confirm"),
@@ -127,23 +126,22 @@ class MoveProducts extends React.Component {
           ],
           {cancelable: false},
         );
-      };
+      }
     }
     this.setState({isloading:false,fnsku_code:null});
   };
 
   _putLocationProductMove = async  (code,parram) =>{
-    const { t } = this.props.screenProps;
     this.setState({isloading:true});
     const response = await putNewLocationMove(code,parram);
     if (response.status === 403){
       permissionDenied(this.props.navigation);
-    };
+    }
     if (response.status === 200){
       handleSoundOkScaner();
       Alert.alert(
         '',
-        t('screen.module.product.move.update_ok'),
+        translate('screen.module.product.move.update_ok'),
         [
           {
             text: t("base.confirm"),
@@ -156,7 +154,7 @@ class MoveProducts extends React.Component {
       handleSoundScaner();
       Alert.alert(
         '',
-        t('screen.module.product.move.bin_fail'),
+        translate('screen.module.product.move.bin_fail'),
         [
           {
             text: t("base.confirm"),
@@ -165,7 +163,7 @@ class MoveProducts extends React.Component {
         ],
         {cancelable: false},
       );
-    };
+    }
     this.setState({isloading:false});
   };
 
@@ -175,14 +173,14 @@ class MoveProducts extends React.Component {
         fnsku_code:code
       });
       this._findProductMove(code,{"location":this.state.barcode_stock},0)
-    };
+    }
   };
 
   _onSubmitEditingInputSold = async (code) => {
     if (code){
       await this.setState({fnsku_change : code})
     }
-    
+
   }
   _onSubmitEditingInputLocation = async (code) => {
     if (code){
@@ -190,18 +188,17 @@ class MoveProducts extends React.Component {
         barcode_stock:code
       });
       this._findProductMove(code,{"location" : code,"is_check_location":1},1);
-    };
+    }
   };
 
   _onSubmitEditingInputNewLocation = async (code) => {
-    const { t } = this.props.screenProps;
     if(parseInt(this.state.fnsku_change) > parseInt(this.state.bin_stock_info.quantity)){
       Alert.alert(
         '',
-        `${t('screen.module.product.move.text_error_1')}`,
+        `${translate('screen.module.product.move.text_error_1')}`,
         [
           {
-            text:t('base.confirm'),
+            text:translate('base.confirm'),
             onPress: null,
           },
         ],
@@ -211,7 +208,7 @@ class MoveProducts extends React.Component {
     else{
       Alert.alert(
         '',
-        `${t('screen.module.product.move.text_move_1')} ${code}. ${t('screen.module.product.move.text_move_2')}`,
+        `${translate('screen.module.product.move.text_move_1')} ${code}. ${translate('screen.module.product.move.text_move_2')}`,
         [
           {
             text: t("base.confirm"),
@@ -227,41 +224,38 @@ class MoveProducts extends React.Component {
             );},
           },
           {
-            text:t('screen.module.product.move.btn_cancel'),
+            text:translate('screen.module.product.move.btn_cancel'),
             onPress: null,
           },
         ],
         {cancelable: false},
       );
-    };
+    }
   };
 
-  toggleViewByStatus(val) {
-    this.setState({
-      is_prioritize: val,
-    });
-  }
-  
+  // toggleViewByStatus(val) {
+  //   this.setState({
+  //     is_prioritize: val,
+  //   });
+  // }
+
   render() {
     const {
       navigation
     } = this.props;
-    const {  
+    const {
       fnsku_info,
       bin_stock_info,
       isloading,
       barcode_stock,
       fnsku_change,
       sugget_list_bin,
-      bgLocation,
-      is_prioritize,
-      fnsku_outbound_type
+      bgLocation
     } = this.state;
-    const { t } = this.props.screenProps;
     return (
         <View style={[gStyle.container]}>
           <View style={{ position: 'absolute', top: 0, width: '100%', zIndex: 10 }}>
-            <ScreenHeader title={t('screen.module.product.move.text_header')} showBack={true}/>
+            <ScreenHeader title={translate('screen.module.product.move.text_header')} showBack={true} navigation={navigation}/>
           </View>
           <KeyboardAwareScrollView
             style={styles.containerMove}
@@ -275,20 +269,20 @@ class MoveProducts extends React.Component {
             {fnsku_info === null && bin_stock_info!= null && <TextInputComponent
               navigation={navigation}
               autoFocus={true}
-              textLabel = {t('screen.module.product.move.label_fnsku')}
+              textLabel = {translate('screen.module.product.move.label_fnsku')}
               onPressCamera = {this._onSubmitEditingInput}
               onSubmitEditingInput = {this._onSubmitEditingInput}
-              textPlaceholder={t('screen.module.product.move.textplaceholder_fnsku')}>
+              textPlaceholder={translate('screen.module.product.move.textplaceholder_fnsku')}>
             </TextInputComponent>}
             {bin_stock_info === null && <TextInputComponent
               navigation={navigation}
               autoFocus={true}
-              textLabel = {t('screen.module.product.move.label_current_bin')}
+              textLabel = {translate('screen.module.product.move.label_current_bin')}
               onPressCamera = {this._onSubmitEditingInputLocation}
               onSubmitEditingInput = {this._onSubmitEditingInputLocation}
-              textPlaceholder={t('screen.module.product.move.textplaceholder_current_bin')}>
+              textPlaceholder={translate('screen.module.product.move.textplaceholder_current_bin')}>
             </TextInputComponent>}
-            {bin_stock_info !== null && fnsku_info !== null && 
+            {bin_stock_info !== null && fnsku_info !== null &&
               <View style={gStyle.flexRow}>
                 <View style={{width:'30%'}}>
                   <TextInputComponent
@@ -299,10 +293,10 @@ class MoveProducts extends React.Component {
                     inputValue ={`${fnsku_change}`}
                     showSearch = {false}
                     showScan = {false}
-                    textLabel = {t('screen.module.product.move.quantity_move')}
+                    textLabel = {translate('screen.module.product.move.quantity_move')}
                     onPressCamera = {this._onSubmitEditingInputSold}
                     onSubmitEditingInput = {this._onSubmitEditingInputSold}
-                    textPlaceholder={t('screen.module.product.move.quantity_move')}>
+                    textPlaceholder={translate('screen.module.product.move.quantity_move')}>
                   </TextInputComponent>
                 </View>
                 <View style={{width:'70%'}}>
@@ -311,18 +305,18 @@ class MoveProducts extends React.Component {
                     showSearch= {false}
                     autoFocus={true}
                     is_close={true}
-                    textLabel = {t('screen.module.product.move.label_new_bin')}
+                    textLabel = {translate('screen.module.product.move.label_new_bin')}
                     onPressCamera = {this._onSubmitEditingInputNewLocation}
                     onSubmitEditingInput = {this._onSubmitEditingInputNewLocation}
-                    textPlaceholder={t('screen.module.product.move.textplaceholder_new_bin')}>
+                    textPlaceholder={translate('screen.module.product.move.textplaceholder_new_bin')}>
                   </TextInputComponent>
                 </View>
-                
+
               </View>
             }
-            
+
           </View>
-          
+
           { fnsku_info !== null && (
             <View style={styles.sectionHeading}>
               <View style={{
@@ -334,10 +328,10 @@ class MoveProducts extends React.Component {
               </View>
               <View style={[gStyle.flexRowSpace]}>
                 <View style={gStyle.flexRow}>
-                    <Text style={styles.textLabel}>{t('screen.module.product.move.barcode')}</Text>
+                    <Text style={styles.textLabel}>{translate('screen.module.product.move.barcode')}</Text>
                 </View>
                 <View style={gStyle.flexRow}>
-                    <Text style={styles.textLabel}>{t('screen.module.product.move.fnsku')}</Text>
+                    <Text style={styles.textLabel}>{translate('screen.module.product.move.fnsku')}</Text>
                 </View>
               </View>
               <View style={gStyle.flexRowSpace}>
@@ -352,11 +346,11 @@ class MoveProducts extends React.Component {
               </View>
               <View style={[gStyle.flexRowSpace,{marginTop:4}]}>
                 <View style={gStyle.flexRow}>
-                    <Text style={styles.textLabel}>{t('screen.module.product.move.bsin_current')}</Text>
-                    
+                    <Text style={styles.textLabel}>{translate('screen.module.product.move.bsin_current')}</Text>
+
                 </View>
                 <View style={gStyle.flexRow}>
-                    <Text style={styles.textLabel}>{t('screen.module.product.move.quantity_move')}</Text>
+                    <Text style={styles.textLabel}>{translate('screen.module.product.move.quantity_move')}</Text>
                 </View>
               </View>
               <View style={[gStyle.flexRowSpace,{marginTop:4}]}>
@@ -376,7 +370,7 @@ class MoveProducts extends React.Component {
               }}>
 
               </View>
-              <Text style={[styles.textLabel]}>{t('screen.module.putaway.recommend')}</Text>
+              <Text style={[styles.textLabel]}>{translate('screen.module.putaway.recommend')}</Text>
               <View style={[gStyle.flexRow,{marginTop:5}]}>
                 {sugget_list_bin.slice(0, 3).map((prop,key) => {
                     return (

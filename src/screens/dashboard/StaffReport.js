@@ -6,25 +6,26 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import ListCard from '../../components/ListCard';
-import { 
-  colors, 
+import {
+  colors,
   gStyle ,
 } from '../../constants';
 import getReportOverview from '../../services/reports/overview';
 import getListStaff from "../../services/tasks/list-staff";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 const StaffReport = props => {
-    
+
     const [data, setdata] = React.useState([]);
     const [listStaff, setListStaff] = React.useState([]);
 
 
     React.useEffect(() => {
-      fetchListStaff();
-      _fetchReportOverview();
+      fetchListStaff().then(r => {});
+      _fetchReportOverview().then(r => {});
     }, []);
 
-    fetchListStaff = async () => {
+    const fetchListStaff = async () => {
       const response = await getListStaff({});
       if (response.status === 200){
         let list_staff_tmp = []
@@ -35,23 +36,23 @@ const StaffReport = props => {
             avatar: element.avatar,
             role_id: element.role,
             by_avatar: Array.from(element.fullname)[0],
-            is_avatar :element.avatar ? true : false
+            is_avatar :!!element.avatar
           })
           });
           setListStaff(list_staff_tmp)
       }
     };
 
-    _fetchReportOverview = async () => {
+    const _fetchReportOverview = async () => {
         const response = await getReportOverview({});
         if (response.status === 200){
             setdata([{
               'task_id' :1,
-              'task_name' :props.t('screen.module.home.report_order.putaway_text'),
-              'task_text' :props.t('screen.module.home.report_order.task_pk'),
+              'task_name' :translate('screen.module.home.report_order.putaway_text'),
+              'task_text' :translate('screen.module.home.report_order.task_pk'),
               'task_value':response.data.results.inbound_awaiting,
               'task_color' :colors.white,
-              'task_status' : props.t('screen.module.home.report_order.task_status_1'),
+              'task_status' : translate('screen.module.home.report_order.task_status_1'),
               'action' : 'PutawayLists',
               'parram' : {},
               'sla':false,
@@ -62,11 +63,11 @@ const StaffReport = props => {
             },
             {
               'task_id' :8,
-              'task_name' :props.t('screen.module.home.report_order.pickup_awaiting_pack'),
+              'task_name' :translate('screen.module.home.report_order.pickup_awaiting_pack'),
               'task_value':response.data.results.pickup_awaiting_packed,
-              'task_text' :props.t('screen.module.home.report_order.task_pk'),
+              'task_text' :translate('screen.module.home.report_order.task_pk'),
               'task_color' :colors.white,
-              'task_status' :props.t('screen.module.home.report_order.task_status_1'),
+              'task_status' :translate('screen.module.home.report_order.task_status_1'),
               'action' : "ModalQickAction",
               'parram' : {},
               'sla':true,
@@ -77,11 +78,11 @@ const StaffReport = props => {
             },
             {
               'task_id' :7,
-              'task_name' :props.t('screen.module.home.report_order.pickup_awaiting'),
+              'task_name' :translate('screen.module.home.report_order.pickup_awaiting'),
               'task_value':response.data.results.pickup_awaiting,
-              'task_text' :props.t('screen.module.home.report_order.task_pk'),
+              'task_text' :translate('screen.module.home.report_order.task_pk'),
               'task_color' :colors.white,
-              'task_status' : props.t('screen.module.home.report_order.task_status_2'),
+              'task_status' : translate('screen.module.home.report_order.task_status_2'),
               'action' : null,
               'parram' : {},
               'sla':false,
@@ -92,12 +93,12 @@ const StaffReport = props => {
             },
             {
               'task_id' :2,
-              'task_name' :props.t('screen.module.home.report_order.order_pick'),
+              'task_name' :translate('screen.module.home.report_order.order_pick'),
               'task_value':response.data.results.orders_awaiting,
               'last_fetch' :response.data.results.last_fetch,
-              'task_text' :props.t('screen.module.home.report_order.task_order'),
+              'task_text' :translate('screen.module.home.report_order.task_order'),
               'task_color' :colors.white,
-              'task_status' : props.t('screen.module.home.report_order.task_status_1'),
+              'task_status' : translate('screen.module.home.report_order.task_status_1'),
               'action' : null,
               'parram' : {},
               'sla':true,
@@ -106,7 +107,7 @@ const StaffReport = props => {
               'role_id': 2
             }
           ])
-    
+
         };
     };
 
@@ -131,7 +132,7 @@ const StaffReport = props => {
                     is_click ={item.is_click}
                     task_id={item.task_id}
                     last_fetch ={item.last_fetch}
-                    list_staff = {listStaff.filter(x => x.role_id == item.role_id)}
+                    list_staff = {listStaff.filter(x => x.role_id === item.role_id)}
                   />
                 </View>
               );

@@ -73,7 +73,6 @@ class ListInbound extends React.Component {
       scrollY,
       list_data
     } = this.state;
-    const { t } = this.props.screenProps;
     const shuffleRange = device.web ? [40, 80] : [40, 80];
     const opacityShuffleBottom = scrollY.interpolate({
       inputRange: shuffleRange,
@@ -91,16 +90,16 @@ class ListInbound extends React.Component {
           <View
             style={{ position: "absolute", top: 0, width: "100%", zIndex: 100}}
           >
-            <ScreenHeader 
-              title={'Scan mã nhập kho'} 
+            <ScreenHeader
+              title={'Scan mã nhập kho'}
               showBack={true}
               showInput = {true}
               inputValueSend ={null}
               autoFocus={false}
               onPressCamera={this._searchCameraBarcode}
               onSubmitEditingInput= {this._searchCameraBarcode}
-              textPlaceholder={t("screen.module.handover.text_search")}
-            />
+              textPlaceholder={translate("screen.module.handover.text_search")}
+             navigation={navigation}/>
           </View>
           <Animated.ScrollView
             onScroll={Animated.event(
@@ -119,7 +118,6 @@ class ListInbound extends React.Component {
                     <ItemInbound
                         key={index.toString()}
                         navigation={navigation}
-                        translate={t}
                         inboundItem = {{
                             'time_created': item.time_created,
                             'inspection_type': item.inspection_type,
@@ -146,7 +144,6 @@ class ListInbound extends React.Component {
 ListInbound.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({

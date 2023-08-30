@@ -16,21 +16,21 @@ import {
 } from "react-native";
 import LottieView from 'lottie-react-native';
 import moment from "moment";
-import { 
-  TabView, 
-  SceneMap, 
-  TabBar 
+import {
+  TabView,
+  SceneMap,
+  TabBar
 } from "react-native-tab-view";
 import * as ImagePicker from "expo-image-picker";
-import { 
-  Image as Imagecompressor 
+import {
+  Image as Imagecompressor
 } from "react-native-compressor";
-import { 
-  Feather 
+import {
+  Feather
 } from "@expo/vector-icons";
-import { 
-  colors, 
-  gStyle, 
+import {
+  colors,
+  gStyle,
   device
  } from "../constants";
 import {
@@ -49,6 +49,7 @@ import ScanDocument from "../components/ScanDocument";
 import ButtonInbound from "../components/ButtonInbound";
 
 import { serviceUploadAsset } from "../helpers/upload-base";
+import {translate} from "../i18n/locales/IMLocalized";
 
 class ModelReceivedShipment extends React.Component {
   constructor() {
@@ -77,11 +78,10 @@ class ModelReceivedShipment extends React.Component {
   }
 
   UNSAFE_componentWillMount = async () => {
-    const { t } = this.props.screenProps;
     this.setState({
       routes: [
-        { key: "info", title: t("screen.module.inbound.tab_info") },
-        { key: "box", title: t("screen.module.inbound.tab_box") },
+        { key: "info", title: translate("screen.module.inbound.tab_info") },
+        { key: "box", title: translate("screen.module.inbound.tab_box") },
       ],
     });
   };
@@ -104,7 +104,6 @@ class ModelReceivedShipment extends React.Component {
   };
 
   pickImageorVideo = async () => {
-    const { t } = this.props.screenProps;
     this.setState({ is_loading: true });
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -171,7 +170,7 @@ class ModelReceivedShipment extends React.Component {
       }else{
         handleSoundScaner();
       }
-      
+
     } else if (response.status === 403) {
       permissionDenied(this.props.navigation);
     } else {
@@ -181,14 +180,13 @@ class ModelReceivedShipment extends React.Component {
   };
 
   _confirmReceivedInbound = async () => {
-    const { t } = this.props.screenProps;
     if (this.state.list_asset.length < 3) {
       Alert.alert(
         "",
-        t("screen.module.inbound.upload_alert"),
+        translate("screen.module.inbound.upload_alert"),
         [
           {
-            text: t("base.confirm"),
+            text: translate("base.confirm"),
             onPress: () => null,
           },
         ],
@@ -197,16 +195,16 @@ class ModelReceivedShipment extends React.Component {
     } else {
       Alert.alert(
         "",
-        t("screen.module.inbound.text_confirm_accept"),
+        translate("screen.module.inbound.text_confirm_accept"),
         [
           {
-            text: t("base.confirm"),
+            text: translate("base.confirm"),
             onPress: () => {
               this._fetchUpdateInbound(301);
             },
           },
           {
-            text: t("screen.module.product.move.btn_cancel"),
+            text: translate("screen.module.product.move.btn_cancel"),
             onPress: null,
           },
         ],
@@ -216,19 +214,18 @@ class ModelReceivedShipment extends React.Component {
   };
 
   _confirmNotReceivedInbound = async () => {
-    const { t } = this.props.screenProps;
     Alert.alert(
       "",
-      t("screen.module.inbound.text_confirm_cancell"),
+      translate("screen.module.inbound.text_confirm_cancell"),
       [
         {
-          text: t("base.confirm"),
+          text: translate("base.confirm"),
           onPress: () => {
             this._fetchUpdateInbound(302);
           },
         },
         {
-          text: t("screen.module.product.move.btn_cancel"),
+          text: translate("screen.module.product.move.btn_cancel"),
           onPress: null,
         },
       ],
@@ -238,7 +235,6 @@ class ModelReceivedShipment extends React.Component {
 
   _fetchUpdateInbound = async (status_id) => {
     this.setState({ is_loading: true });
-    const { t } = this.props.screenProps;
     const response = await confirmReceivedInbound(
       this.state.shipment_id,
       JSON.stringify({
@@ -253,10 +249,10 @@ class ModelReceivedShipment extends React.Component {
       this.setState({ status_flow: status_id });
       Alert.alert(
         "",
-        t("screen.module.putaway.text_ok"),
+        translate("screen.module.putaway.text_ok"),
         [
           {
-            text: t("base.confirm"),
+            text: translate("base.confirm"),
             onPress: () => {
               this.props.navigation.goBack(null);
             },
@@ -273,7 +269,6 @@ class ModelReceivedShipment extends React.Component {
   };
 
   shipmentInfoBox = ({}) => {
-    const { t } = this.props.screenProps;
     return (
       <SafeAreaView style={gStyle.flex1}>
         <ScrollView contentContainerStyle={[gStyle.flex1, gStyle.pB80]}
@@ -294,7 +289,7 @@ class ModelReceivedShipment extends React.Component {
                   ]}
                 >
                   <Text style={styles.textLabel}>
-                    {t("screen.module.inbound.tracking_code")}
+                    {translate("screen.module.inbound.tracking_code")}
                   </Text>
                   <Text style={[styles.textValue, { color: colors.white }]}>
                     {this.state.code_scan}
@@ -312,7 +307,7 @@ class ModelReceivedShipment extends React.Component {
               >
                 <View style={gStyle.flexRowSpace}>
                   <Text style={[styles.textLabel]}>
-                    {t("screen.module.inbound.box_quantity_list")}
+                    {translate("screen.module.inbound.box_quantity_list")}
                   </Text>
                   <Text
                     style={[
@@ -325,7 +320,7 @@ class ModelReceivedShipment extends React.Component {
                 </View>
                 <View style={gStyle.flexRowSpace}>
                   <Text style={[styles.textLabel]}>
-                    {t("screen.module.inbound.box_quantity_item")}
+                    {translate("screen.module.inbound.box_quantity_item")}
                   </Text>
                   <Text
                     style={[
@@ -349,14 +344,14 @@ class ModelReceivedShipment extends React.Component {
               >
                 <View style={gStyle.flexRowSpace}>
                   <Text style={styles.textLabel}>
-                    {t("screen.module.inbound.sender_name")}
+                    {translate("screen.module.inbound.sender_name")}
                   </Text>
                   <Text style={[styles.textValue, { color: colors.white }]}>
                     {this.state.address_info[0].from_user_name}
                   </Text>
                 </View>
                 <Text style={styles.textLabel}>
-                  {t("screen.module.inbound.sender_address")}
+                  {translate("screen.module.inbound.sender_address")}
                 </Text>
                 <View style={gStyle.flexRow}>
                   <Text
@@ -395,7 +390,7 @@ class ModelReceivedShipment extends React.Component {
                       paddingLeft: 6,
                     }}
                   >
-                    {t("screen.module.inbound.shipment_urgert")}
+                    {translate("screen.module.inbound.shipment_urgert")}
                   </Text>
                 </View>
               )}
@@ -419,7 +414,7 @@ class ModelReceivedShipment extends React.Component {
                       paddingHorizontal: 6,
                     }}
                   >
-                    {t("screen.module.inbound.shipment_goods_reject")}
+                    {translate("screen.module.inbound.shipment_goods_reject")}
                   </Text>
                 </View>
               )}
@@ -436,7 +431,7 @@ class ModelReceivedShipment extends React.Component {
                   },
                 ]}
               >
-                <Text style={styles.textLabel}>{t("screen.module.inbound.co_inspection")}</Text>
+                <Text style={styles.textLabel}>{translate("screen.module.inbound.co_inspection")}</Text>
                 <Switch
                   style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
                   value={this.state.is_co_inspection}
@@ -456,7 +451,7 @@ class ModelReceivedShipment extends React.Component {
                   },
                 ]}
               >
-                <Text style={styles.textLabel}>{t("screen.module.inbound.is_unload")}</Text>
+                <Text style={styles.textLabel}>{translate("screen.module.inbound.is_unload")}</Text>
                 <Switch
                   style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
                   value={this.state.is_unloaded}
@@ -471,7 +466,7 @@ class ModelReceivedShipment extends React.Component {
               >
                 <View style={gStyle.flexRowSpace}>
                   <Text style={styles.textLabel}>
-                    {t("screen.module.inbound.journey_created")}
+                    {translate("screen.module.inbound.journey_created")}
                   </Text>
                   <Text style={[styles.textValue, { color: colors.white }]}>
                     {moment(this.state.created_date).fromNow()}
@@ -486,28 +481,28 @@ class ModelReceivedShipment extends React.Component {
                   style={{ color: colors.greyInactive, paddingVertical: 5 }}
                 >
                   {" "}
-                  {t("screen.module.inbound.shipment_text_alert")}
+                  {translate("screen.module.inbound.shipment_text_alert")}
                 </Text>
               </View>
-              <ButtonInbound 
+              <ButtonInbound
                 icon={"camera"}
                 onPress={this.toggleCamera}
-                main_text= {t("screen.module.inbound.btn_accept_photo")}
-                sub_text= {'camera ...'} 
+                main_text= {translate("screen.module.inbound.btn_accept_photo")}
+                sub_text= {'camera ...'}
               />
-              <ButtonInbound 
+              <ButtonInbound
                 icon={"file-text"}
                 onPress={this.setModalVisibleScan}
-                main_text= {t("screen.module.inbound.scan_btn")}
-                sub_text= {'pdf ,file'} 
+                main_text= {translate("screen.module.inbound.scan_btn")}
+                sub_text= {'pdf ,file'}
               />
-              <ButtonInbound 
+              <ButtonInbound
                 icon={"image"}
                 onPress={this.pickImageorVideo}
-                main_text= {t("screen.module.camera.upload_select")}
-                sub_text= {'png , jpg'} 
+                main_text= {translate("screen.module.camera.upload_select")}
+                sub_text= {'png , jpg'}
               />
-              
+
             </View>
           </View>
           <View style={gStyle.spacer11} />
@@ -518,7 +513,6 @@ class ModelReceivedShipment extends React.Component {
   };
 
   shipmentBoxList = ({}) => {
-    const { t } = this.props.screenProps;
     const { navigation } = this.props;
     return (
       <View style={{ flex: 1,marginHorizontal:10}}>
@@ -529,7 +523,6 @@ class ModelReceivedShipment extends React.Component {
             renderItem={({ item }) => (
               <LineParcelShipment
                 navigation={navigation}
-                trans={t}
                 parcel={{
                   tracking_code: item.tracking_code,
                   status_name: item.status.description,
@@ -543,36 +536,36 @@ class ModelReceivedShipment extends React.Component {
             )}
           />
         ) : (
-          <EmptySearch t={t} />
+          <EmptySearch/>
         )}
       </View>
     );
   };
 
   render() {
-    const { 
-      data, 
-      status_flow, 
-      open_camera, 
-      index, 
-      routes, 
+    const { navigation } = this.props
+    const {
+      data,
+      status_flow,
+      open_camera,
+      index,
+      routes,
       is_scan,
       is_loading } =
       this.state;
-    const { t } = this.props.screenProps;
     return (
       <TouchableWithoutFeedback>
         <View style={gStyle.container}>
           <ScreenHeader
-            title={t("screen.module.inbound.header")}
+            title={translate("screen.module.inbound.header")}
             showBack={true}
             iconLeft={"chevron-down"}
             showInput={true}
             inputValueSend={null}
             onPressCamera={this._onSubmitEditingInput}
             onSubmitEditingInput={this._onSubmitEditingInput}
-            textPlaceholder={t("screen.module.inbound.input")}
-          />
+            textPlaceholder={translate("screen.module.inbound.input")}
+           navigation={navigation}/>
           {is_loading && <ActivityIndicator/>}
           {data.length > 0 ? (
             <TabView
@@ -621,9 +614,9 @@ class ModelReceivedShipment extends React.Component {
               width: 150,
                         height: 100,
             }} source={require('../assets/icons/qr-scan.json')} autoPlay loop />
-                      <Text style={{...gStyle.textBoxme14,color:colors.white}}>{t('screen.module.inbound.step1')}</Text>
-                  <Text style={{...gStyle.textBoxme14,color:colors.white}}>{t('screen.module.inbound.step2')}</Text>
-                  <Text style={{...gStyle.textBoxme14,color:colors.white}}>{t('screen.module.inbound.step3')}</Text> 
+                      <Text style={{...gStyle.textBoxme14,color:colors.white}}>{translate('screen.module.inbound.step1')}</Text>
+                  <Text style={{...gStyle.textBoxme14,color:colors.white}}>{translate('screen.module.inbound.step2')}</Text>
+                  <Text style={{...gStyle.textBoxme14,color:colors.white}}>{translate('screen.module.inbound.step3')}</Text>
             </View>
           )}
           {data.length > 0 && (
@@ -632,7 +625,7 @@ class ModelReceivedShipment extends React.Component {
                 <View style={[gStyle.flex1, { marginHorizontal: 25 }]}>
                   <View style={[gStyle.flexRowSpace,{paddingVertical:12,}]}>
                     <Text style={[styles.textLabel]}>
-                      {t("screen.module.inbound.upload_text")}
+                      {translate("screen.module.inbound.upload_text")}
                     </Text>
                     <Text
                       style={{
@@ -654,7 +647,7 @@ class ModelReceivedShipment extends React.Component {
                     onPress={() => this._confirmNotReceivedInbound(302)}
                   >
                     <Text style={styles.textButton} numberOfLines={1}>
-                      {t("screen.module.inbound.btn_cancell")}
+                      {translate("screen.module.inbound.btn_cancell")}
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
@@ -663,7 +656,7 @@ class ModelReceivedShipment extends React.Component {
                     onPress={() => this._confirmReceivedInbound(301)}
                   >
                     <Text style={styles.textButton} numberOfLines={1}>
-                      {t("screen.module.inbound.btn_accept")}
+                      {translate("screen.module.inbound.btn_accept")}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -673,14 +666,12 @@ class ModelReceivedShipment extends React.Component {
           {open_camera && (
             <CameraModule
               showModal={open_camera}
-              trans={t}
               setModalVisible={() => this.toggleCamera()}
               setImage={(result) => this.imageCompress(result.uri)}
             />
           )}
           {is_scan && (
             <ScanDocument
-              t={t}
               setModalVisible={this.setModalVisibleScan}
               onSubmit={this.imageCompress}
             />
@@ -694,7 +685,6 @@ class ModelReceivedShipment extends React.Component {
 ModelReceivedShipment.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({

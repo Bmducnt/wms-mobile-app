@@ -5,10 +5,10 @@ import moment from 'moment';
 import {SvgUri} from 'react-native-svg';
 import { colors, gStyle } from '../../constants';
 import Badge from '../../components/Badge';
+import {translate} from "../../i18n/locales/IMLocalized";
 
 const   ItemOrderPacked = ({
   itemInfo,
-  translate,
   onPress,
   isloading,
   onListBox,
@@ -16,7 +16,7 @@ const   ItemOrderPacked = ({
   onSelect
 }) => {
 
-  
+
   return (
     <View style={styles.container}>
         <TouchableOpacity
@@ -50,7 +50,7 @@ const   ItemOrderPacked = ({
             <View style={styles.percentBar}></View>
             <View style={[gStyle.flexRowSpace,{marginTop:5}]}>
               <Text style={styles.textLabel}>
-                
+
                 {translate('screen.module.packed.item.tracking_type')}
               </Text>
               <Badge
@@ -85,7 +85,7 @@ const   ItemOrderPacked = ({
                   borderRadius: 6,
                 }}
               />
-              <View style={gStyle.flexRow}> 
+              <View style={gStyle.flexRow}>
                 <TouchableOpacity
                   onPress={() => onListBox(itemInfo.tracking_code)}
                   style={{
@@ -96,7 +96,7 @@ const   ItemOrderPacked = ({
                     backgroundColor:colors.borderLight
                   }}
                 >
-                  {isloading && <ActivityIndicator color={colors.white} size={12} />} 
+                  {isloading && <ActivityIndicator color={colors.white} size={12} />}
                   <Text style={{ color: colors.white,...gStyle.textboxme14,paddingLeft:5}}>
                     {translate('screen.module.packed.item.list_box')}
                   </Text>
@@ -145,7 +145,7 @@ const   ItemOrderPacked = ({
               </View>
           </View>
         </TouchableOpacity>
-        
+
     </View>
   );
 };
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     ...gStyle.textBoxme14,
     color:colors.greyInactive
   },
-  
+
 });
 
 export default ItemOrderPacked;

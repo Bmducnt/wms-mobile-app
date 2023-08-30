@@ -11,28 +11,24 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Timeline from 'react-native-timeline-flatlist'
-import { 
+import {
   FontAwesome,
   Ionicons,
-  Entypo 
+  Entypo
 } from "@expo/vector-icons";
-import { 
-  colors, 
-  device, 
-  gStyle 
+import {
+  colors,
+  device,
+  gStyle
 } from "../../constants";
 import * as ImagePicker from "expo-image-picker";
-import { 
-  Image as Imagecompressor 
+import {
+  Image as Imagecompressor
 } from "react-native-compressor";
 // components
 import ScreenHeader from "../../components/ScreenHeader";
 import TextInputComponent from "../../components/TextInputComponent";
 
-import {
-  _getTimeDefaultFrom,
-  _getTimeDefaultTo,
-} from "../../helpers/device-height";
 import {
   permissionDenied
 } from "../../helpers/async-storage";
@@ -44,6 +40,7 @@ import getDetailTask from "../../services/tasks/detail";
 import getCommentTask from "../../services/tasks/list_comment";
 import addCommentTask from "../../services/tasks/chat";
 import updateStatusTask from "../../services/tasks/status-task";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 
 class DetailTask extends React.PureComponent {
@@ -61,16 +58,16 @@ class DetailTask extends React.PureComponent {
   }
 
   componentDidMount() {
-    const { navigation } = this.props;
-    this.setState({
-        task_code: navigation.getParam("task_code")
+      const { params } = this.props?.route;    this.setState({
+        task_code: params?.task_code
       });
-    
+
   }
 
   UNSAFE_componentWillMount = async () => {
-    this.fetchDetailTask(this.props.navigation.getParam("task_code"));
-    this.fetchCommentTask(this.props.navigation.getParam("task_code"));
+      const { params } = this.props?.route;
+    await this.fetchDetailTask(params?.task_code);
+    await this.fetchCommentTask(params?.task_code);
   };
 
   fetchDetailTask= async (code) => {
@@ -83,7 +80,7 @@ class DetailTask extends React.PureComponent {
         if(response.data.results.length > 0){
           this.setState({ data_detail: response.data.results[0] });
         }
-        
+
     } else if (response.status === 403) {
       permissionDenied(this.props.navigation);
     }
@@ -98,7 +95,7 @@ class DetailTask extends React.PureComponent {
     const response = await getCommentTask(code);
     if (response.status === 200) {
         this.setState({ data_comment_task: response.data.results });
-        
+
     } else if (response.status === 403) {
       permissionDenied(this.props.navigation);
     }
@@ -106,7 +103,6 @@ class DetailTask extends React.PureComponent {
   };
 
   addCommentTasks = async () =>{
-    const { t } = this.props.screenProps;
     this.setState({is_loading : true});
     const response = await addCommentTask(this.state.task_code,JSON.stringify({
         comment_text : this.state.comment_text,
@@ -115,10 +111,10 @@ class DetailTask extends React.PureComponent {
     if (response.status === 200){
         Alert.alert(
             '',
-            t("base.success"),
+            translate("base.success"),
             [
                 {
-                text: t("base.confirm"),
+                text: translate("base.confirm"),
                 onPress: () => {this.fetchCommentTask(this.state.task_code);},
                 },
             ],
@@ -131,7 +127,6 @@ class DetailTask extends React.PureComponent {
   };
 
   updateStatusTasksClose = async () =>{
-    const { t } = this.props.screenProps;
     this.setState({is_loading : true});
     const response = await updateStatusTask(this.state.task_code,JSON.stringify({
       status_id:405
@@ -139,10 +134,10 @@ class DetailTask extends React.PureComponent {
     if (response.status === 200){
         Alert.alert(
             '',
-            t("base.success"),
+            translate("base.success"),
             [
                 {
-                text: t("base.confirm"),
+                text: translate("base.confirm"),
                 onPress: () => {this.fetchCommentTask(this.state.task_code);},
                 },
             ],
@@ -157,7 +152,6 @@ class DetailTask extends React.PureComponent {
 
 
   pickImageorVideo = async () => {
-    const { t } = this.props.screenProps;
     this.setState({ is_loading: true });
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -175,7 +169,7 @@ class DetailTask extends React.PureComponent {
 
   commitAssetToServer = async (assetPath) => {
     this.setState({ is_loading: true });
-    req = await serviceUploadAsset(assetPath, null, null, 3,0,false);
+    const req = await serviceUploadAsset(assetPath, null, null, 3,0,false);
     this.setState({
       list_asset: [
         {
@@ -197,14 +191,13 @@ class DetailTask extends React.PureComponent {
 
   render() {
     const { navigation } = this.props;
-    const { 
+    const {
         list_asset,
         is_loading,
         data_detail,
         data_comment_task,
         task_code
     } = this.state;
-    const { t } = this.props.screenProps;
     return (
         <View style={gStyle.container}>
             <View>
@@ -217,8 +210,8 @@ class DetailTask extends React.PureComponent {
                     bgColor={colors.cardLight}
                     onPressCamera={null}
                     onSubmitEditingInput={null}
-                    textPlaceholder={t("screen.module.pickup.detail.box_master")}
-                />
+                    textPlaceholder={translate("screen.module.pickup.detail.box_master")}
+                 navigation={navigation}/>
             </View>
             <ScrollView nestedScrollEnabled={true}>
                 <View style={[{marginHorizontal:15,marginTop:10}]}>
@@ -235,7 +228,7 @@ class DetailTask extends React.PureComponent {
                     <View style={[{
                         marginTop:5,
                     }]}>
-                    <View 
+                    <View
                         style={[gStyle.flexRowSpace,{
                           backgroundColor:colors.cardLight ,
                           paddingHorizontal:4,
@@ -260,7 +253,7 @@ class DetailTask extends React.PureComponent {
                           {data_detail?.task_detail?.total_images} <Entypo name="chevron-thin-right" size={14} color={colors.white} />
                         </Text>
                     </TouchableOpacity>
-                    <View 
+                    <View
                       style={[gStyle.flexRowSpace,{backgroundColor:colors.cardLight,paddingHorizontal:4,
                       paddingVertical:13,borderRadius:4,marginTop:5}]}>
                         <Text style={{color:colors.white,padding:4}}>
@@ -275,8 +268,8 @@ class DetailTask extends React.PureComponent {
                                     paddingVertical:13,borderRadius:4,backgroundColor:colors.cardLight,marginTop:5}]}
                     >
                         <Text style={{color:colors.white,padding:4}}>
-                          <Entypo name="shopping-cart" size={20} color={colors.white} /> {t('screen.module.taks.detail.box_have')}  
-                          {data_detail?.task_material_req} {t('screen.module.taks.detail.box_move')} 
+                          <Entypo name="shopping-cart" size={20} color={colors.white} /> {t('screen.module.taks.detail.box_have')}
+                          {data_detail?.task_material_req} {t('screen.module.taks.detail.box_move')}
                         </Text>
                         <Text style={{color:colors.white,padding:4}}>
                            <Entypo name="chevron-thin-right" size={14} color={colors.white} />
@@ -284,7 +277,7 @@ class DetailTask extends React.PureComponent {
                     </TouchableOpacity>
                   }
                   </View>
-                    
+
                 </View>
                 <View style={{marginTop:8}}>
                     <TextInputComponent
@@ -306,7 +299,7 @@ class DetailTask extends React.PureComponent {
                 <View style={[gStyle.flexRowSpace,{marginVertical:5,marginHorizontal:15}]}>
                     <TouchableOpacity onPress={() => this.pickImageorVideo()}>
                         <Ionicons name="attach" size={18} color={colors.darkgreen} />
-                        {list_asset.length > 0 && 
+                        {list_asset.length > 0 &&
                       <Text style={[styles.textLabel,{color:colors.white}]}>{list_asset.length} {t('screen.module.taks.add.file_sub')}</Text> }
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.addCommentTasks()} style={{paddingHorizontal:10,
@@ -349,7 +342,7 @@ class DetailTask extends React.PureComponent {
                             paddingHorizontal:6,
                             backgroundColor:colors.cardLight
                         }}
-                        
+
                     />
                 </View>}
                 </ScrollView>
@@ -360,7 +353,7 @@ class DetailTask extends React.PureComponent {
                     paddingVertical:4,
                     paddingHorizontal:4,
                     borderRadius:4
-                  }} 
+                  }}
                       onPress={() => this.updateStatusTasksClose()}>
                       {!is_loading ? <Text style={styles.textButton}>
                       {t('screen.module.taks.detail.btn_done')}
@@ -368,7 +361,7 @@ class DetailTask extends React.PureComponent {
                   </TouchableOpacity>
               </View>}
 
-            
+
       </View>
     );
   }
@@ -377,7 +370,6 @@ class DetailTask extends React.PureComponent {
 DetailTask.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({

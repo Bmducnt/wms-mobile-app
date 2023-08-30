@@ -17,10 +17,11 @@ import { colors, images, gStyle } from '../constants';
 
 // components
 import ScreenHeader from '../components/ScreenHeader';
-import {_getTimeDefaultFrom,_getTimeDefaultTo,permissionDenied} from '../helpers/device-height';
+import {permissionDenied} from '../helpers/device-height';
 
 //api
 import getListNotifyByWarehouse from '../services/reports/notify';
+import {translate} from "../i18n/locales/IMLocalized";
 
 class NotifyScreen extends React.Component {
 
@@ -52,7 +53,7 @@ class NotifyScreen extends React.Component {
       this.setState({list_notify:response.data.results});
     }else if (response.status === 403){
       permissionDenied(this.props.navigation);
-    };
+    }
     this.setState({isloading : false})
   };
 
@@ -61,7 +62,6 @@ class NotifyScreen extends React.Component {
       navigation
     } = this.props;
     const {isloading,scrollY,list_notify} = this.state;
-    const {t} = this.props.screenProps;
     const opacityIn = scrollY.interpolate({
         inputRange: [0, 128],
         outputRange: [0, 1],
@@ -70,11 +70,11 @@ class NotifyScreen extends React.Component {
     return (
       <View style={[gStyle.container]}>
         <Animated.View style={{ position: 'absolute', top: 0, width: '100%', zIndex: 10 ,opacity: opacityIn}}>
-          <ScreenHeader 
-            title={t('base.notify')}
+          <ScreenHeader
+            title={translate('base.notify')}
             showBack={true}
             showInput = {false}
-          />
+           navigation={navigation}/>
         </Animated.View>
         <Animated.ScrollView
             onScroll={Animated.event(
@@ -93,7 +93,7 @@ class NotifyScreen extends React.Component {
         >
             <View style={gStyle.spacer11} />
             <Animated.View style={[gStyle.flexRow,{marginHorizontal:10}]}>
-                <Text style={{color:colors.white,...gStyle.textBoxmeBold26}}>{t('base.notify')}</Text>
+                <Text style={{color:colors.white,...gStyle.textBoxmeBold26}}>{translate('base.notify')}</Text>
             </Animated.View>
             {isloading && <View style={gStyle.flexCenter}>
               <ActivityIndicator/>
@@ -102,7 +102,7 @@ class NotifyScreen extends React.Component {
             {list_notify.length === 0 && !isloading && <View style={[gStyle.flexCenter,{marginTop:'20%'}]}>
                 <Ionicons name="ios-notifications-off-outline" size={28} color={colors.white} />
                 <Text style={{...gStyle.textBoxme16,color:colors.white}}>
-                  {t('base.empty')}
+                  {translate('base.empty')}
                 </Text>
             </View>}
             {list_notify.length > 0 && (<View >
@@ -140,7 +140,6 @@ class NotifyScreen extends React.Component {
 NotifyScreen.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired
 };
 
 const styles = StyleSheet.create({

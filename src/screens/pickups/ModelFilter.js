@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Modal,
   Text,
@@ -9,14 +9,11 @@ import {
   FlatList,
 } from "react-native";
 import { Feather, Ionicons } from "@expo/vector-icons";
-import {
-  _getDatetimeToTimestamp,
-  _convertDatetimeToTimestamp,
-} from "../../helpers/device-height";
 import { colors, device, gStyle } from "../../constants";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 const ModelFilter = (props) => {
-  const [listData, setlistData] = useState(props.data);
+  const [listData] = useState(props.data);
   const [tabSelect, settabSelect] = useState(null);
 
   const renderObjDate = (obj) => {
@@ -56,7 +53,7 @@ const ModelFilter = (props) => {
                 { color: tabSelect === obj.tab ? colors.white : colors.black },
               ]}
             >
-              {props.t(obj.title)}
+              {translate(obj.title)}
             </Text>
           </View>
         </View>
@@ -96,7 +93,7 @@ const ModelFilter = (props) => {
                 <Ionicons color={colors.black70} name="close" size={24} />
               </TouchableOpacity>
               <Text style={[styles.textValue, { ...gStyle.textBoxme16 }]}>
-                {props.t("screen.module.pickup.detail.filter_detail_status")}
+                {translate("screen.module.pickup.detail.filter_detail_status")}
               </Text>
               <Text style={[styles.textLabel]}></Text>
             </View>
@@ -111,7 +108,7 @@ const ModelFilter = (props) => {
               },
             ]}
           >
-            {props.t("screen.module.pickup.detail.filter_detail_status_sub")}
+            {translate("screen.module.pickup.detail.filter_detail_status_sub")}
           </Text>
 
           <View>
@@ -131,7 +128,7 @@ const ModelFilter = (props) => {
             onPress={() => props.onCofirm(tabSelect)}
           >
             {!props.isLoading ? (
-              <Text style={styles.textButton}>{props.t("base.search")}</Text>
+              <Text style={styles.textButton}>{translate("base.search")}</Text>
             ) : (
               <ActivityIndicator />
             )}

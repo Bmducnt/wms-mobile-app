@@ -4,16 +4,17 @@ import {
   View,
   TouchableOpacity
 } from 'react-native';
-import { 
+import {
     Entypo
   } from '@expo/vector-icons';
-import { 
-  colors, 
+import {
+  colors,
   gStyle ,
 } from '../../constants';
 import ModelOrderKPI from '../../components/ModelOrderKPI';
 
 import getOrderHandover from "../../services/reports/handover";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 const OrderFailSLAHandover = props => {
 
@@ -21,8 +22,8 @@ const OrderFailSLAHandover = props => {
     const [isVisible, setisVisible] = React.useState(false);
     const [report, setreport] = React.useState([]);
     const [totalOrderMissSla, settotalOrderMissSla] = React.useState(0);
-    
-    fetchOrderHandoverHandler = async () => {
+
+    const fetchOrderHandoverHandler = async () => {
         const response = await getOrderHandover({
           type: 1,
           status: 2,
@@ -36,17 +37,17 @@ const OrderFailSLAHandover = props => {
             settotalOrderMissSla(response?.data?.total_item);
             setdata(response?.data?.results);
             setreport(response?.data?.report);
-        } 
+        }
     };
 
     React.useEffect(() => {
-        fetchOrderHandoverHandler();     
+        fetchOrderHandoverHandler().then(r => {});
     }, []);
 
 
     return (
         <React.Fragment>
-            <TouchableOpacity 
+            <TouchableOpacity
                 onPress={() => setisVisible(true)}
                 style={[gStyle.flexRowSpace,{
                 paddingVertical:13,
@@ -59,27 +60,27 @@ const OrderFailSLAHandover = props => {
             }]}>
                 <View>
                 <Text style={{color:colors.white,...gStyle.textBoxme16}} numberOfLines={2}>
-                    {props.t('screen.module.home.handover_text')}</Text>
+                    {translate('screen.module.home.handover_text')}</Text>
                     <Text style={{color:colors.white,...gStyle.textBoxme12}} numberOfLines={2}>
-                    {props.t('screen.module.home.handover_text_urgent')}
+                    {translate('screen.module.home.handover_text_urgent')}
                     </Text>
                 </View>
-                <TouchableOpacity 
+                <TouchableOpacity
                 style={[gStyle.flexRowCenter]}
                 >
                     <Text style={{color:colors.white,...gStyle.textBoxmeBold16}} numberOfLines={2}>{totalOrderMissSla}</Text>
                     <Entypo name="chevron-thin-right" size={16} color={colors.white} />
                 </TouchableOpacity>
             </TouchableOpacity>
-            <ModelOrderKPI 
-                data={data} t={props.t}
+            <ModelOrderKPI
+                data={data}
                 navigation = {props.navigation}
                 isVisible={isVisible}
-                onClose={()=>setisVisible(false)} 
+                onClose={()=>setisVisible(false)}
                 reports={report}
             />
         </React.Fragment>
-        
+
     );
 }
 

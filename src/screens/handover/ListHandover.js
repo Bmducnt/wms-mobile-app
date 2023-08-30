@@ -24,6 +24,7 @@ import ListHandoverItem from "../../components/ListHandoverItem";
 import ModelDate from '../../screens/packed/ModelDate';
 import OrderHandoverHorizontal from "../../components/OrderHandoverHorizontal";
 import { permissionDenied } from "../../helpers/async-storage";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 //service api
 
@@ -59,16 +60,15 @@ class ListHandover extends React.PureComponent {
   }
 
   componentDidMount = async () => {
-    const { navigation } = this.props;
     this.setState({
-      is_handover: navigation.getParam("is_handover"),
+      is_handover: this.props?.route?.params?.is_handover,
     });
   };
 
   UNSAFE_componentWillMount = async () => {
     const { navigation } = this.props;
     this._fetchReportHandover();
-    if (navigation.getParam("is_handover")) {
+    if (this.props?.route?.params?.is_handover) {
       this._fetchListHandover("",2);
       this._fetchOrderHandoverHandler();
     } else {
@@ -78,7 +78,7 @@ class ListHandover extends React.PureComponent {
 
   _onRefresh = async () => {
     this.state.page = 1;
-    if (this.props.navigation.getParam("is_handover")) {
+    if (this.props?.route?.params?.is_handover) {
       this.setState({ isloading: true }, () => {
         this._fetchListHandover("");
         this._fetchOrderHandoverHandler();
@@ -110,14 +110,14 @@ class ListHandover extends React.PureComponent {
   _handleLoadMore = () => {
     if (!this.state.isloading) {
       this.state.page = this.state.page + 1; // increase page by 1
-      if (this.props.navigation.getParam("is_handover")) {
+      if (this.props?.route?.params?.is_handover) {
         if (parseInt(this.state.total_page) >= parseInt(this.state.page+1)){
           this._fetchListHandover("",this.state.status_id);
         }
-        
+
       }
     }
-  };
+  }
 
   _fetchListHandover = async (code,status_id) => {
     this.setState({ isloading: true, status_id : status_id});
@@ -130,9 +130,9 @@ class ListHandover extends React.PureComponent {
       page_size: 10,
     });
     if (response.status === 200) {
-      this.setState({ 
-        
-        list_data: response.data.results, 
+      this.setState({
+
+        list_data: response.data.results,
         total_page:response.data.total_page,
         isloading: false });
     }
@@ -162,12 +162,12 @@ class ListHandover extends React.PureComponent {
       is_pda : 1
     });
     if (response.status === 200) {
-      this.setState({ 
+      this.setState({
         list_data : this.state.page === 1 ?  response.data.results : [...this.state.list_data, ...response.data.results] , isloading: false });
     }
     this.setState({ isloading: false });
   };
-  
+
 
   _openModelTime = async (code) => {
     this.setState((prev) => ({
@@ -187,7 +187,7 @@ class ListHandover extends React.PureComponent {
       }
     }
     this._openModelTime();
-    
+
   };
 
   _searchCameraBarcode = async (code) => {
@@ -231,7 +231,6 @@ class ListHandover extends React.PureComponent {
       awaiting_handover,
       done_handover
     } = this.state;
-    const { t } = this.props.screenProps;
     const shuffleRange = device.web ? [40, 80] : [40, 80];
     const opacityShuffleBottom = scrollY.interpolate({
       inputRange: shuffleRange,
@@ -249,16 +248,16 @@ class ListHandover extends React.PureComponent {
           <View
             style={{ position: "absolute", top: 0, width: "100%", zIndex: 100}}
           >
-            <ScreenHeader 
-              title={is_handover ? t("screen.module.handover.header") : t("screen.module.handover.rma_text")} 
+            <ScreenHeader
+              title={is_handover ? translate("screen.module.handover.header") : translate("screen.module.handover.rma_text")}
               showBack={true}
               showInput = {true}
               inputValueSend ={null}
               autoFocus={false}
               onPressCamera={this._searchCameraBarcode}
               onSubmitEditingInput= {this._searchCameraBarcode}
-              textPlaceholder={t("screen.module.handover.text_search")}
-            />
+              textPlaceholder={translate("screen.module.handover.text_search")}
+             navigation={navigation}/>
           </View>
           <Animated.ScrollView
             onScroll={Animated.event(
@@ -286,16 +285,15 @@ class ListHandover extends React.PureComponent {
               <View style={{marginLeft:10}}>
                 <OrderHandoverHorizontal
                   data={listOrderhandover}
-                  heading={t("screen.module.handoverd.header_text")}
-                  t={t}
+                  heading={translate("screen.module.handoverd.header_text")}
                   on_view={true}
                   tagline=""
-                />
+                 navigation={navigation}/>
               </View>
             )}
             {isloading && <View style={[gStyle.flexCenter,{marginTop:"30%"}]}><ActivityIndicator animating={true}  style={{opacity:1}} color={colors.white} /></View>}
             {list_data.length === 0 && !isloading &&(
-              <EmptySearch t={t}/>
+              <EmptySearch />
             )}
             {list_data &&
               list_data.map((item, index) => (
@@ -306,8 +304,7 @@ class ListHandover extends React.PureComponent {
                     warehouse_name = {item.warehouse_id.name}
                     code={item.outbound_code ? item.outbound_code : item.rma_code}
                     is_approved={item.outbound_code ? item.is_approved : true}
-                    type_handover={item.outbound_code ? true : false}
-                    trans={t}
+                    type_handover={!!item.outbound_code}
                     order_pending = {this.findOrderByCarrier(item.carrier_name)}
                     carrier_name = {item.carrier_name}
                     driver_vehicle={item.driver_vehicle}
@@ -344,19 +341,19 @@ class ListHandover extends React.PureComponent {
                 iconSize ={20}
               />
             </View>}
-          {is_handover && <Animated.View 
+          {is_handover && <Animated.View
               style={[gStyle.flexRow,
               {
                 marginHorizontal:10,
                 position:"absolute",
                 bottom:0,
-                opacity: opacityShuffleBottom, 
+                opacity: opacityShuffleBottom,
                 backgroundColor:colors.borderLight
               }]}
             >
-              
+
               <View style={{width:'100%'}}>
-                
+
                 <TouchableOpacity
                   style={[styles.blockText,{borderTopLeftRadius:3,borderTopRightRadius:3}]}
                   onPress={() => this._fetchListHandover("",0)}
@@ -364,21 +361,20 @@ class ListHandover extends React.PureComponent {
                   {isloading ? <ActivityIndicator animating={true}  style={{opacity:1}} color={colors.white}/>:
                   (<Text style={styles.blockTextLeft}>{awaiting_handover.toLocaleString()}</Text>)}
                   <Text style={styles.blockTextRight}>
-                    {t("screen.module.handoverd.await_handover_status")}
+                    {translate("screen.module.handoverd.await_handover_status")}
                   </Text>
                 </TouchableOpacity>
-                
+
               </View>
             </Animated.View>}
           <ModelDate
-              t={t}
               isVisible = {isDatePickerVisible}
-              onClose = {this._openModelTime} 
+              onClose = {this._openModelTime}
               onSelect = {this._onConfirmTime}
               fromTime = {from_time}
               toTime = {to_time}
           />
-          <ActionButton buttonColor={colors.boxmeBrand} 
+          <ActionButton buttonColor={colors.boxmeBrand}
             renderIcon={() => <FontAwesome5 name="plus" size={14} color={colors.white} />}
             buttonTextStyle={{...gStyle.textBoxme26}}
             onPress={() => navigation.navigate("ModalListCarrier", {"handover_type" : is_handover ? 2 : 1})}
@@ -393,7 +389,6 @@ class ListHandover extends React.PureComponent {
 ListHandover.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({

@@ -19,16 +19,17 @@ import {
 } from "react-native-compressor";
 import * as ImagePicker from "expo-image-picker";
 import { serviceUploadAsset } from "../helpers/upload-base";
-import { 
-  colors, 
-  gStyle, 
-  images, 
+import {
+  colors,
+  gStyle,
+  images,
   device
 } from "../constants";
 import TextInputComponent from "../components/TextInputComponent";
 import SliderBase from "../components/SliderBase";
 // components
 import CameraModule from "../components/CameraModule";
+import {translate} from "../i18n/locales/IMLocalized";
 
 const backgroundMode = true;
 class ModalImageBase extends React.Component {
@@ -54,19 +55,18 @@ class ModalImageBase extends React.Component {
   }
 
   UNSAFE_componentWillMount = async () => {
-    const { t } = this.props.screenProps;
     const { navigation } = this.props;
 
     Alert.alert(
-      t("screen.module.qualitycontrol.alert_head"),
-      t("screen.module.qualitycontrol.alert_body"),
+      translate("screen.module.qualitycontrol.alert_head"),
+      translate("screen.module.qualitycontrol.alert_body"),
       [
         {
-          text: t("screen.module.qualitycontrol.alert_btn"),
+          text: translate("screen.module.qualitycontrol.alert_btn"),
           onPress: () => navigation.navigate("QcScreens",{}),
         },
         {
-          text: t("base.ok"),
+          text: translate("base.ok"),
           onPress: null,
         },
       ],
@@ -77,32 +77,30 @@ class ModalImageBase extends React.Component {
 
 
   componentDidMount() {
-    const { t } = this.props.screenProps;
-    const { navigation } = this.props;
+    const { params } = this.props?.route;
     this.setState({
       text_label:
-        navigation.getParam("is_tracking") === 1
-          ? t("screen.module.camera.lable_tracking_code")
-          : t("screen.module.camera.lable_fnsku_code"),
+        params?.is_tracking === 1
+          ? translate("screen.module.camera.lable_tracking_code")
+          : translate("screen.module.camera.lable_fnsku_code"),
       text_placeholder:
-        navigation.getParam("is_tracking") === 1
-          ? t("screen.module.camera.tracking_code")
-          : t("screen.module.camera.fnsku_code"),
-      is_tracking: navigation.getParam("is_tracking"),
+      params?.is_tracking === 1
+          ? translate("screen.module.camera.tracking_code")
+          : translate("screen.module.camera.fnsku_code"),
+      is_tracking: params?.is_tracking,
     });
   }
 
   _validate_data_upload = async () => {
-    const { t } = this.props.screenProps;
     if (this.state.code_scan === null) {
       Alert.alert(
         "",
         this.state.is_tracking === 1
-          ? t("screen.module.camera.alert_scan_order")
-          : t("screen.module.camera.alert_scan_fnsku"),
+          ? translate("screen.module.camera.alert_scan_order")
+          : translate("screen.module.camera.alert_scan_fnsku"),
         [
           {
-            text: t("base.confirm"),
+            text: translate("base.confirm"),
             onPress: null,
           },
         ],
@@ -111,10 +109,10 @@ class ModalImageBase extends React.Component {
     } else {
       Alert.alert(
         "",
-        t("screen.module.camera.confirm_text"),
+        translate("screen.module.camera.confirm_text"),
         [
           {
-            text: t("base.confirm"),
+            text: translate("base.confirm"),
             onPress: () => this.submitAllAsset(),
           },
         ],
@@ -140,9 +138,8 @@ class ModalImageBase extends React.Component {
       open_camera: !prev.open_camera,
     }));
   }
-  
+
   submitAllAsset = async () => {
-    const { t } = this.props.screenProps;
     this.setState({ is_loading: true });
     for (let key = 0; key < this.state.list_asset.length; key++) {
       await serviceUploadAsset(
@@ -157,10 +154,10 @@ class ModalImageBase extends React.Component {
     this.setState({ is_loading: false });
     return Alert.alert(
       "",
-      t("screen.module.putaway.text_ok"),
+      translate("screen.module.putaway.text_ok"),
       [
         {
-          text: t("base.confirm"),
+          text: translate("base.confirm"),
           onPress: () =>
             this.setState({ list_asset: [], code_note: null, code_scan: null }),
         },
@@ -191,14 +188,13 @@ class ModalImageBase extends React.Component {
   };
 
   pickImageorVideo = async () => {
-    const { t } = this.props.screenProps;
     if (this.state.list_asset.length >= 3) {
       Alert.alert(
         "",
-        t("screen.module.camera.upload_select_alert"),
+        translate("screen.module.camera.upload_select_alert"),
         [
           {
-            text: t("base.confirm"),
+            text: translate("base.confirm"),
             onPress: null,
           },
         ],
@@ -282,7 +278,7 @@ class ModalImageBase extends React.Component {
               paddingTop: 20,
             }}
           >
-            {t("screen.module.camera.upload_text")}
+            {translate("screen.module.camera.upload_text")}
           </Text>
         </View>
         <View style={[gStyle.flexRowCenter]}>
@@ -293,7 +289,7 @@ class ModalImageBase extends React.Component {
               paddingTop: 5,
             }}
           >
-            {t("screen.module.camera.upload_text_sub")}
+            {translate("screen.module.camera.upload_text_sub")}
           </Text>
         </View>
         <View style={[gStyle.flexRowCenter]}>
@@ -304,7 +300,7 @@ class ModalImageBase extends React.Component {
               paddingTop: 40,
             }}
           >
-            {t("screen.module.camera.upload_size")}
+            {translate("screen.module.camera.upload_size")}
           </Text>
         </View>
       </View>
@@ -323,7 +319,6 @@ class ModalImageBase extends React.Component {
       is_selected,
       background_percent,
     } = this.state;
-    const { t } = this.props.screenProps;
     return (
       <ScrollView>
         <KeyboardAvoidingView
@@ -366,7 +361,7 @@ class ModalImageBase extends React.Component {
                       <Feather color={colors.white} name="camera" size={25} />
                       <Text style={[styles.textButton, { paddingLeft: 8 }]}>
                         {" "}
-                        {t("screen.module.camera.btn_camera")}
+                        {translate("screen.module.camera.btn_camera")}
                       </Text>
                     </View>
                   ) : (
@@ -402,7 +397,7 @@ class ModalImageBase extends React.Component {
                 </View>
                 <View style={[{ width: Dimensions.get("window").width - 100 }]}>
                   <Text style={{ color: "#162a53", ...gStyle.textBoxme14 }}>
-                    {t("screen.module.camera.upload_select")}
+                    {translate("screen.module.camera.upload_select")}
                   </Text>
                   <Text
                     style={{
@@ -434,7 +429,7 @@ class ModalImageBase extends React.Component {
                   autoChange={true}
                   onPressCamera={this._onSubmitEditingInputNote}
                   onSubmitEditingInput={this._onSubmitEditingInputNote}
-                  textPlaceholder={t("screen.module.camera.staff_note_input")}
+                  textPlaceholder={translate("screen.module.camera.staff_note_input")}
                 />
                 <View style={{ paddingTop: 8 }}>
                   <TextInputComponent
@@ -455,7 +450,7 @@ class ModalImageBase extends React.Component {
                 >
                   {!is_loading ? (
                     <Text style={styles.textButton}>
-                      {t("screen.module.camera.btn_upload")}{" "}
+                      {translate("screen.module.camera.btn_upload")}{" "}
                       {this.countObjectKey("video")} video ,{" "}
                       {this.countObjectKey("image")} image
                     </Text>
@@ -476,7 +471,6 @@ class ModalImageBase extends React.Component {
             {open_camera && (
               <CameraModule
                 showModal={open_camera}
-                trans={t}
                 setModalVisible={() => this.toggleCamera(false)}
                 setImage={(result) => this.pickImageByCamera(result.uri)}
               />
@@ -491,15 +485,9 @@ class ModalImageBase extends React.Component {
 ModalImageBase.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({
-  textButton: {
-    textAlign: "center",
-    color: colors.white,
-    ...gStyle.textBoxme16,
-  },
   fileUpload: {
     height: device.iPhoneNotch ? device.width - 250 : device.width - 300,
     width: device.iPhoneNotch ? device.width - 250 : device.width - 300,

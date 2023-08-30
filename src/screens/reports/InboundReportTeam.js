@@ -4,8 +4,8 @@ import {
   Text,
   View,
 } from 'react-native';
-import { 
-  colors, 
+import {
+  colors,
   gStyle ,
 } from '../../constants';
 import getKPIIboundReport from '../../services/reports/kpi_inbound';
@@ -14,21 +14,21 @@ import {_getTimeDefaultFrom,
     _getDatetimeToTimestamp,
     _getTimeDefaultFromOneDay,
     _convertDatetimeToTimestamp} from '../../helpers/device-height';
+import {translate} from "../../i18n/locales/IMLocalized";
 
 const InboundReportTeam = props => {
-    const t = props.t;
     const [data, setdata] = React.useState({});
-    
+
     React.useEffect( () => {
         fetchReport()
-        
+
       }, [data]);
-    
+
 
     const fetchReport = async () =>{
         const response = await getKPIIboundReport({
         });
-        
+
         if (response.status === 200){
             setdata(response.data.results)
         }
@@ -46,13 +46,13 @@ const InboundReportTeam = props => {
                     width:"48%"
                 }}>
                     <View style={gStyle.flexCenter}>
-                        <Text style={{...gStyle.textBoxme14,color:colors.white}}>{t('screen.module.staff_report.inbound_text')}</Text>
+                        <Text style={{...gStyle.textBoxme14,color:colors.white}}>{translate('screen.module.staff_report.inbound_text')}</Text>
                     </View>
                     <View style={[gStyle.flexCenter,{paddingVertical:5}]}>
                         <Text style={{...gStyle.textBoxmeBold20,color:colors.brandPrimary}}>{data?.po}%</Text>
                     </View>
                     <View style={gStyle.flexRowCenter}>
-                        <Text style={{...gStyle.textBoxme14,color:colors.greyInactive}}>{t('screen.module.staff_report.minimum_percent')}</Text>
+                        <Text style={{...gStyle.textBoxme14,color:colors.greyInactive}}>{translate('screen.module.staff_report.minimum_percent')}</Text>
                         <Text style={{...gStyle.textBoxme14,color:colors.boxmeBrand,paddingLeft:4}}>95%</Text>
                     </View>
                 </View>
@@ -65,13 +65,13 @@ const InboundReportTeam = props => {
                     width:"50%"
                 }}>
                 <View style={gStyle.flexCenter}>
-                        <Text style={{...gStyle.textBoxme14,color:colors.white}}>{t('screen.module.staff_report.inbound_text')} (now)</Text>
+                        <Text style={{...gStyle.textBoxme14,color:colors.white}}>{translate('screen.module.staff_report.inbound_text')} (now)</Text>
                     </View>
                     <View style={[gStyle.flexCenter,{paddingVertical:5}]}>
                         <Text style={{...gStyle.textBoxmeBold20,color:colors.brandPrimary}}>{data?.po_now}%</Text>
                     </View>
                     <View style={gStyle.flexRowCenter}>
-                    <Text style={{...gStyle.textBoxme14,color:colors.greyInactive}}>{t('screen.module.staff_report.minimum_percent')}</Text>
+                    <Text style={{...gStyle.textBoxme14,color:colors.greyInactive}}>{translate('screen.module.staff_report.minimum_percent')}</Text>
                     <Text style={{...gStyle.textBoxme14,color:colors.boxmeBrand,paddingLeft:4}}>95%</Text>
                     </View>
                 </View>

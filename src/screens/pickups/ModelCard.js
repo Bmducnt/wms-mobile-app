@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { 
-    Modal, 
-    Text, 
-    TouchableOpacity, 
+import {
+    Modal,
+    Text,
+    TouchableOpacity,
     View,
     StyleSheet
 } from "react-native";
@@ -13,11 +13,12 @@ import {
     _getTimeDefaultTo
 } from '../../helpers/device-height';
 
-import { 
-    colors, 
-    device, 
-    gStyle 
+import {
+    colors,
+    device,
+    gStyle
 } from "../../constants";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 
 const ModelCard = props => {
@@ -45,27 +46,27 @@ const ModelCard = props => {
                 }]}>
 
                     <Text >
-                        {props.t("screen.module.pickup.by_sot.header")}
+                        {translate("screen.module.pickup.by_sot.header")}
                     </Text>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         onPress={() => props.onClose()}
                         style={gStyle.flexRowSpace}
                         activeOpacity={gStyle.activeOpacity}
                     >
                         <AntDesign name="closecircle" size={22} color={colors.greyInactive} />
                     </TouchableOpacity>
-                    
+
                 </View>
                 <View>
                 <View style={{marginTop:30,marginHorizontal:10}}>
                     <View style={{paddingHorizontal:15}}>
-                        <Text>{props.t("screen.module.pickup.by_sot.help1")}</Text>
-                        <Text style={{paddingVertical:3}}>{props.t("screen.module.pickup.by_sot.help2")}</Text>
-                        <Text style={{paddingVertical:3}}>{props.t("screen.module.pickup.by_sot.help3")}</Text>
+                        <Text>{translate("screen.module.pickup.by_sot.help1")}</Text>
+                        <Text style={{paddingVertical:3}}>{translate("screen.module.pickup.by_sot.help2")}</Text>
+                        <Text style={{paddingVertical:3}}>{translate("screen.module.pickup.by_sot.help3")}</Text>
                     </View>
                     <TextInputComponent
                         navigation={props.navigation}
-                        textLabel = {props.t("screen.module.pickup.by_sot.input")}
+                        textLabel = {translate("screen.module.pickup.by_sot.input")}
                         autoFocus={true}
                         autoChange = {true}
                         ediTable={true}
@@ -78,11 +79,11 @@ const ModelCard = props => {
                     </TextInputComponent>
                     <View style={[gStyle.flexCenter,{marginTop:20}]}>
                         <TouchableOpacity disabled={!xeCode} style={[styles.bottomButton,
-                                {borderRadius:3,backgroundColor:colors.boxmeBrand}]} 
+                                {borderRadius:3,backgroundColor:colors.boxmeBrand}]}
                             onPress={() => {props.onSubmit(xeCode)}
                             }>
                             <Text style={styles.textButton}>
-                            {props.t("screen.module.pickup.by_sot.btn_by_sot")}
+                            {translate("screen.module.pickup.by_sot.btn_by_sot")}
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -93,11 +94,11 @@ const ModelCard = props => {
                 <View style={{marginTop:30,marginHorizontal:10}}>
                     <View style={[gStyle.flexCenter]}>
                         <TouchableOpacity style={[styles.bottomButton,
-                                {borderRadius:3,backgroundColor:colors.darkgreen}]} 
+                                {borderRadius:3,backgroundColor:colors.darkgreen}]}
                             onPress={() => {props.onSubmit(xeCode)}
                             }>
                             <Text style={styles.textButton}>
-                            {props.t("screen.module.pickup.by_sot.btn_by_item")}
+                            {translate("screen.module.pickup.by_sot.btn_by_item")}
                             </Text>
                         </TouchableOpacity>
                     </View>

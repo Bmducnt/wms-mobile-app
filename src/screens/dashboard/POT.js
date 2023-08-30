@@ -6,20 +6,21 @@ import {
   Dimensions,
   FlatList,
 } from 'react-native';
-import { 
-  colors, 
-  device, 
+import {
+  colors,
+  device,
   gStyle ,
 } from '../../constants';
 import CircularProgress from '../../components/CircularProgress';
 import getReportPOT from '../../services/reports/pot';
+import {translate} from "../../i18n/locales/IMLocalized";
 
 const POTReport = props => {
 
 
     const [data, setdata] = React.useState([]);
 
-    fetchPOT = async () => {
+    const fetchPOT = async () => {
         const response = await getReportPOT({});
         if (response.status === 200) {
             setdata(response.data.results.summary_chart)
@@ -31,7 +32,7 @@ const POTReport = props => {
     }
 
     React.useEffect(() => {
-        fetchPOT();     
+        fetchPOT();
     }, []);
 
 
@@ -39,7 +40,7 @@ const POTReport = props => {
         <React.Fragment>
             <View style={{backgroundColor:colors.cardLight,marginHorizontal:10,marginVertical:5}}>
                 <View style={gStyle.flexRowSpace}>
-                    <Text style={[styles.sectionHeading]} numberOfLines={1}>{props.t('screen.module.home.pot')}</Text>
+                    <Text style={[styles.sectionHeading]} numberOfLines={1}>{translate('screen.module.home.pot')}</Text>
                 </View>
                 <View style={[gStyle.flexRow,{backgroundColor:colors.cardDark,borderRadius:3}]}>
                 <FlatList

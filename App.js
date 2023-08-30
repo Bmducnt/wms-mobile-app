@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import * as Localization from "expo-localization";
 import * as Notifications from "expo-notifications";
+import 'react-native-gesture-handler';
 // import AppLoading from 'expo-app-loading';
 import moment from "moment";
 import "moment/min/locales";
@@ -26,6 +27,7 @@ import { getCachedUrlContent } from "./src/helpers/wrap-api";
 // main navigation stack
 import Stack from "./src/navigation/Stack";
 import {Platform} from "react-native";
+import {setI18nConfig, setI18nConfigChange} from "./src/i18n/locales/IMLocalized";
 
 //i18n
 const i18n = new I18n(translation);
@@ -120,14 +122,14 @@ class App extends React.Component {
   }
 
   UNSAFE_componentWillMount = async () => {
-    const locale = await Localization.getLocales();
+    const locale = Localization.getLocales();
+    let lang = 'en'
     if (locale[0].languageCode === "en" || locale[0].languageCode === "vi") {
-      await this.setState({ locale: locale[0].languageCode });
-      moment.locale(locale[0].languageCode);
-    } else {
-      await this.setState({ locale: "en" });
-      moment.locale("en");
+      lang = locale[0].languageCode
     }
+    await this.setState({ locale: lang });
+    moment.locale(lang);
+    setI18nConfig(lang)
   };
 
   prepareResources = async () => {
@@ -138,9 +140,7 @@ class App extends React.Component {
     });
   };
 
-  setLocale = (locale) => {
-    this.setState({ locale });
-  };
+
 
   translationApp = (scope, options) => {
     return i18n.t(scope, { locale: this.state.locale, ...options });

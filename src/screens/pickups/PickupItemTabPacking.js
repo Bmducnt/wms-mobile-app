@@ -4,9 +4,9 @@ import {
   ActivityIndicator,
   FlatList
 } from 'react-native';
-import { 
+import {
     colors,
-    gStyle 
+    gStyle
 } from '../../constants';
 
 import ListPickupItems from '../../components/ListPickupItems';
@@ -60,7 +60,7 @@ class PickupItemTabPacking extends React.PureComponent {
     };
 
     _onRefresh = async () =>{
-        this.setState({isloading: true,},() => 
+        this.setState({isloading: true,},() =>
         {
             this._fetchListPickupHandler({
                 'status' : this.props.status_id,
@@ -81,7 +81,7 @@ class PickupItemTabPacking extends React.PureComponent {
                 {isloading && <View style={[gStyle.flexCenter,{marginTop:"20%"}]}><ActivityIndicator animating={true}  style={{opacity:1}} color={colors.white} /></View>}
                 <View>
                     {list_pickup.length === 0  &&  !isloading &&
-                        <EmptySearch t={t}/> }
+                        <EmptySearch/> }
                     {list_pickup.length > 0 && <FlatList
                     data={list_pickup}
                     onRefresh={() => this._onRefresh()}
@@ -90,7 +90,6 @@ class PickupItemTabPacking extends React.PureComponent {
                     renderItem={({ item }) => (
                         <ListPickupItems
                             navigation = {navigation}
-                            translate ={t}
                             itemInfo={{
                                 'time_created': item.created_date,
                                 'assigner_by' :item.assigner_by.email,

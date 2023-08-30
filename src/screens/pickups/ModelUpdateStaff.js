@@ -13,14 +13,15 @@ import {
   _getTimeDefaultTo,
 } from "../../helpers/device-height";
 import ListCarrierName from "../../components/ListCarrierAtWarehouse";
-import { 
-    colors, 
-    device, 
-    gStyle 
+import {
+    colors,
+    device,
+    gStyle
 } from "../../constants";
 
 //API
 import getListStaffPickup from "../../services/pickup/list-staff";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 const ModelUpdateStaff = (props) => {
   const [openListStaff, setopenListStaff] = useState([]);
@@ -65,7 +66,7 @@ const ModelUpdateStaff = (props) => {
             activeOpacity={gStyle.activeOpacity}
           >
             <Text style={[styles.textValue, { ...gStyle.textBoxme16 }]}>
-              {props.t("base.back")}
+              {translate("base.back")}
             </Text>
           </TouchableOpacity>
         </View>
@@ -89,7 +90,6 @@ const ModelUpdateStaff = (props) => {
                   text_note1={"screen.module.pickup.create.text_1"}
                   text_note2={"screen.module.pickup.create.text_2"}
                   is_select={props.staff_id}
-                  trans={props.t}
                   onPress={props.onSelect}
                 />
               )}
@@ -103,7 +103,7 @@ const ModelUpdateStaff = (props) => {
           >
             {!props.isLoading ? (
               <Text style={styles.textButton}>
-                {props.t("screen.module.pickup.list.btn_update")}
+                {translate("screen.module.pickup.list.btn_update")}
               </Text>
             ) : (
               <ActivityIndicator color={colors.white}/>

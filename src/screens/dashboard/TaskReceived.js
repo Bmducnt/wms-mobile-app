@@ -4,18 +4,19 @@ import {
   View,
   TouchableOpacity
 } from 'react-native';
-import { 
+import {
   colors,
   gStyle ,
 } from '../../constants';
 
-import { 
+import {
     Entypo
   } from '@expo/vector-icons';
 
 import getReportTask from "../../services/tasks/report-task";
 
 import ModelTasksRc from '../../components/ModelTasksRc';
+import {translate} from "../../i18n/locales/IMLocalized";
 
 
 const TaskReceived = props => {
@@ -23,7 +24,7 @@ const TaskReceived = props => {
 
     const [totalTask, settotalTask] = React.useState(0);
 
-    fetchTask = async () => {
+    const fetchTask = async () => {
         const response = await getReportTask();
         if (response.status === 200) {
             settotalTask(response?.data?.results)
@@ -31,13 +32,13 @@ const TaskReceived = props => {
     };
 
     React.useEffect(() => {
-        fetchTask();     
+        fetchTask().then(r => {});
     }, []);
 
 
     return (
         <React.Fragment>
-            <TouchableOpacity 
+            <TouchableOpacity
                 style={[gStyle.flexRowSpace,{
                     paddingVertical:13,
                     marginTop:1,
@@ -49,17 +50,17 @@ const TaskReceived = props => {
                 }]}
                 onPress={() => props.navigation.navigate("ListTasks",{})}
             >
-            
+
             <View>
               <Text style={{color:colors.white,...gStyle.textBoxme16}} numberOfLines={2}>
-                {props.t('screen.module.taks.home1')}{" "}
-                {totalTask}{" "}{props.t('screen.module.taks.home2')} </Text>
+                {translate('screen.module.taks.home1')}{" "}
+                {totalTask}{" "}{translate('screen.module.taks.home2')} </Text>
                 <Text style={{color:colors.white,...gStyle.textBoxme12}} numberOfLines={2}>
-                {props.t('screen.module.home.handover_text_urgent')}
+                {translate('screen.module.home.handover_text_urgent')}
                 </Text>
             </View>
-            
-            <TouchableOpacity 
+
+            <TouchableOpacity
               onPress={() => props.navigation.navigate("ListTasks",{})}
               style={[gStyle.flexRowCenter,{height:30,width:30,borderRadius:30/2,backgroundColor:colors.transparent}]}
             >

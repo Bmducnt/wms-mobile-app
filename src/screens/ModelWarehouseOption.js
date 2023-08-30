@@ -20,13 +20,13 @@ import updateTokenApp from '../services/auth/update';
 import {saveStaffLogin} from '../helpers/async-storage';
 // components
 import LineWarehouse from '../components/LineWarehouse';
+import {translate} from "../i18n/locales/IMLocalized";
 
-const ModelWarehouseOption = ({navigation,screenProps}) => {
-  const list_warehoue = navigation.getParam('list_warehoue');
-  const staff_email = navigation.getParam('staff_email');
-  const staff_pass = navigation.getParam('staff_pass');
-  const token_app = navigation.getParam('token_app');
-  const { t, locale,setLocale} = screenProps;
+const ModelWarehouseOption = ({route, navigation}) => {
+  const list_warehoue = route.params?.list_warehoue;
+  const staff_email =  route.params?.staff_email;
+  const staff_pass =  route.params?.staff_pass;
+  const token_app =  route.params?.token_app;
   const [loading, setLoading] = React.useState(false);
 
   const adminReLogin = async (warehouse_code) => {
@@ -59,11 +59,11 @@ const ModelWarehouseOption = ({navigation,screenProps}) => {
           'app_version' : device.version_release,
         })
       }
-      navigation.navigate('App',{ screen: 'HomeScreen',initial: true});
+      navigation.navigate('App',{ screen: 'TabNavigation',initial: true});
     }else{
       Alert.alert(
         '',
-        t('screen.module.authen.error_wrong_info'),
+        translate('screen.module.authen.error_wrong_info'),
         [
           {
             text: 'ok',
@@ -101,7 +101,7 @@ const ModelWarehouseOption = ({navigation,screenProps}) => {
         contentContainerStyle={[gStyle.flex1]}
         contentInset={{bottom: 80}}
         showsVerticalScrollIndicator={true}
-        style={[gStyle.container, { backgroundColor: 'transparent' }]}
+        style={[gStyle.container, { backgroundColor: colors.blackBlur }]}
       >
         <View style={styles.container}>
           <View style={styles.containerImage}>
@@ -141,7 +141,6 @@ const ModelWarehouseOption = ({navigation,screenProps}) => {
 ModelWarehouseOption.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired
 };
 
 const styles = StyleSheet.create({

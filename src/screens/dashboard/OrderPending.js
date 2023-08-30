@@ -18,7 +18,7 @@ const OrderPending = props => {
     const [dataReportCarrier, setdataReportCarrier] = React.useState([]);
     const [totalOrder, settotalOrder] = React.useState(0);
 
-    fetchOrderPeding = async () => {
+    const fetchOrderPeding = async () => {
         const response = await getReportOrderKPI({
             'is_pda' : 2,
             'v2':1
@@ -52,7 +52,7 @@ const OrderPending = props => {
     };
 
     React.useEffect(() => {
-        fetchOrderPeding();
+        fetchOrderPeding().then(r => {});
     }, []);
 
 
@@ -63,10 +63,9 @@ const OrderPending = props => {
                 slaSync = {slaSync}
                 slaPack={slaPack}
                 kpi_total = {totalOrder}
-                t={props.t}
             />
 
-            {slaPack.length > 0 && <SLAPack slaPack={slaPack} t={props.t} />}
+            {slaPack.length > 0 && <SLAPack slaPack={slaPack} />}
         </React.Fragment>
         );
     }

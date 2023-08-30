@@ -12,12 +12,13 @@ import {
 } from "react-native";
 import { Feather,AntDesign,Octicons } from "@expo/vector-icons";
 
-import { 
-    colors, 
-    device, 
+import {
+    colors,
+    device,
     gStyle,
     images
 } from "../../constants";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 
 const ModelListPart = (props) => {
@@ -46,13 +47,13 @@ const ModelListPart = (props) => {
                     <View style={gStyle.flexRowSpace}>
                         <View style={gStyle.flexRow}>
                             <View >
-                                <Text style={[styles.textCode, { ...gStyle.textBoxmeBold14 }]} 
+                                <Text style={[styles.textCode, { ...gStyle.textBoxmeBold14 }]}
                                     numberOfLines={1} ellipsizeMode="tail">
-                                    {props.t('screen.module.handover.b2b_part_pk')} {obj.pickup_code}
+                                    {translate('screen.module.handover.b2b_part_pk')} {obj.pickup_code}
                                 </Text>
                                 <View style={[styles.containerStatus]}>
                                     <Text style={[styles.textRight, { ...gStyle.textBoxme14,color:colors.black70 }]} numberOfLines={1}>
-                                        {props.t('screen.module.handover.b2b_part_quantity')}
+                                        {translate('screen.module.handover.b2b_part_quantity')}
                                     </Text>
                                     <Text style={[styles.textRight, { ...gStyle.textBoxme14,color:colors.black,paddingLeft:3 }]} numberOfLines={1}>
                                         {obj.total}
@@ -60,23 +61,23 @@ const ModelListPart = (props) => {
                                 </View>
                                 <View style={[styles.containerStatus]}>
                                     <Text style={[styles.textRight, { ...gStyle.textBoxme14,color:colors.black70 }]} numberOfLines={1}>
-                                    {props.t('screen.module.handover.b2b_vas')}{" "}
+                                    {translate('screen.module.handover.b2b_vas')}{" "}
                                         <Octicons name={ obj.is_vas === 1 ? "check-circle-fill" : "blocked"} size={16} color={
-                                            obj.is_vas === 1 ? colors.darkgreen : colors.red} /> 
+                                            obj.is_vas === 1 ? colors.darkgreen : colors.red} />
                                     </Text>
                                 </View>
                                 <View style={[styles.containerStatus]}>
                                     <Text style={[styles.textRight, { ...gStyle.textBoxme14,color:colors.black70 }]} numberOfLines={1}>
-                                    {props.t('screen.module.handover.b2b_status')}
+                                    {translate('screen.module.handover.b2b_status')}
                                     </Text>
                                     <Text style={[styles.textRight, { ...gStyle.textBoxme14,color:obj.is_available ? colors.darkgreen : colors.boxmeBrand,paddingLeft:3 }]} numberOfLines={1}>
-                                        {!obj.is_available ? `${props.t('screen.module.handover.b2b_status_done')}` : 
-                                        `${props.t('screen.module.handover.b2b_status_await')}`}
+                                        {!obj.is_available ? `${translate('screen.module.handover.b2b_status_done')}` :
+                                        `${translate('screen.module.handover.b2b_status_await')}`}
                                     </Text>
                                 </View>
                                 <View style={[styles.containerStatus]}>
                                     <Text style={[styles.textRight, { ...gStyle.textBoxme14,color:colors.black70 }]} numberOfLines={1}>
-                                        {props.t('screen.module.handover.b2b_part_email')}
+                                        {translate('screen.module.handover.b2b_part_email')}
                                     </Text>
                                     <Text style={[styles.textRight, { ...gStyle.textBoxme14,color:colors.black,paddingLeft:3 }]} numberOfLines={1}>
                                         {obj.picker_by}
@@ -84,7 +85,7 @@ const ModelListPart = (props) => {
                                 </View>
                             </View>
                         </View>
-                        
+
                     </View>
                     <View style={[styles.containerRight]}>
                         <View style={gStyle.flexRow}>
@@ -100,7 +101,7 @@ const ModelListPart = (props) => {
     };
 
     return (
-        <Modal 
+        <Modal
         animationType="slide"
         presentationStyle="formSheet"
         visible={true}
@@ -131,7 +132,7 @@ const ModelListPart = (props) => {
                 ]}
                 >
                     <Text>
-                        {props.t('screen.module.handover.b2b_part_header')}
+                        {translate('screen.module.handover.b2b_part_header')}
                     </Text>
                     <TouchableOpacity
                     onPress={() => props.onClose(false)}
@@ -139,10 +140,10 @@ const ModelListPart = (props) => {
                     style={gStyle.flexCenter}
                     >
                         <AntDesign name="closecircle" size={22} color={colors.greyInactive} />
-                    
+
                     </TouchableOpacity>
                 </View>
-                
+
                 <View style={[gStyle.flexRow, { paddingBottom: 100,marginTop:10,marginHorizontal:5}]}>
                     <FlatList
                         showsVerticalScrollIndicator={false}

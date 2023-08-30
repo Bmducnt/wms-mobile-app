@@ -1,9 +1,9 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { 
-    Alert, 
-    StyleSheet, 
-    Text, 
+import {
+    Alert,
+    StyleSheet,
+    Text,
     View,
     ActivityIndicator,
     FlatList,
@@ -15,7 +15,6 @@ import { colors, gStyle } from '../../constants';
 // components
 import ModalHeader from '../../components/ModalHeader';
 import TextInputComponent from '../../components/TextInputComponent';
-import {_getTimeDefaultFrom,_getTimeDefaultTo} from '../../helpers/device-height';
 import {handleSoundScaner,permissionDenied,handleSoundOkScaner} from '../../helpers/async-storage';
 import FNSKUItems from '../../components/ListFNSKUPickup';
 
@@ -23,6 +22,7 @@ import FNSKUItems from '../../components/ListFNSKUPickup';
 import getDetailBinPickup from '../../services/pickup/bin';
 import putItemOutBound from '../../services/pickup/update';
 import confirmOrderException from '../../services/pickup/exception';
+import {translate} from "../../i18n/locales/IMLocalized";
 
 class ModalPickupUpdate extends React.Component {
 
@@ -45,18 +45,17 @@ class ModalPickupUpdate extends React.Component {
     };
 
     componentDidMount() {
-        const { navigation } = this.props;
+        const { params } = this.props?.route;
         this.setState({
-            pickup_box_id: navigation.getParam('pickup_box_id'),
-            bin_code_validate: navigation.getParam('bin_code'),
-            is_bin_api: navigation.getParam('is_bin'),
-            is_error: navigation.getParam('is_error_rollback')
+            pickup_box_id: params?.pickup_box_id,
+            bin_code_validate: paramsbin_code,
+            is_bin_api: paramsis_bin,
+            is_error: paramsis_error_rollback
         });
     };
 
     _putOrderException = async (is_confirm) => {
         this.setState({isloading:true});
-        const { t } = this.props.screenProps;
         const response = await confirmOrderException(JSON.stringify({
             bin_id: this.state.bin_code,
             pickupbox_id: this.state.pickup_box_id,
@@ -70,10 +69,10 @@ class ModalPickupUpdate extends React.Component {
         }else if (response.status === 400){
             Alert.alert(
                 '',
-                t('screen.module.pickup.detail.text_confirm_lost_403'),
+                translate('screen.module.pickup.detail.text_confirm_lost_403'),
                 [
                   {
-                    text: t("base.confirm"),
+                    text: translate("base.confirm"),
                     onPress: () => { null;},
                   }
                 ],
@@ -82,12 +81,11 @@ class ModalPickupUpdate extends React.Component {
         }else {
             handleSoundScaner();
             this.setState({isloading:false});
-        };
+        }
     };
 
     _putBinOutBoundtHandler = async (code_scan) => {
         this.setState({ isloading: true });
-        const { t } = this.props.screenProps;
         const response = await putItemOutBound(this.state.pickup_box_id, JSON.stringify({
             fnsku: code_scan,
             scan_type: 2,
@@ -122,17 +120,17 @@ class ModalPickupUpdate extends React.Component {
                     total_sold_pick -= sold;
                   }
                 } else {
-                    if (item.quantity == item.quantity_pick){
+                    if (item.quantity === item.quantity_pick){
                         item.activebg = colors.brandPrimary;
                         item.idx_sort = 2;
                     }else{
                         item.activebg = colors.greyLight;
                         item.idx_sort = 1;
                     }
-                  
+
                 }
             });
-            this.state.list_fnsku_outbound.sort(function(a, b) { 
+            this.state.list_fnsku_outbound.sort(function(a, b) {
                 return a.idx_sort - b.idx_sort  ||  a.activebg.localeCompare(b.activebg);
              });
             this._goBackAuto();
@@ -143,17 +141,17 @@ class ModalPickupUpdate extends React.Component {
             if (response?.data?.error === 4) {
                 Alert.alert(
                     '',
-                    t('screen.module.pickup.detail.text_confirm_cycle'),
+                    translate('screen.module.pickup.detail.text_confirm_cycle'),
                     [
                         {
-                            text: t("base.confirm"),
+                            text: translate("base.confirm"),
                             onPress: () => { null; },
                         }
                     ],
                     { cancelable: false },
                 );
             }
-        };
+        }
         this.setState({ isloading: false });
     };
 
@@ -184,7 +182,7 @@ class ModalPickupUpdate extends React.Component {
                 if (response?.data?.data[0]['box_id'] !== ''){
                     this.setState({is_box : false})
                 }
-            };
+            }
             this._checkBinShowButton(response.data.data);
             this.setState({
             list_fnsku_outbound:response.data.data})
@@ -192,7 +190,7 @@ class ModalPickupUpdate extends React.Component {
             permissionDenied(this.props.navigation);
         }else {
             handleSoundScaner();
-        };
+        }
         this.setState({isloading:false});
     };
 
@@ -200,7 +198,7 @@ class ModalPickupUpdate extends React.Component {
     _searchCameraBarcode = async (code) => {
         if (code){
             this._putBinOutBoundtHandler(code);
-        };
+        }
     };
 
     _onSubmitEditingInputBin = async (code) => {
@@ -213,31 +211,30 @@ class ModalPickupUpdate extends React.Component {
                 'is_bin': this.state.is_bin_api,
                 'is_error' : this.state.is_error
             });
-        };
+        }
     };
 
     _onSubmitEditingInput = async (code) => {
         if (code){
             await this.setState({fnsku_quantity_scan : code});
-        };
+        }
     };
-    
+
     _onRefresh = async () => {
         this.props.navigation.goBack(null);
     };
 
     _onOutOfstock = async () =>{
-        const { t } = this.props.screenProps;
         Alert.alert(
             '',
-            t('screen.module.pickup.detail.text_confirm_out_stock'),
+            translate('screen.module.pickup.detail.text_confirm_out_stock'),
             [
               {
-                text: t("base.confirm"),
+                text: translate("base.confirm"),
                 onPress: () => { this._putOrderException(0);},
               },
               {
-                text: t('screen.module.product.move.btn_cancel'),
+                text: translate('screen.module.product.move.btn_cancel'),
                 onPress: null,
               },
             ],
@@ -245,17 +242,16 @@ class ModalPickupUpdate extends React.Component {
         );
     };
 
-    
+
 
     render() {
         const { navigation } = this.props;
-        const { 
+        const { params } = this.props?.route;
+        const {
             list_fnsku_outbound,
             isloading,
-            is_box,
             is_show_button
         } = this.state;
-        const { t } = this.props.screenProps;
         return (
             <KeyboardAvoidingView
                 style={{ height: '100%', width: '100%' }}
@@ -270,15 +266,15 @@ class ModalPickupUpdate extends React.Component {
                             ...gStyle.textBoxme12,
                             backgroundColor : colors.borderLight,
                             color:colors.boxmeBrand
-                        }}>{t('screen.module.pickup.detail.lost_item')}</Text> : null}
+                        }}>{translate('screen.module.pickup.detail.lost_item')}</Text> : null}
                         rightPress={() => this._onOutOfstock()}
-                        text={`${navigation.getParam('bin_code')}`}
+                        text={`${params?.bin_code}`}
                     />
                     {list_fnsku_outbound.length > 0 ? <View style={gStyle.flexRow}>
                         <View style={{width:'30%'}}>
                             <TextInputComponent
                                 navigation={navigation}
-                                textLabel = {t('screen.module.pickup.detail.quantity_out')}
+                                textLabel = {translate('screen.module.pickup.detail.quantity_out')}
                                 inputValue = {'1'}
                                 keyboardType={'numeric'}
                                 autoChange = {true}
@@ -294,10 +290,10 @@ class ModalPickupUpdate extends React.Component {
                                 navigation={navigation}
                                 autoFocus={true}
                                 showSearch = {false}
-                                textLabel = {t('screen.module.pickup.detail.fnsku_code')}
+                                textLabel = {translate('screen.module.pickup.detail.fnsku_code')}
                                 onPressCamera = {this._searchCameraBarcode}
                                 onSubmitEditingInput = {this._searchCameraBarcode}
-                                textPlaceholder={t('screen.module.pickup.detail.fnsku_scan')}/>
+                                textPlaceholder={translate('screen.module.pickup.detail.fnsku_scan')}/>
                         </View>
                     </View>:
                     <View style={{width:'100%'}}>
@@ -305,17 +301,17 @@ class ModalPickupUpdate extends React.Component {
                             navigation={navigation}
                             autoFocus={true}
                             showSearch = {true}
-                            textLabel = {t('screen.module.pickup.detail.bin_scan')}
+                            textLabel = {translate('screen.module.pickup.detail.bin_scan')}
                             onPressCamera = {this._onSubmitEditingInputBin}
                             onSubmitEditingInput = {this._onSubmitEditingInputBin}
-                            textPlaceholder={t('screen.module.pickup.detail.bin_scan')}/>
-                        
+                            textPlaceholder={translate('screen.module.pickup.detail.bin_scan')}/>
+
                     </View>
                     }
                     {isloading && <View style={gStyle.p3}><ActivityIndicator/></View>}
                     <View style={[gStyle.flexRowCenterAlign,{marginTop : 10}]}>
-                        <Text style={styles.sectionHeading}>{t('screen.module.pickup.detail.fnsku_list')} </Text>
-                        <Text style={{...gStyle.textBoxme14,color:colors.white,paddingLeft :3}}>{navigation.getParam('sold')}</Text>
+                        <Text style={styles.sectionHeading}>{translate('screen.module.pickup.detail.fnsku_list')} </Text>
+                        <Text style={{...gStyle.textBoxme14,color:colors.white,paddingLeft :3}}>{params?.sold}</Text>
                     </View>
                     <View style={styles.containerScroll}>
                         <FlatList
@@ -324,15 +320,15 @@ class ModalPickupUpdate extends React.Component {
                             renderItem={({ item }) => (
                                 <FNSKUItems
                                     navigation = {navigation}
-                                    textLabelLeft = {t('screen.module.pickup.detail.fnsku_code')}
-                                    textLabelRight = {t('screen.module.pickup.list.sold')}
+                                    textLabelLeft = {translate('screen.module.pickup.detail.fnsku_code')}
+                                    textLabelRight = {translate('screen.module.pickup.list.sold')}
                                     fnsku_info={{
                                         code: item.bsin_info.fnsku_barcode ? item.bsin_info.fnsku_barcode : item.bsin_info.fnsku_code,
                                         quantity_oubound: item.quantity,
                                         fnsku_name : item.bsin_info.fnsku_name,
-                                        pickup_box_id :navigation.getParam('pickup_box_id'),
+                                        pickup_box_id :params?.pickup_box_id,
                                         quantity_pick:item.quantity_pick,
-                                        is_pick :item.quantity_pick === item.quantity ? true : false,
+                                        is_pick :item.quantity_pick === item.quantity,
                                         out_of_stock_action : item.is_error,
                                         total_product : 0,
                                         activebg : item.activebg ? item.activebg : colors.greyLight,
@@ -342,7 +338,6 @@ class ModalPickupUpdate extends React.Component {
                                         condition_goods : item.condition_goods,
                                         idx_sort : item?.idx_sort
                                 }}
-                                trans ={t}
                                 disableRightSide={true}
                                 />
                             )}

@@ -14,6 +14,7 @@ import * as Animatable from "react-native-animatable";
 import {
   colors,
   gStyle } from '../constants';
+import {translate} from "../i18n/locales/IMLocalized";
 class BarOrderFFNOW extends React.Component {
 
   constructor() {
@@ -26,7 +27,6 @@ class BarOrderFFNOW extends React.Component {
       orderffNow,
       timeRequest,
       loading } = this.props;
-    const { t } = this.props.screenProps;
     return (
       <View
         style={styles.container}
@@ -38,7 +38,7 @@ class BarOrderFFNOW extends React.Component {
                     color: colors.white,
                 }}
                 numberOfLines={1}
-              >{t('screen.module.home.handover_total')} {orderffNow} {t('screen.module.home.report_order.ff_now')}</Text>
+              >{translate('screen.module.home.handover_total')} {orderffNow} {translate('screen.module.home.report_order.ff_now')}</Text>
               <Text style={{
                     ...gStyle.textBoxme10,
                     color: colors.greyInactive}}
@@ -61,7 +61,7 @@ class BarOrderFFNOW extends React.Component {
               >
                 {!loading ? <Text style={{
                     fontSize:14,
-                    color: colors.white}}>{t('screen.module.home.report_order.tab_create_pk')}
+                    color: colors.white}}>{translate('screen.module.home.report_order.tab_create_pk')}
                 </Text>:<ActivityIndicator/>}
               </TouchableOpacity>
             </Animatable.View>

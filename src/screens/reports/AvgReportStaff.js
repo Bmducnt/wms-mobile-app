@@ -7,12 +7,12 @@ import {
   Modal,
   TouchableOpacity
 } from 'react-native';
-import { 
+import {
     AntDesign,
     FontAwesome5,
-  } from '@expo/vector-icons'; 
-import { 
-  colors, 
+  } from '@expo/vector-icons';
+import {
+  colors,
   gStyle ,
 } from '../../constants';
 import getInboundStaff from '../../services/staff/inbound';
@@ -23,9 +23,9 @@ import {_getTimeDefaultFrom,
     _getDatetimeToTimestamp,
     _getTimeDefaultFromOneDay,
     _convertDatetimeToTimestamp} from '../../helpers/device-height';
+import {translate} from "../../i18n/locales/IMLocalized";
 
 const AvgReportStaff = props => {
-    const t = props.t;
     const [dataKPI, setdataKPI] = React.useState([]);
     const [totalReceived, settotalReceived] = React.useState(0);
     const [totalPutaway, settotalPutaway] = React.useState(0);
@@ -36,7 +36,7 @@ const AvgReportStaff = props => {
     const [totalPackedOsm, settotalPackedOsm] = React.useState(0);
     const [totalPickB2b, settotalPickB2b] = React.useState(0);
     const [totalPickOsm, settotalPickOsm] = React.useState(0);
-    
+
     const [totalInboundBarcode, settotalInboundBarcode] = React.useState(0);
     const [totalInboundSticker, settotalInboundSticker] = React.useState(0);
     const [totalInboundStickerALL, settotalInboundStickerALL] = React.useState(0);
@@ -49,52 +49,52 @@ const AvgReportStaff = props => {
           await fetchRMA(props.staff_id);
           setdataKPI([
             {
-              title:t('screen.module.staff_report.inbound_text'),
+              title:translate('screen.module.staff_report.inbound_text'),
               data: [
                 {
-                  key : t('screen.module.staff_report.barcode'),
+                  key : translate('screen.module.staff_report.barcode'),
                   value : totalInboundBarcode,
                   icon : 'barcode',
                   color: colors.boxmeBrand
                 },
                 {
-                  key : t('screen.module.staff_report.sticker'),
+                  key : translate('screen.module.staff_report.sticker'),
                   value : totalInboundSticker,
                   icon : 'sticky-note',
                   color: colors.brandPrimary
                 },
                 {
-                  key : t('screen.module.staff_report.sticker_barcode'),
+                  key : translate('screen.module.staff_report.sticker_barcode'),
                   value : totalInboundStickerALL,
                   icon : 'random',
                   color: colors.purple
-    
+
                 },
                 {
-                  key : t('screen.module.staff_report.no_barcode'),
+                  key : translate('screen.module.staff_report.no_barcode'),
                   value : totalInbound,
                   icon : 'pallet',
                   color: colors.blue
                 }
-              ]  
+              ]
             },
             {
-              title: t('screen.module.staff_report.pickup'),
+              title: translate('screen.module.staff_report.pickup'),
               data: [
                 {
-                  key : t('screen.module.staff_report.b2b'),
+                  key : translate('screen.module.staff_report.b2b'),
                   value : totalPickB2b,
                   icon : 'archive',
                   color: colors.primary
                 },
                 {
-                  key : t('screen.module.staff_report.b2c'),
+                  key : translate('screen.module.staff_report.b2c'),
                   value : totalPicked,
                   icon : 'gifts',
                   color: colors.brandPrimary
                 },
                 {
-                  key : t('screen.module.staff_report.osm'),
+                  key : translate('screen.module.staff_report.osm'),
                   value : totalPickOsm,
                   icon : 'bullhorn',
                   color: colors.purple
@@ -102,22 +102,22 @@ const AvgReportStaff = props => {
               ]
             },
             {
-              title: t('screen.module.staff_report.text_packed'),
+              title: translate('screen.module.staff_report.text_packed'),
               data: [
                 {
-                  key : t('screen.module.staff_report.b2b'),
+                  key : translate('screen.module.staff_report.b2b'),
                   value : totalPackedB2b,
                   icon : 'archive',
                   color: colors.primary
                 },
                 {
-                  key : t('screen.module.staff_report.b2c'),
+                  key : translate('screen.module.staff_report.b2c'),
                   value : totalPacked,
                   icon : 'gifts',
                   color: colors.brandPrimary
                 },
                 {
-                  key : t('screen.module.staff_report.osm'),
+                  key : translate('screen.module.staff_report.osm'),
                   value : totalPackedOsm,
                   icon : 'bullhorn',
                   color: colors.boxmeBrand
@@ -125,27 +125,27 @@ const AvgReportStaff = props => {
               ]
             },
             {
-              title: t('screen.module.staff_report.kpi_rma'),
+              title: translate('screen.module.staff_report.kpi_rma'),
               data: [
                 {
-                  key : t('screen.module.staff_report.rma_received'),
+                  key : translate('screen.module.staff_report.rma_received'),
                   value : totalReceived,
                   icon : 'cart-arrow-down',
                   color: colors.purple
                 },
                 {
-                  key : t('screen.module.staff_report.putaway'),
+                  key : translate('screen.module.staff_report.putaway'),
                   value : totalPutaway,
                   icon : 'check-double',
                   color: colors.brandPrimary
                 },
-              ]  
+              ]
             },
             {
-              title: t('screen.module.staff_report.handover'),
+              title: translate('screen.module.staff_report.handover'),
               data: [
                 {
-                  key : t('screen.module.staff_report.text_handover'),
+                  key : translate('screen.module.staff_report.text_handover'),
                   value : totalHandover,
                   icon : 'truck',
                   color: colors.brandPrimary
@@ -155,7 +155,7 @@ const AvgReportStaff = props => {
           ]);
         };
         fetchDataByStaff();
-        
+
       }, []);
 
 
@@ -174,14 +174,14 @@ const AvgReportStaff = props => {
           permissionDenied(navigation);
         };
     };
-    
+
     const fetchOutbound = async (staff_id) => {
         const response = await getOutboundStaff(staff_id, {
           'from_time': _getTimeDefaultFromOneDay(),
           'to_time': _getTimeDefaultTo(),
           'is_cache': false,
         });
-      
+
         if (response.status !== 200) {
           if (response.status === 403) {
             permissionDenied(navigation);
@@ -196,11 +196,11 @@ const AvgReportStaff = props => {
         settotalPackedOsm(results.packed_osm_summary);
         settotalPickB2b(results.picking_b2b_summary);
         settotalPickOsm(results.picking_osm_summary);
-    
+
       };
-    
-    
-    
+
+
+
     const fetchRMA = async (staff_id) =>{
         const response = await getRMAStaff(staff_id,{
           'from_time' : _getTimeDefaultFromOneDay(),
@@ -231,14 +231,14 @@ const AvgReportStaff = props => {
                     <Text >
                         Báo cáo chi tiết
                     </Text>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         onPress={() => props.onClose(false)}
                         style={gStyle.flexRowSpace}
                         activeOpacity={gStyle.activeOpacity}
                     >
                         <AntDesign name="closecircle" size={22} color={colors.greyInactive} />
                     </TouchableOpacity>
-                    
+
                 </View>
                 <View >
                     <SectionList
@@ -270,7 +270,7 @@ const AvgReportStaff = props => {
                 </View>
             </View>
         </Modal>
-        
+
       </React.Fragment>
     );
   }

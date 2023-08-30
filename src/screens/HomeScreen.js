@@ -98,7 +98,6 @@ class HomeScreen extends React.PureComponent {
       from_time
     } = this.state;
     const { navigation} = this.props;
-    const { t } = this.props.screenProps;
 
     return (
       <React.Fragment>
@@ -140,17 +139,17 @@ class HomeScreen extends React.PureComponent {
         >
 
 
-          <OrderFailSLAHandover t={t} from_time={from_time} to_time ={to_time} navigation={navigation} />
+          <OrderFailSLAHandover from_time={from_time} to_time ={to_time} navigation={navigation} />
 
 
-          <StaffReport t={t} navigation={navigation} />
+          <StaffReport navigation={navigation} />
 
 
-          <TaskReceived t={t} navigation={navigation} />
+          <TaskReceived navigation={navigation} />
 
-          <ReportAdmin t={t} to_time ={to_time} />
+          <ReportAdmin to_time ={to_time} />
 
-          <OrderPending t={t} />
+          <OrderPending />
 
           <View style={gStyle.spacer11} />
           <View style={gStyle.spacer11} />
@@ -158,7 +157,6 @@ class HomeScreen extends React.PureComponent {
        </View>
 
         <MenuHorizontal
-          trans = {t}
           navigation={navigation}
           isVisible={isVisibleMenu}
           onClose={this.onLoadMenu}

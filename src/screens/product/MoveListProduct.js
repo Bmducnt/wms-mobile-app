@@ -16,9 +16,10 @@ import ScreenHeader from '../../components/ScreenHeader';
 import {_getTimeDefaultFrom,_getTimeDefaultTo} from '../../helpers/device-height';
 import {handleSoundScaner,permissionDenied,handleSoundOkScaner} from '../../helpers/async-storage';
 import ModelLocationSugget from './ModelLocationSugget';
-//service 
+//service
 import findDetailFnskuMove from '../../services/products/find';
 import getBinFnsku from '../../services/products/bin';
+import {translate} from "../../i18n/locales/IMLocalized";
 
 
 class MoveListProduct extends React.Component {
@@ -51,11 +52,10 @@ class MoveListProduct extends React.Component {
   }
 
   componentWillUnmount() {
-    this.willFocusSubscription.remove();
+    this.willFocusSubscription();
   };
 
   _findProductMove = async  (code,parram) =>{
-    const { t } = this.props.screenProps;
     this.setState({isloading:true});
     const response = await findDetailFnskuMove(code,parram);
     if (response.status === 403){
@@ -66,13 +66,13 @@ class MoveListProduct extends React.Component {
       this.setState({
         list_fnsku_move:response.data.results,
         isloading:false})
-      
+
     }else {
-      handleSoundScaner();
+      await handleSoundScaner();
       if (response.data.error_code === 1){
         Alert.alert(
           '',
-          t('screen.module.product.move.bin_fail'),
+          translate('screen.module.product.move.bin_fail'),
           [
             {
               text: t("base.confirm"),
@@ -84,7 +84,7 @@ class MoveListProduct extends React.Component {
       }else {
         Alert.alert(
           '',
-          t('screen.module.product.move.fnsku_fail'),
+          translate('screen.module.product.move.fnsku_fail'),
           [
             {
               text: t("base.confirm"),
@@ -132,16 +132,15 @@ class MoveListProduct extends React.Component {
     await this.setState({is_model:code})
   }
   _render_item = (item,index)=>{
-    const { t } = this.props.screenProps;
     const { navigation } = this.props;
     return (
         <View style={styles.sectionHeading} key={index}>
             <View style={[gStyle.flexRowSpace]}>
                 <View style={gStyle.flexRow}>
-                    <Text style={styles.textLabel}>{t('screen.module.product.move.barcode')}</Text>
+                    <Text style={styles.textLabel}>{translate('screen.module.product.move.barcode')}</Text>
                 </View>
                 <View style={gStyle.flexRow}>
-                    <Text style={styles.textLabel}>{t('screen.module.product.move.fnsku')}</Text>
+                    <Text style={styles.textLabel}>{translate('screen.module.product.move.fnsku')}</Text>
                 </View>
             </View>
             <View style={gStyle.flexRowSpace}>
@@ -156,11 +155,11 @@ class MoveListProduct extends React.Component {
             </View>
             <View style={[gStyle.flexRowSpace,{marginTop:4}]}>
                 <View style={gStyle.flexRow}>
-                    <Text style={styles.textLabel}>{t('screen.module.product.move.bsin_current')}</Text>
-                    
+                    <Text style={styles.textLabel}>{translate('screen.module.product.move.bsin_current')}</Text>
+
                 </View>
                 <View style={gStyle.flexRow}>
-                    <Text style={styles.textLabel}>{t('screen.module.product.move.quantity_move')}</Text>
+                    <Text style={styles.textLabel}>{translate('screen.module.product.move.quantity_move')}</Text>
                 </View>
             </View>
             <View style={[gStyle.flexRowSpace,{marginVertical:4}]}>
@@ -174,7 +173,7 @@ class MoveListProduct extends React.Component {
                 </View>
             </View>
             <View style={[gStyle.flexRowSpace]}>
-                <Text style={styles.textLabel}>{t('screen.module.pickup.detail.expire_date')}</Text>
+                <Text style={styles.textLabel}>{translate('screen.module.pickup.detail.expire_date')}</Text>
                 <Text style={[styles.textValue]} numberOfLines={1} >
                   {item.expire_date.substring(0,10)}
                 </Text>
@@ -192,7 +191,7 @@ class MoveListProduct extends React.Component {
                 }}
               >
                 <Text style={{ color: colors.white,...gStyle.textboxme14 }}>
-                {t('screen.module.product.move.btn_cycle')}
+                {translate('screen.module.product.move.btn_cycle')}
                 </Text>
               </TouchableOpacity>
               <View style={gStyle.flexRow}>
@@ -208,7 +207,7 @@ class MoveListProduct extends React.Component {
                   }}
                 >
                   <Text style={{ color: colors.white,...gStyle.textboxme14 }}>
-                  {t('screen.module.product.move.btn_view_location')}
+                  {translate('screen.module.product.move.btn_view_location')}
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -227,7 +226,7 @@ class MoveListProduct extends React.Component {
                   }}
                 >
                   <Text style={{ color: colors.white,...gStyle.textboxme14 }}>
-                    {t('screen.module.product.move.btn_move')}
+                    {translate('screen.module.product.move.btn_move')}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -235,15 +234,14 @@ class MoveListProduct extends React.Component {
         </View>
     )
   };
-  
+
   render() {
     const { isloading,location_move,list_fnsku_move,is_model,sugget_list_bin} = this.state;
-    const { t } = this.props.screenProps;
     return (
         <View style={[gStyle.container]}>
           <View style={{ position: 'absolute', top: 0, width: '100%', zIndex: 10 }}>
-            <ScreenHeader 
-              title={t('screen.module.product.move.text_header')}
+            <ScreenHeader
+              title={translate('screen.module.product.move.text_header')}
               showBack={true}
               showInput = {true}
               inputValueSend ={null}
@@ -266,7 +264,7 @@ class MoveListProduct extends React.Component {
                 ...gStyle.textBoxme16,color:colors.white,
                 paddingVertical:10
             }}>
-                {t('screen.module.product.move.text_sub_move')} {location_move}
+                {translate('screen.module.product.move.text_sub_move')} {location_move}
             </Text>}
             {Object.keys(list_fnsku_move).map((index) => {
               const item = list_fnsku_move[index];
@@ -275,9 +273,8 @@ class MoveListProduct extends React.Component {
               );
             })}
           </View>
-          {is_model && 
+          {is_model &&
             <ModelLocationSugget
-              t={t}
               listData = {sugget_list_bin}
               onClose = {this._onOpenModel}
             />}

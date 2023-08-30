@@ -21,10 +21,6 @@ import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview"
 import ScreenHeader from "../../components/ScreenHeader"
 import TextInputComponent from "../../components/TextInputComponent"
 import {
-	_getTimeDefaultFrom,
-	_getTimeDefaultTo,
-} from "../../helpers/device-height"
-import {
 	handleSoundScaner,
 	permissionDenied,
 	handleSoundOkScaner,
@@ -35,6 +31,7 @@ import ModelListTracking from "./ModelListTracking";
 import ModelCamera from "./ModelCamera";
 import createHandoverAPI from "../../services/handover/create"
 import {PDF_QR_PICKUP} from "../../services/endpoints"
+import {translate} from "../../i18n/locales/IMLocalized";
 
 
 
@@ -65,7 +62,7 @@ class CreatedHandoverList extends React.PureComponent {
 	}
 
 	componentDidMount() {
-		const {navigation} = this.props
+		const {params} = this.props.route
 		this.state.deviceEmitterSubscription = DeviceEventEmitter.addListener(
 			"datawedge_broadcast_intent",
 			(intent) => {
@@ -74,15 +71,15 @@ class CreatedHandoverList extends React.PureComponent {
 		)
 		if (Device.osName === "Android") {
 			this.registerBroadcastReceiver();
-		};
+		}
 		this.setState({
-			carrier_name: navigation.getParam("carrier_name"),
-			order_type: navigation.getParam("order_type"),
-			carrier_logo: navigation.getParam("carrier_logo"),
-			handover_type: navigation.getParam("handover_type"),
-			quantity_rollback : navigation.getParam("quantity_rollback"),
-			dispatched_code: navigation.getParam("dispatched_code")
-				? navigation.getParam("dispatched_code")
+			carrier_name: params?.carrier_name,
+			order_type: params?.order_type,
+			carrier_logo: params?.carrier_logo,
+			handover_type: params?.handover_type,
+			quantity_rollback : params?.quantity_rollback,
+			dispatched_code: params?.dispatched_code
+				? params?.dispatched_code
 				: "",
 		});
 		this.willFocusSubscription = this.props.navigation.addListener(
@@ -99,7 +96,7 @@ class CreatedHandoverList extends React.PureComponent {
 
 	componentWillUnmount() {
 		this.state.deviceEmitterSubscription.remove();
-		this.willFocusSubscription.remove();
+		this.willFocusSubscription();
 	}
 
 	UNSAFE_componentWillMount = async () => {
@@ -137,9 +134,9 @@ class CreatedHandoverList extends React.PureComponent {
 			)
 		) {
 			//  The version has been returned (DW 6.3 or higher).  Includes the DW version along with other subsystem versions e.g MX
-			var versionInfo =
+			const versionInfo =
 				intent["com.symbol.datawedge.api.RESULT_GET_VERSION_INFO"]
-			var datawedgeVersion = versionInfo["DATAWEDGE"]
+			const datawedgeVersion = versionInfo["DATAWEDGE"]
 			//  Fire events sequentially so the application can gracefully degrade the functionality available on earlier DW versions
 			if (datawedgeVersion >= "6.3") this.datawedge63()
 			if (datawedgeVersion >= "6.4") this.datawedge64();
@@ -147,10 +144,10 @@ class CreatedHandoverList extends React.PureComponent {
 
 		if (!intent.hasOwnProperty("RESULT_INFO")) {
 			//  A barcode has been scanned
-			var scannedData = intent["com.symbol.datawedge.data_string"]
+			const scannedData = intent["com.symbol.datawedge.data_string"]
 			if (scannedData && scannedData !== "") {
-				this._postOrderHandover(scannedData)
-			};
+				this._postOrderHandover(scannedData).then(() => {})
+			}
 		}
 	}
 
@@ -253,18 +250,17 @@ class CreatedHandoverList extends React.PureComponent {
 
 	_saveHandover = async () => {
 		const {navigation} = this.props
-		const {t} = this.props.screenProps
 		Alert.alert(
 			"",
 			this.state.handover_type === 2
-				? t("screen.module.handover.btn_approved_text")
-				: t("screen.module.handover.confirm"),
+				? translate("screen.module.handover.btn_approved_text")
+				: translate("screen.module.handover.confirm"),
 			[
 				{
 					text:
 						this.state.handover_type === 2
-							? t("screen.module.handover.btn_approved")
-							: t("screen.module.handover.confirm_text"),
+							? translate("screen.module.handover.btn_approved")
+							: translate("screen.module.handover.confirm_text"),
 					onPress: () =>
 						navigation.navigate("SignatureScreenBase", {
 							ob_code: this.state.dispatched_code,
@@ -277,8 +273,8 @@ class CreatedHandoverList extends React.PureComponent {
 				{
 					text:
 						this.state.handover_type === 2
-							? t("screen.module.handover.btn_confirm")
-							: t("screen.module.handover.confirm_not_btn"),
+							? translate("screen.module.handover.btn_confirm")
+							: translate("screen.module.handover.confirm_not_btn"),
 					onPress: () =>
 						this.state.dispatched_code
 							? this._printQRCode(this.state.dispatched_code)
@@ -291,7 +287,6 @@ class CreatedHandoverList extends React.PureComponent {
 
 	_postOrderHandover = async (code) => {
 		this.setState({isloading: true, textError: null,visible_tracking:false})
-		const {t} = this.props.screenProps
 		const response = await createHandoverAPI({
 			tracking_code: code,
 			courier_name: this.state.carrier_name,
@@ -313,11 +308,11 @@ class CreatedHandoverList extends React.PureComponent {
 			})
 			if (response.data.results.is_return) {
 				Alert.alert(
-					t("screen.module.handover.rma_order"),
-					` ${t("screen.module.handover.rma_order_text")} + ${response.data.results.reason_note}`,
+					translate("screen.module.handover.rma_order"),
+					` ${translate("screen.module.handover.rma_order_text")} + ${response.data.results.reason_note}`,
 					[
 						{
-							text: t("screen.module.handover.btn_rma_order_text"),
+							text: translate("screen.module.handover.btn_rma_order_text"),
 							onPress: () => this.openCamera(true),
 						},
 					],
@@ -331,28 +326,28 @@ class CreatedHandoverList extends React.PureComponent {
 			this.setState({tracking_scan: null})
 			if (response.data.error === 1) {
 				await this.setState({
-					textError: t("screen.module.handover.order_fail"),
+					textError: translate("screen.module.handover.order_fail"),
 				})
 			} else if (response.data.error === 6) {
 				await this.setState({
-					textError: t("screen.module.handover.order_fail_carrier"),
+					textError: translate("screen.module.handover.order_fail_carrier"),
 				})
 			} else if (response.data.error === 4) {
 				await this.setState({
-					textError: t("screen.module.handover.order_status_fail"),
+					textError: translate("screen.module.handover.order_status_fail"),
 				})
 			} else if (response.data.error === 5) {
 				await this.setState({
-					textError: t("screen.module.handover.order_status_fail_flow"),
+					textError: translate("screen.module.handover.order_status_fail_flow"),
 				})
 			} else if (response.data.error === 3) {
 				await this.setState({
-					textError: t("screen.module.handover.order_status_fail_done"),
+					textError: translate("screen.module.handover.order_status_fail_done"),
 				})
 			}
 			else if (response.data.error === 7) {
 				await this.setState({
-					textError: t("screen.module.handover.order_over_200"),
+					textError: translate("screen.module.handover.order_over_200"),
 				})
 			}
 			else if (response.data.error === 10) {
@@ -361,7 +356,7 @@ class CreatedHandoverList extends React.PureComponent {
 			}
 			else {
 				await this.setState({
-					textError: t("screen.module.handover.order_has_scan"),
+					textError: translate("screen.module.handover.order_has_scan"),
 				})
 			}
 		}
@@ -378,6 +373,7 @@ class CreatedHandoverList extends React.PureComponent {
 
 	render() {
 		const {navigation} = this.props
+		const { params } = this.props?.route;
 		const {
 			isloading,
 			quantity_scan,
@@ -391,7 +387,6 @@ class CreatedHandoverList extends React.PureComponent {
 			visible_tracking,
 			country_id
 		} = this.state
-		const {t} = this.props.screenProps
 		return (
 			<View style={[gStyle.container]}>
 				<View
@@ -402,10 +397,10 @@ class CreatedHandoverList extends React.PureComponent {
 						zIndex: 10,
 					}}>
 					<ScreenHeader
-						title={navigation.getParam("carrier_name")}
+						title={params?.carrier_name}
 						showBack={true}
 						textAlign={"center"}
-					/>
+					 navigation={navigation}/>
 				</View>
 				<KeyboardAwareScrollView
 					style={styles.container}
@@ -421,7 +416,7 @@ class CreatedHandoverList extends React.PureComponent {
 									{width: Dimensions.get("window").width / 2},
 								]}>
 								<Text style={styles.textLabel}>
-									{t("screen.module.handover.tracking_just_scan")}
+									{translate("screen.module.handover.tracking_just_scan")}
 								</Text>
 								<Text style={styles.textValue}>
 									{tracking_approved ? tracking_approved : "N/A"}
@@ -434,7 +429,7 @@ class CreatedHandoverList extends React.PureComponent {
 									{width: Dimensions.get("window").width / 2},
 								]}>
 								<Text style={styles.textLabel}>
-									{t("screen.module.handover.quantity")}
+									{translate("screen.module.handover.quantity")}
 								</Text>
 								<Text style={[styles.textValue]}>{quantity_scan}</Text>
 							</View>
@@ -443,10 +438,10 @@ class CreatedHandoverList extends React.PureComponent {
 					<View style={{marginTop: 10, marginHorizontal: 10}}>
 						<TextInputComponent
 							navigation={navigation}
-							textLabel={t("screen.module.handover.input_tracking")}
+							textLabel={translate("screen.module.handover.input_tracking")}
 							inputValue={tracking_scan}
 							autoFocus={true}
-							is_close={handover_type === 2 ? order_type === 'b2c' ? true : false:false}
+							is_close={handover_type === 2 ? order_type === 'b2c':false}
 							textError={textError}
 							onPressCamera={this._searchCameraBarcode}
 							onSubmitEditingInput={this._searchCameraBarcode}
@@ -463,7 +458,7 @@ class CreatedHandoverList extends React.PureComponent {
 							activeOpacity={gStyle.activeOpacity}
 							onPress={() => this._saveHandover()}>
 							<Text style={{color: colors.white}}>
-								{t("base.confirm")}
+								{translate("base.confirm")}
 							</Text>
 						</TouchableOpacity>
 					</View>
@@ -471,8 +466,8 @@ class CreatedHandoverList extends React.PureComponent {
 				{Device.osName === "Android" && textError && (
 					<ToastAlert textAlert={textError} />
 				)}
-				{visible_camera && <ModelCamera t={t} onClose={this.openCamera} tracking_code ={tracking_approved} country_id = {country_id}/>}
-				{visible_tracking && <ModelListTracking t={t} onClose={this.openListTracking} listData ={list_tracking_error} onSelect={this._postOrderHandover}/>}
+				{visible_camera && <ModelCamera onClose={this.openCamera} tracking_code ={tracking_approved} country_id = {country_id}/>}
+				{visible_tracking && <ModelListTracking onClose={this.openListTracking} listData ={list_tracking_error} onSelect={this._postOrderHandover}/>}
 			</View>
 		)
 	}

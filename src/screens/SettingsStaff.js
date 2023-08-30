@@ -35,19 +35,12 @@ import InboundReportTeam from './reports/InboundReportTeam';
 import OutboundReportTeam from './reports/OutboundReportTeam';
 import HandoverReportTeam from './reports/HandoverReportTeam';
 import ControllerReportTeam from './reports/ControllerReportTeam';
-
-import {_getTimeDefaultFrom,
-  _getTimeDefaultTo,
-  _getDatetimeToTimestamp,
-  _getTimeDefaultFromOneDay,
-  _convertDatetimeToTimestamp} from '../helpers/device-height';
-  import { serviceUploadAsset } from "../helpers/upload-base";
+import { serviceUploadAsset } from "../helpers/upload-base";
 import {removeStaffLogout} from '../helpers/async-storage';
 import {clearAsyncStorage} from '../helpers/wrap-api';
+import {translate} from "../i18n/locales/IMLocalized";
 
-const SettingsStaff = ({navigation,screenProps}) => {
-  const { t} = screenProps;
-
+const SettingsStaff = ({navigation}) => {
   const [staffInfo, setstaffInfo] = React.useState(null);
   const [staffID, setstaffID] = React.useState(0);
   const [avarta, setAvarta] = React.useState(null);
@@ -91,7 +84,7 @@ const SettingsStaff = ({navigation,screenProps}) => {
   return (
     <View style={gStyle.container}>
       <View style={{ position: 'absolute', top: 0, width: '100%', zIndex: 10 }}>
-        <ScreenHeader title={t('screen.module.settings.info')} bgColor={colors.cardLight} textAlign={"center"}/>
+        <ScreenHeader title={translate('screen.module.settings.info')} bgColor={colors.cardLight} textAlign={"center"} navigation={navigation}/>
       </View>
       <Animated.ScrollView
             style={[gStyle.container,{flex: 1,
@@ -139,7 +132,7 @@ const SettingsStaff = ({navigation,screenProps}) => {
             >
                 <Text style={{...gStyle.textBoxme14,color:colors.white}}>
                 <FontAwesome5 name="chart-bar" size={14} color={colors.white} />{" "}
-                {t('screen.module.staff_report.btn_kpi')}</Text>
+                {translate('screen.module.staff_report.btn_kpi')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 activeOpacity={gStyle.activeOpacity}
@@ -151,39 +144,39 @@ const SettingsStaff = ({navigation,screenProps}) => {
                 backgroundColor:colors.borderLight
                 }}
             >
-                <Text style={{...gStyle.textBoxme14,color:colors.white}}>{t('screen.module.settings.avatar')}
+                <Text style={{...gStyle.textBoxme14,color:colors.white}}>{translate('screen.module.settings.avatar')}
                 {" "}<FontAwesome5 name="cloud-upload-alt" size={14} color={colors.white} />
                 </Text>
             </TouchableOpacity>
           </View>
         </View>}
-        <AvgReportStaff t={t} staff_id = {staffID} visible = {openModel} onClose ={setopenModel} />
+        <AvgReportStaff  staff_id = {staffID} visible = {openModel} onClose ={setopenModel} />
         <View style={{marginTop:10}}>
           <View >
                 <Text style={{...gStyle.textBoxme16,color:colors.white}}>
-                {t('screen.module.staff_report.over_view')}
+                {translate('screen.module.staff_report.over_view')}
                 </Text>
                 <View style={gStyle.flexRow}>
-                    <Text style={{...gStyle.textBoxme14,color:colors.greyInactive}}>{t('screen.module.staff_report.over_view_filter')}</Text>
-                    <Text style={{...gStyle.textBoxme14,color:colors.white,paddingLeft:2}}>{t('screen.module.staff_report.over_view_month')}</Text>
+                    <Text style={{...gStyle.textBoxme14,color:colors.greyInactive}}>{translate('screen.module.staff_report.over_view_filter')}</Text>
+                    <Text style={{...gStyle.textBoxme14,color:colors.white,paddingLeft:2}}>{translate('screen.module.staff_report.over_view_month')}</Text>
                 </View>
           </View>
 
           {/* Inbound */}
 
-          <InboundReportTeam t={t} />
+          <InboundReportTeam  />
           {/* Packed */}
 
-          <OutboundReportTeam t={t} />
+          <OutboundReportTeam  />
 
           {/* Handover */}
 
-          <HandoverReportTeam t={t} />
+          <HandoverReportTeam  />
 
 
           {/* WH Controller */}
 
-          <ControllerReportTeam  t={t} />
+          <ControllerReportTeam   />
 
 
         </View>
@@ -204,7 +197,6 @@ const SettingsStaff = ({navigation,screenProps}) => {
 SettingsStaff.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired
 };
 
 const styles = StyleSheet.create({

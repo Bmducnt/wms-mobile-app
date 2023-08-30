@@ -23,10 +23,6 @@ import FNSKUItems from "../../components/ListFNSKUPickup";
 import ButtonSwiper from "../../components/ButtonSwiper";
 
 import {
-  _getTimeDefaultFrom,
-  _getTimeDefaultTo,
-} from "../../helpers/device-height";
-import {
   handleSoundScaner,
   permissionDenied,
   handleSoundOkScaner,
@@ -40,6 +36,7 @@ import ModelCard from './ModelCard';
 import getDetailPickup from "../../services/pickup/detail";
 import putDetailPickup from "../../services/pickup/box-master";
 import confirmOrderException from "../../services/pickup/exception";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 class PickupDetails extends React.PureComponent {
   constructor(props) {
@@ -62,14 +59,14 @@ class PickupDetails extends React.PureComponent {
   }is_open_model
 
   componentDidMount() {
-    const { navigation } = this.props;
+    const { params } = this.props?.route;
     this.setState({
-      pickup_code: navigation.getParam("pickup_code"),
-      is_error: navigation.getParam("is_error"),
-      is_confirm: navigation.getParam("is_confirm"),
-      pickup_box_id: navigation.getParam("pickup_box_id"),
-      total_orders_sla: navigation.getParam("total_orders_sla"),
-      is_pick_model_xe: navigation.getParam("total_orders") <= 20 ? navigation.getParam("is_open_model") : false,
+      pickup_code: params?.pickup_code,
+      is_error: params?.is_error,
+      is_confirm: params?.is_confirm,
+      pickup_box_id: params?.pickup_box_id,
+      total_orders_sla: params?.total_orders_sla,
+      is_pick_model_xe: params?.total_orders <= 20 ? params?.is_open_model : false,
     });
     this.willFocusSubscription = this.props.navigation.addListener(
       "willFocus",
@@ -77,7 +74,7 @@ class PickupDetails extends React.PureComponent {
         if (this.state.pickup_box_id) {
           this._fetchDetailPickupHandler(this.state.pickup_box_id, {
             is_tab: this.state.is_tab,
-            is_error: navigation.getParam("is_error"),
+            is_error: params?.is_error,
           });
         }
       }
@@ -85,13 +82,14 @@ class PickupDetails extends React.PureComponent {
   }
 
   componentWillUnmount() {
-    this.willFocusSubscription.remove();
+    this.willFocusSubscription();
   }
 
   UNSAFE_componentWillMount = async () => {
-    this._fetchDetailPickupHandler(
-      this.props.navigation.getParam("pickup_box_id"),
-      { is_tab: 3, is_error: this.props.navigation.getParam("is_error") }
+    const { params } = this.props?.route;
+    await this._fetchDetailPickupHandler(
+        params?.pickup_box_id,
+        {is_tab: 3, is_error: params?.is_error}
     );
   };
 
@@ -106,7 +104,7 @@ class PickupDetails extends React.PureComponent {
       const rows = response.data.results.filter((result) => {
         return parseInt(result[1]) !== parseInt(result[2]);
         });
-        
+
       this.setState({ list_data: parram["is_tab"] === 3 ? rows : response.data.results });
 
 
@@ -117,19 +115,18 @@ class PickupDetails extends React.PureComponent {
   };
 
   _confirmChangeLocation = async (code, scan_type) => {
-    const { t } = this.props.screenProps;
     Alert.alert(
       "",
-      t("screen.module.pickup.detail.confirm_change_bin"),
+      translate("screen.module.pickup.detail.confirm_change_bin"),
       [
         {
-          text: t("base.confirm"),
+          text: translate("base.confirm"),
           onPress: () => {
             this._putBoxDetailPickup(code, scan_type);
           },
         },
         {
-          text: t("screen.module.product.move.btn_cancel"),
+          text: translate("screen.module.product.move.btn_cancel"),
           onPress: null,
         },
       ],
@@ -138,19 +135,18 @@ class PickupDetails extends React.PureComponent {
   };
 
   _confirmCancellOrder = async (tracking_code) => {
-    const { t } = this.props.screenProps;
     Alert.alert(
       "",
-      t("screen.module.pickup.detail.text_confirm_lost"),
+      translate("screen.module.pickup.detail.text_confirm_lost"),
       [
         {
-          text: t("base.confirm"),
+          text: translate("base.confirm"),
           onPress: () => {
             this._putOrderException(4, tracking_code);
           },
         },
         {
-          text: t("screen.module.product.move.btn_cancel"),
+          text: translate("screen.module.product.move.btn_cancel"),
           onPress: null,
         },
       ],
@@ -159,19 +155,18 @@ class PickupDetails extends React.PureComponent {
   };
 
   _confirmSloveOrder = async (tracking_code) => {
-    const { t } = this.props.screenProps;
     Alert.alert(
       "",
-      t("screen.module.pickup.detail.text_confirm_packed"),
+      translate("screen.module.pickup.detail.text_confirm_packed"),
       [
         {
-          text: t("base.confirm"),
+          text: translate("base.confirm"),
           onPress: () => {
             this._putOrderException(5, tracking_code);
           },
         },
         {
-          text: t("screen.module.product.move.btn_cancel"),
+          text: translate("screen.module.product.move.btn_cancel"),
           onPress: null,
         },
       ],
@@ -190,15 +185,14 @@ class PickupDetails extends React.PureComponent {
         pickup_code: this.state.pickup_code,
       })
     );
-    const { t } = this.props.screenProps;
     if (response.status === 200) {
       handleSoundOkScaner();
       Alert.alert(
         "",
-        t("screen.module.handover.text_ok"),
+        translate("screen.module.handover.text_ok"),
         [
           {
-            text: t("base.confirm"),
+            text: translate("base.confirm"),
             onPress: () => {
               this._fetchDetailPickupHandler(this.state.pickup_box_id, {
                 is_tab: 3,
@@ -214,10 +208,10 @@ class PickupDetails extends React.PureComponent {
     } else {
       Alert.alert(
         "",
-        t("screen.module.pickup.detail.box_fail"),
+        translate("screen.module.pickup.detail.box_fail"),
         [
           {
-            text: t("base.confirm"),
+            text: translate("base.confirm"),
             onPress: null,
           },
         ],
@@ -229,7 +223,6 @@ class PickupDetails extends React.PureComponent {
 
   _putOrderException = async (is_confirm, tracking_code) => {
     this.setState({ isloading: true });
-    const { t } = this.props.screenProps;
     const response = await confirmOrderException(
       JSON.stringify({
         bin_id: null,
@@ -241,10 +234,10 @@ class PickupDetails extends React.PureComponent {
     if (response.status === 200) {
       Alert.alert(
         "",
-        t("base.success"),
+        translate("base.success"),
         [
           {
-            text: t("base.confirm"),
+            text: translate("base.confirm"),
             onPress: () => {
               this.props.navigation.goBack(null);
             },
@@ -258,10 +251,10 @@ class PickupDetails extends React.PureComponent {
       handleSoundScaner();
       Alert.alert(
         "",
-        t("screen.module.pickup.detail.text_confirm_lost_403"),
+        translate("screen.module.pickup.detail.text_confirm_lost_403"),
         [
           {
-            text: t("base.confirm"),
+            text: translate("base.confirm"),
             onPress: () => {
               null;
             },
@@ -276,11 +269,12 @@ class PickupDetails extends React.PureComponent {
   _filterByTab = async (tab_value) => {
     this.onCloseModel(false);
     this.setState({ is_tab: tab_value }, () => {
+      const { params } = this.props?.route;
       this._fetchDetailPickupHandler(
-        this.props.navigation.getParam("pickup_box_id"),
+        params?.pickup_box_id,
         {
           is_tab: tab_value,
-          is_error: this.props.navigation.getParam("is_error"),
+          is_error: params?.is_error,
         }
       );
     });
@@ -306,7 +300,7 @@ class PickupDetails extends React.PureComponent {
       this.onToggleBox(false);
       handleSoundOkScaner();
     }
-    
+
   };
 
   _putConfirmOk = async (code) => {
@@ -318,19 +312,18 @@ class PickupDetails extends React.PureComponent {
         code_xe: code,
       })
     );
-    const { t } = this.props.screenProps;
     if (response.status === 200) {
       this.onCloseModelXe(false)
       handleSoundOkScaner();
       Alert.alert(
         "",
-        this.state.total_orders_sla === 0 ? 
-        t("screen.module.handover.text_ok"):
-        `${t("screen.module.handover.sla_text_1")} ${this.state.total_orders_sla} ${t("screen.module.handover.sla_text_2")}`
+        this.state.total_orders_sla === 0 ?
+        translate("screen.module.handover.text_ok"):
+        `${translate("screen.module.handover.sla_text_1")} ${this.state.total_orders_sla} ${translate("screen.module.handover.sla_text_2")}`
         ,
         [
           {
-            text: t("base.confirm"),
+            text: translate("base.confirm"),
             onPress: () => {
               this.props.navigation.goBack(null);
             },
@@ -346,41 +339,41 @@ class PickupDetails extends React.PureComponent {
 
   render() {
     const { navigation } = this.props;
-    const { 
-      list_data, 
-      isloading, 
-      is_tab, 
-      is_model, 
-      is_error, 
+    const { params } = this.props?.route;
+    const {
+      list_data,
+      isloading,
+      is_tab,
+      is_model,
+      is_error,
       is_confirm,
       is_model_xe,
       pickup_box_id,
       is_pick_model_xe
     } = this.state;
-    const { t } = this.props.screenProps;
     return (
       <View style={[gStyle.container]}>
         <View>
           <ScreenHeader
             title={`${t(
               "screen.module.packed.detail.text"
-            )} ${navigation.getParam("pickup_code")}`}
+            )} ${params?.pickup_code}`}
             showBack={true}
             showInput={false}
             inputValueSend={null}
             autoFocus={false}
             bgColor={colors.cardLight}
-            textPlaceholder={t("screen.module.pickup.detail.box_master")}
-          />
+            textPlaceholder={translate("screen.module.pickup.detail.box_master")}
+           navigation={navigation}/>
           {!is_confirm && (
             <ButtonSwiper
                 isLeftToRight={true} // set false to move slider Right to Left
                 childrenContainer={{ backgroundColor: 'rgba(255,255,255,0.0)'}}
                 slideOverStyle={{backgroundColor:'#c4f8e4',
-                  borderBottomLeftRadius:0, 
-                  borderBottomRightRadius: 5, 
-                  borderTopLeftRadius: 0, 
-                  borderTopRightRadius: 5 
+                  borderBottomLeftRadius:0,
+                  borderBottomRightRadius: 5,
+                  borderTopLeftRadius: 0,
+                  borderTopRightRadius: 5
                 }}
                 onEndReached={() => this.onCloseModelXe(true)}
                 isOpacityChangeOnSlide={true}
@@ -406,7 +399,7 @@ class PickupDetails extends React.PureComponent {
                   </View>
                 }
             >
-              <Text >{t("screen.module.pickup.detail.btn_text_confirm")}</Text>
+              <Text >{translate("screen.module.pickup.detail.btn_text_confirm")}</Text>
             </ButtonSwiper>
           )}
           {isloading && (
@@ -431,7 +424,7 @@ class PickupDetails extends React.PureComponent {
               borderRadius:8,
             }}>
                 <QRCode
-                    value={navigation.getParam('pickup_code')}
+                    value={params?.pickup_code}
                     size={220}
                     logo={images["iconMotify"]}
                     logoSize={64}
@@ -448,15 +441,15 @@ class PickupDetails extends React.PureComponent {
               }}
               onPress={() =>
                 navigation.navigate("ModalPickupQRCode", {
-                  pickup_code: navigation.getParam("pickup_code"),
-                  quantity: navigation.getParam("quantity"),
+                  pickup_code: params?.pickup_code,
+                  quantity: params?.quantity,
                   is_query: 0,
                 })
               }
             >
               <Feather color={colors.white} name="printer" size={22} />
               <Text style={styles.textBtnPrint}>
-                {t("screen.module.pickup.detail.qr_print")}
+                {translate("screen.module.pickup.detail.qr_print")}
               </Text>
             </TouchableOpacity>
           </View>
@@ -472,26 +465,24 @@ class PickupDetails extends React.PureComponent {
                 fnsku_info={{
                   code: item[0],
                   quantity_oubound: item[1],
-                  pickup_box_id: navigation.getParam("pickup_box_id"),
+                  pickup_box_id: params?.pickup_box_id,
                   quantity_pick: item[2],
-                  is_pick: item[1] === item[2] ? true : false,
+                  is_pick: item[1] === item[2],
                   total_product: item[3],
                   expire_date: item[4],
                   is_error: item[5] ? item[5] : false,
                   is_rollback: item[6] ? item[6] : false,
-                  expire_date: item[4],
                   box_code: "",
-                  is_sugget_location: is_tab === 3 ? true : false,
-                  is_show_button: is_tab === 4 ? true : false,
+                  is_sugget_location: is_tab === 3,
+                  is_show_button: is_tab === 4,
                   is_error_rollback: is_error,
                   is_lost_items: item[7] ? item[7] : false,
                   condition_goods: item[8],
                 }}
-                trans={t}
                 onPressPack={this._confirmSloveOrder}
                 onPressLost={this._confirmCancellOrder}
                 onChangeLocation={this._confirmChangeLocation}
-                disableRightSide={is_tab === 2 || is_tab === 4 ? true : false}
+                disableRightSide={is_tab === 2 || is_tab === 4}
               />
             )}
           />
@@ -508,21 +499,19 @@ class PickupDetails extends React.PureComponent {
         {is_model && (
           <ModelFilter
             data={menuPickupDetail}
-            t={t}
             onClose={this.onCloseModel}
             onCofirm={this._filterByTab}
           />
         )}
-        {is_model_xe && <ModelConfirmXE 
-                t={t} 
-                onClose={this.onCloseModelXe} 
-                onSubmit ={this._putConfirmOk} 
-                pickup_id ={pickup_box_id} 
-                pickup_code ={navigation.getParam("pickup_code")}
+        {is_model_xe && <ModelConfirmXE
+                onClose={this.onCloseModelXe}
+                onSubmit ={this._putConfirmOk}
+                pickup_id ={pickup_box_id}
+                pickup_code ={params?.pickup_code}
                 index ={1}
         />}
 
-        {is_pick_model_xe && <ModelCard t={t} onClose={this.onToggleBox} onSubmit={this.onSubmitPickByXe} />}
+        {is_pick_model_xe && <ModelCard onClose={this.onToggleBox} onSubmit={this.onSubmitPickByXe} />}
         {list_data.length > 0 && (
           <View style={styles.containerBottom}>
             <View style={[gStyle.flex1, gStyle.flexCenter]}>
@@ -535,15 +524,15 @@ class PickupDetails extends React.PureComponent {
                   }}
                   onPress={() =>
                     navigation.navigate("ModalPickupUpdate", {
-                      pickup_box_id: navigation.getParam("pickup_box_id"),
-                      bin_code: navigation.getParam("pickup_code"),
+                      pickup_box_id: params?.pickup_box_id,
+                      bin_code: params?.pickup_code,
                       is_bin: 0,
                       is_error_rollback: is_error,
                     })
                   }
                 >
                   <Text style={styles.textButton}>
-                    {t("screen.module.pickup.detail.btn_update_pickup")}
+                    {translate("screen.module.pickup.detail.btn_update_pickup")}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -564,7 +553,6 @@ class PickupDetails extends React.PureComponent {
 PickupDetails.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({

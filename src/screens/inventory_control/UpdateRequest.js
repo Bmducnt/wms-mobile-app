@@ -16,7 +16,6 @@ import { colors, gStyle } from '../../constants';
 import ModalHeader from '../../components/ModalHeader';
 import BottomModal from '../../components/BottomModal';
 import TextInputComponent from '../../components/TextInputComponent';
-import {_getTimeDefaultFrom,_getTimeDefaultTo} from '../../helpers/device-height';
 import {handleSoundScaner,permissionDenied,handleSoundOkScaner} from '../../helpers/async-storage';
 import FNSKUItems from '../../components/ListFNSKUPickup';
 
@@ -24,6 +23,7 @@ import FNSKUItems from '../../components/ListFNSKUPickup';
 import putDetailBinInventory from "../../services/rack/update-bin";
 import getInfoBinStockCycle from "../../services/rack/find-bsin-cycle";
 import findDetailFnskuMove from '../../services/products/find';
+import {translate} from "../../i18n/locales/IMLocalized";
 
 class UpdateRequest extends React.PureComponent {
 
@@ -52,13 +52,13 @@ class UpdateRequest extends React.PureComponent {
     };
 
     componentDidMount() {
-        const { navigation } = this.props;
+        const { params } = this.props?.route;
         this.setState({
-          cycle_code: navigation.getParam('cycle_code'),
-          tracking_code: navigation.getParam('tracking_code'),
-          cycle_type: navigation.getParam('cycle_type'),
-          location_code: navigation.getParam('location_code'),
-          list_fnsku_outbound : navigation.getParam('bin_item_stock')
+          cycle_code: params.cycle_code,
+          tracking_code: params.tracking_code,
+          cycle_type: params.cycle_type,
+          location_code: params.location_code,
+          list_fnsku_outbound : params.bin_item_stock
         });
     };
 
@@ -73,7 +73,7 @@ class UpdateRequest extends React.PureComponent {
         'cycle_code' : this.state.cycle_code
       });
       if (response.status === 200){
-        handleSoundOkScaner();
+        await handleSoundOkScaner();
         this.setState({
           openModel:true,
           fnsku_code :response.data.results.fnsku_bsin,
@@ -81,23 +81,22 @@ class UpdateRequest extends React.PureComponent {
           is_batch_control : response.data.results.is_batch_control,
         });
       }else{
-        handleSoundScaner();
+        await handleSoundScaner();
       }
       this.setState({isloading:false});
     };
 
     _findBarcodeService = async  (code,parram) =>{
-      const { t } = this.props.screenProps;
       this.setState({isloading:true});
       const response = await findDetailFnskuMove(code,parram);
       if (response.status === 403){
-        permissionDenied(this.props.navigation);
-      };
+        await permissionDenied(this.props.navigation);
+      }
       if (response.status === 200){
-        handleSoundOkScaner();
+        await handleSoundOkScaner();
         this.setState({location_code:code})
       }else {
-        handleSoundScaner();
+        await handleSoundScaner();
       }
       this.setState({isloading:false,fnsku_code:null});
     };
@@ -132,18 +131,17 @@ class UpdateRequest extends React.PureComponent {
 
     _onSubmitEditingInputLocation = async (code) => {
       if (code){
-        this._findBarcodeService(code,{"location" : code,"is_check_location":1})
-      };
+        await this._findBarcodeService(code, {"location": code, "is_check_location": 1})
+      }
     };
 
     _searchCameraBarcode = async (code) => {
         if (code){
           this._fetchListProductsHandler(code);
-        };
+        }
     };
 
     _onSubmitEditingInput = async (code) => {
-        const { t } = this.props.screenProps;
         if (code){
             if (code < 0){
               Alert.alert(
@@ -163,7 +161,7 @@ class UpdateRequest extends React.PureComponent {
               await this.setState({fnsku_quantity_scan : code});
             }
 
-        };
+        }
     };
 
     _renderLocationScaner(t,navigation){
@@ -173,10 +171,10 @@ class UpdateRequest extends React.PureComponent {
                 navigation={navigation}
                 autoFocus={true}
                 showSearch = {true}
-                textLabel = {t('screen.module.cycle_check.update.label_bin_check')}
+                textLabel = {translate('screen.module.cycle_check.update.label_bin_check')}
                 onPressCamera = {this._onSubmitEditingInputLocation}
                 onSubmitEditingInput = {this._onSubmitEditingInputLocation}
-                textPlaceholder={t('screen.module.cycle_check.update.label_bin_check_input')} />
+                textPlaceholder={translate('screen.module.cycle_check.update.label_bin_check_input')} />
         </View>
       )
     }
@@ -190,12 +188,11 @@ class UpdateRequest extends React.PureComponent {
         expire_date:expire_date,
         batch_lot_code : batch_lot_code
       });
-      const { t } = this.props.screenProps;
       this._oncloseModel();
       if (this.state.fnsku_quantity_scan < 0){
         Alert.alert(
           "",
-          t('screen.module.cycle_check.add.alert_empty3'),
+          translate('screen.module.cycle_check.add.alert_empty3'),
           [
             {
               text: t("base.confirm"),
@@ -219,10 +216,10 @@ class UpdateRequest extends React.PureComponent {
                     navigation={navigation}
                     autoFocus={true}
                     showSearch = {true}
-                    textLabel = {t('screen.module.pickup.detail.fnsku_code')}
+                    textLabel = {translate('screen.module.pickup.detail.fnsku_code')}
                     onPressCamera = {this._searchCameraBarcode}
                     onSubmitEditingInput = {this._searchCameraBarcode}
-                    textPlaceholder={t('screen.module.pickup.detail.fnsku_scan')}>
+                    textPlaceholder={translate('screen.module.pickup.detail.fnsku_scan')}>
                 </TextInputComponent>
             </View>
         </View>
@@ -230,6 +227,7 @@ class UpdateRequest extends React.PureComponent {
     }
     render() {
         const { navigation } = this.props;
+        const { params } = this.props?.route;
         const {
           list_fnsku_outbound,
           is_loading,
@@ -241,15 +239,14 @@ class UpdateRequest extends React.PureComponent {
           staff_role,
           is_batch_control
         } = this.state;
-        const { t } = this.props.screenProps;
         return (
             <View style={gStyle.container}>
                 <ModalHeader
                 left={<Feather color={colors.greyLight} name="chevron-down" />}
                 leftPress={() => navigation.goBack(null)}
-                text={cycle_type ? location_code : navigation.getParam('tracking_code')}
+                text={cycle_type ? location_code : params?.tracking_code}
                 />
-                {location_code === null && cycle_type ? this._renderLocationScaner(t,navigation) : this._renderHeaderScanner(t,navigation)}
+                {location_code === null && cycle_type ? this._renderLocationScaner(navigation) : this._renderHeaderScanner(t,navigation)}
                 {is_loading && <View style={gStyle.p3}><ActivityIndicator/></View>}
                 <View style={styles.containerScroll}>
                     {list_fnsku_outbound.length > 0 ? <FlatList
@@ -258,8 +255,8 @@ class UpdateRequest extends React.PureComponent {
                         renderItem={({ item }) => (
                             <FNSKUItems
                                 navigation = {navigation}
-                                textLabelLeft = {cycle_type ? t('screen.module.pickup.detail.fnsku_code') :t('screen.module.pickup.list.location')}
-                                textLabelRight = {t('screen.module.cycle_check.update.label_quantity')}
+                                textLabelLeft = {cycle_type ? translate('screen.module.pickup.detail.fnsku_code') :translate('screen.module.pickup.list.location')}
+                                textLabelRight = {translate('screen.module.cycle_check.update.label_quantity')}
                                 fnsku_info={{
                                     code: item.fnsku_id.fnsku_barcode ? item.fnsku_id.fnsku_barcode : item.fnsku_id.fnsku_code,
                                     quantity_oubound: [2, 2].includes(staff_role) ? item.quantity : 0,
@@ -272,14 +269,13 @@ class UpdateRequest extends React.PureComponent {
                                     expire_date : item.expire_date.substring(0,10),
                                     box_code : null
                             }}
-                            trans ={t}
                             disableRightSide={true}
                             />
                         )}
                         />:
                         <View style={{marginHorizontal:15}}>
                           <Text style={{...gStyle.textBoxme16,color:colors.white}}>
-                          {t('screen.module.cycle_check.add.alert_empty1')} </Text>
+                          {translate('screen.module.cycle_check.add.alert_empty1')} </Text>
                       </View>}
                 </View>
                 {openModel && (
@@ -287,7 +283,6 @@ class UpdateRequest extends React.PureComponent {
                     navigation ={navigation}
                     outboundType ={outbound_type}
                     batchControl ={is_batch_control}
-                    t={t}
                     onSetQuantity ={this._onSubmitEditingInput}
                     trackingCode = {fnsku_code}
                     onCloseModel={this._oncloseModel}

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { 
-    Modal, 
-    Text, 
-    TouchableOpacity, 
+import {
+    Modal,
+    Text,
+    TouchableOpacity,
     View,
     StyleSheet,
     ScrollView,
@@ -25,12 +25,13 @@ import {
 } from '../../helpers/async-storage';
 import putErrorPickup from '../../services/pickup/log';
 import getListFnsku from '../../services/products/list';
-import { 
-    colors, 
-    device, 
-    gStyle 
+import {
+    colors,
+    device,
+    gStyle
 } from "../../constants";
 import getSummaryPickup from "../../services/pickup/summary";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 
 const ModelConfirmXE = props => {
@@ -70,7 +71,7 @@ const ModelConfirmXE = props => {
                         settotalbsinScan(totalbsinScan => totalbsinScan + 1)
                     }
                     handleSoundOkScaner();
-                    
+
                 } else {
                     summaryData.items.forEach(element => {
                         element.idx = 2;
@@ -85,7 +86,7 @@ const ModelConfirmXE = props => {
             }else{
                 handleSoundScaner();
             }
-            
+
         }
     };
 
@@ -98,7 +99,7 @@ const ModelConfirmXE = props => {
           console.log("error:", error);
         }
     };
-    
+
     const putComfirmError = async ()=>{
         let status_code = "OK"
         if (totalSold > summaryData?.total_sold){
@@ -114,16 +115,16 @@ const ModelConfirmXE = props => {
             status_code: status_code,
             quantity_error: totalSold,
             data_scan : summaryData?.items
-            
+
         }));
         if (response.status === 200) {
           handleSoundOkScaner();
           Alert.alert(
               '',
-              props.t('screen.module.putaway.text_ok'),
+              translate('screen.module.putaway.text_ok'),
               [
                 {
-                  text: props.t('base.confirm'),
+                  text: translate('base.confirm'),
                   onPress: () => {props.onClose(false)},
                 }
               ],
@@ -155,7 +156,7 @@ const ModelConfirmXE = props => {
 
     const handlerScan = (code) =>{
         findProducts(code);
-        
+
     }
 
     const renderConfirmXe = () =>{
@@ -164,7 +165,7 @@ const ModelConfirmXE = props => {
                 <View style={{marginTop:30}}>
                     <TextInputComponent
                         navigation={props.navigation}
-                        textLabel = {props.t('screen.module.pickup.detail.box_master')}
+                        textLabel = {translate('screen.module.pickup.detail.box_master')}
                         autoFocus={true}
                         autoChange = {true}
                         ediTable={true}
@@ -178,11 +179,11 @@ const ModelConfirmXE = props => {
                 </View>
                 <View style={[gStyle.flexCenter,{marginTop:20}]}>
                     <TouchableOpacity style={[styles.bottomButton,
-                            {borderRadius:3,backgroundColor:colors.primary}]} 
+                            {borderRadius:3,backgroundColor:colors.primary}]}
                         onPress={() => {props.onSubmit(xeCode)}
                         }>
                         <Text style={styles.textButton}>
-                        {props.t('screen.module.pickup.detail.text_confirm_ok_btn')}
+                        {translate('screen.module.pickup.detail.text_confirm_ok_btn')}
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -200,7 +201,7 @@ const ModelConfirmXE = props => {
                                 color:colors.greyInactive,
                                 ...gStyle.textBoxme12,
                                 marginLeft:15
-                            }}>{props.t('screen.module.pickup.detail.quantity_out')}</Text>
+                            }}>{translate('screen.module.pickup.detail.quantity_out')}</Text>
                             <TouchableOpacity
                                 activeOpacity={1}
                                 onPress={() => null}
@@ -232,14 +233,14 @@ const ModelConfirmXE = props => {
                         </View>
                         <View style={{width:'70%'}}>
                             <TextInputComponent
-                            
+
                                 navigation={props.navigation}
                                 autoFocus={true}
                                 showSearch = {false}
-                                textLabel = {props.t('screen.module.pickup.detail.fnsku_code')}
+                                textLabel = {translate('screen.module.pickup.detail.fnsku_code')}
                                 onPressCamera = {handlerScan}
                                 onSubmitEditingInput = {handlerScan}
-                                textPlaceholder={props.t('screen.module.pickup.detail.fnsku_scan')}/>
+                                textPlaceholder={translate('screen.module.pickup.detail.fnsku_scan')}/>
                         </View>
                     </View>
                 </View>
@@ -254,7 +255,7 @@ const ModelConfirmXE = props => {
                             width:layout.width/2.5,
                             paddingVertical:4,
                         }]}>
-                            <Text style={{color:colors.greyInactive}}>{props.t('screen.module.pickup.detail.quantity_fnsku_scan')}</Text>
+                            <Text style={{color:colors.greyInactive}}>{translate('screen.module.pickup.detail.quantity_fnsku_scan')}</Text>
                             <View style={gStyle.flexRow}>
                                 <Text style={{
                                     paddingTop:5,
@@ -273,7 +274,7 @@ const ModelConfirmXE = props => {
                             width:layout.width/2.5,
                             paddingVertical:4,
                         }]}>
-                            <Text style={{color:colors.greyInactive}}>{props.t('screen.module.pickup.detail.quantity_item_scan')}</Text>
+                            <Text style={{color:colors.greyInactive}}>{translate('screen.module.pickup.detail.quantity_item_scan')}</Text>
                             <View style={gStyle.flexRow}>
                                 <Text style={{
                                     paddingTop:5,
@@ -294,7 +295,7 @@ const ModelConfirmXE = props => {
                         paddingHorizontal:10
                     }]}>
                         <Text style={{color:colors.black}}>Đơn hàng có dịch vụ vas</Text>
-                        <TouchableOpacity style={{}} 
+                        <TouchableOpacity style={{}}
                         onPress={() => {printPdf(summaryData?.picking_list)}
                         }>
                             <Text >
@@ -306,7 +307,7 @@ const ModelConfirmXE = props => {
                 <View style={{marginTop:10}}>
                     {summaryData?.items?.length >0 &&
                         summaryData?.items.map((item, index) => (
-                            <View 
+                            <View
                                 key={item.sku}
                                 style={[gStyle.flexRowSpace,{
                                     marginVertical:2,
@@ -334,15 +335,15 @@ const ModelConfirmXE = props => {
                             </View>
                         </View>
                     ))}
-                    
+
                 </View>
                 <View style={[gStyle.flexCenter,{marginTop:20}]}>
                     <TouchableOpacity style={[styles.bottomButton,
-                            {borderRadius:3,backgroundColor:colors.primary}]} 
+                            {borderRadius:3,backgroundColor:colors.primary}]}
                         onPress={() => {putComfirmError()}
                         }>
                         <Text style={styles.textButton}>
-                        {props.t('screen.module.pickup.detail.text_confirm_ok_btn')}
+                        {translate('screen.module.pickup.detail.text_confirm_ok_btn')}
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -366,16 +367,16 @@ const ModelConfirmXE = props => {
                 }]}>
 
                     <Text >
-                        {props.t('screen.module.pickup.detail.text_confirm_ok_btn')}
+                        {translate('screen.module.pickup.detail.text_confirm_ok_btn')}
                     </Text>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         onPress={() => props.onClose(false)}
                         style={gStyle.flexRowSpace}
                         activeOpacity={gStyle.activeOpacity}
                     >
                         <AntDesign name="closecircle" size={22} color={colors.greyInactive} />
                     </TouchableOpacity>
-                    
+
                 </View>
                 {props.index === 1 ? renderConfirmXe() : renderConfirmCount()}
             </View>

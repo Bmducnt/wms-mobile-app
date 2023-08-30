@@ -12,12 +12,12 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { 
-  Image as Imagecompressor 
+import {
+  Image as Imagecompressor
 } from "react-native-compressor";
 import { Feather,Entypo,AntDesign } from "@expo/vector-icons";
-import { 
-  colors, 
+import {
+  colors,
   gStyle
 } from "../../constants";
 import ModalHeader from "../../components/ModalHeader";
@@ -35,6 +35,7 @@ import addNewTask from "../../services/tasks/add";
 import ModelTaskType from "./ModelTaskType";
 import ModelStaffList from './ModelStaffList';
 import ModelBoxList from './ModelBoxList';
+import {translate} from "../../i18n/locales/IMLocalized";
 
 
 
@@ -65,9 +66,7 @@ class AddTasks extends React.PureComponent {
 
 
   UNSAFE_componentWillMount = async () => {
-    const { t } = this.props.screenProps;
-    this.fetchListStaff();
-    
+    await this.fetchListStaff();
   };
 
 
@@ -103,15 +102,14 @@ class AddTasks extends React.PureComponent {
     }
   };
 
-  imageCompress = async (path) => {
-    const resultcompress = await Imagecompressor.compress(path, {
-      compressionMethod: "auto",
-    });
-    this.commitAssetToServer(resultcompress);
-  };
+  // imageCompress = async (path) => {
+  //   const resultcompress = await Imagecompressor.compress(path, {
+  //     compressionMethod: "auto",
+  //   });
+  //   this.commitAssetToServer(resultcompress);
+  // };
 
   pickImageorVideo = async () => {
-    const { t } = this.props.screenProps;
     this.setState({ is_loading: true });
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -129,7 +127,7 @@ class AddTasks extends React.PureComponent {
 
   commitAssetToServer = async (assetPath) => {
     this.setState({ is_loading: true });
-    req = await serviceUploadAsset(assetPath, null, null, 3,0,false);
+    const req = await serviceUploadAsset(assetPath, null, null, 3,0,false);
     this.setState({
       list_asset: [
         {
@@ -162,23 +160,22 @@ class AddTasks extends React.PureComponent {
       await this.setState({due_date : code})
     }
   };
-  
-  
+
+
   onGoback = async () =>{
     this.props.navigation.goBack(null);
   };
 
-  
+
 
   addTasks = async () =>{
-    const { t } = this.props.screenProps;
     if (!this.state.task_type || !this.state.assigner_by || !this.state.due_date){
       Alert.alert(
         '',
-        t('screen.module.taks.add.alert_text'),
+        translate('screen.module.taks.add.alert_text'),
         [
             {
-            text: t("base.confirm"),
+            text: translate("base.confirm"),
             onPress: () => {null},
             },
         ],
@@ -190,20 +187,20 @@ class AddTasks extends React.PureComponent {
     this.setState({is_loading : true});
     const response = await addNewTask(JSON.stringify({
         task_group: this.state.task_type,
-        task_name: this.state.task_name ? this.state.task_name : t('screen.module.taks.detail.task_name_default'),
+        task_name: this.state.task_name ? this.state.task_name : translate('screen.module.taks.detail.task_name_default'),
         assigner_by : this.state.assigner_by,
         due_date : this.state.due_date,
-        task_notes : this.state.task_note ? this.state.task_note : t('screen.module.taks.detail.task_note_default'),
+        task_notes : this.state.task_note ? this.state.task_note : translate('screen.module.taks.detail.task_note_default'),
         list_asset:this.state.list_asset,
         box_code:this.state.box_code,
     }));
     if (response.status === 200){
         Alert.alert(
             '',
-            t('screen.module.pickup.create.ok'),
+            translate('screen.module.pickup.create.ok'),
             [
                 {
-                text: t("base.confirm"),
+                text: translate("base.confirm"),
                 onPress: () => {this.onGoback();},
                 },
             ],
@@ -233,7 +230,7 @@ class AddTasks extends React.PureComponent {
   onAddBox = async (code) => {
     await this.setState({
       is_box_req : code
-    
+
     })
   }
 
@@ -253,7 +250,6 @@ class AddTasks extends React.PureComponent {
       box_code,
       is_box_req
     } = this.state;
-    const { t } = this.props.screenProps;
     return (
       <ScrollView style={gStyle.container}>
         <KeyboardAvoidingView
@@ -265,16 +261,16 @@ class AddTasks extends React.PureComponent {
                 <ModalHeader
                     left={<Feather color={colors.white} name="x"/>}
                     leftPress={() => navigation.goBack(null)}
-                    text={t('screen.module.taks.add.header')}
+                    text={translate('screen.module.taks.add.header')}
                 />
             </View>
             <View style={[gStyle.container,{
                 marginHorizontal:10,
                 marginTop:10
             }]}>
-                <Text style={styles.textLabel}>{t('screen.module.taks.add.task_type')}</Text>
+                <Text style={styles.textLabel}>{translate('screen.module.taks.add.task_type')}</Text>
                 <View style={[{marginHorizontal:15}]}>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                       onPress={() => this.setState({open_task_model : true})}
                       style={[
                         gStyle.flexRowSpace,
@@ -286,7 +282,7 @@ class AddTasks extends React.PureComponent {
                         },
                     ]}>
                         <Text style={{ color:task_type ? colors.black:colors.greyInactive, ...gStyle.textBoxme14}}>
-                          {task_type ? task_type : `${t('screen.module.taks.add.task_type')}`}
+                          {task_type ? task_type : `${translate('screen.module.taks.add.task_type')}`}
                         </Text>
                         <Entypo name="chevron-down" size={18} color={colors.greyInactive} />
                     </TouchableOpacity>
@@ -304,8 +300,8 @@ class AddTasks extends React.PureComponent {
                     autoChange={true}
                     onPressCamera={this.onSubmitEditingInputName}
                     onSubmitEditingInput={this.onSubmitEditingInputName}
-                    textPlaceholder={t('screen.module.taks.add.task_name')}
-                    textLabel={t('screen.module.taks.add.task_name')}
+                    textPlaceholder={translate('screen.module.taks.add.task_name')}
+                    textLabel={translate('screen.module.taks.add.task_name')}
                     />
                 </View>}
                 {!is_box_req && <View style={{marginTop:8}}>
@@ -321,14 +317,14 @@ class AddTasks extends React.PureComponent {
                     autoChange={true}
                     onPressCamera={this.onSubmitEditingInputNote}
                     onSubmitEditingInput={this.onSubmitEditingInputNote}
-                    textPlaceholder={t('screen.module.taks.add.task_note')}
-                    textLabel={t('screen.module.taks.add.task_note')}
+                    textPlaceholder={translate('screen.module.taks.add.task_note')}
+                    textLabel={translate('screen.module.taks.add.task_note')}
                     />
                 </View>}
                 <View style={gStyle.flexRowSpace}>
-                  <Text style={styles.textLabel}>{t('screen.module.taks.add.file')}</Text>
-                  {list_asset.length > 0 && 
-                  <Text style={[styles.textLabel,{color:colors.white}]}>{list_asset.length} {t('screen.module.taks.add.file_sub')}</Text> }
+                  <Text style={styles.textLabel}>{translate('screen.module.taks.add.file')}</Text>
+                  {list_asset.length > 0 &&
+                  <Text style={[styles.textLabel,{color:colors.white}]}>{list_asset.length} {translate('screen.module.taks.add.file_sub')}</Text> }
                 </View>
                 <TouchableOpacity
                     onPress={() => this.pickImageorVideo()}
@@ -347,7 +343,7 @@ class AddTasks extends React.PureComponent {
                     </View>
                     {!is_loading ? <View style={[{ width: Dimensions.get("window").width - 100 }]}>
                       <Text style={{ color:colors.greyInactive, ...gStyle.textBoxme14 }}>
-                        {t('screen.module.taks.add.file')}
+                        {translate('screen.module.taks.add.file')}
                       </Text>
                       <Text
                           style={{
@@ -357,12 +353,12 @@ class AddTasks extends React.PureComponent {
                       >
                           PNG , JPG or MP4, MOV
                       </Text>
-                      
+
                     </View>: <ActivityIndicator />}
                 </TouchableOpacity>
-                {is_box_req && <Text style={styles.textLabel}>{t('screen.module.taks.add.select_box')}</Text>}
+                {is_box_req && <Text style={styles.textLabel}>{translate('screen.module.taks.add.select_box')}</Text>}
                 {is_box_req && <View style={[gStyle.flexRow,{marginHorizontal:15}]}>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                       onPress={() => this.setState({open_task_box_model : true})}
                       style={[
                         gStyle.flexRowSpace,
@@ -375,15 +371,15 @@ class AddTasks extends React.PureComponent {
                         },
                     ]}>
                         <Text style={{ color:box_code.length > 0 ? colors.black :colors.greyInactive, ...gStyle.textBoxme14}}>
-                          {box_code.length > 0 ? `${box_code.length} ${t('screen.module.taks.detail.box_select')}`   :`${t('screen.module.taks.add.select_box')}`}
+                          {box_code.length > 0 ? `${box_code.length} ${translate('screen.module.taks.detail.box_select')}`   :`${translate('screen.module.taks.add.select_box')}`}
                         </Text>
                         <Entypo name="chevron-down" size={18} color={colors.greyInactive} />
                     </TouchableOpacity>
                 </View>}
 
-                <Text style={styles.textLabel}>{t('screen.module.taks.add.label_staff')}</Text>
+                <Text style={styles.textLabel}>{translate('screen.module.taks.add.label_staff')}</Text>
                 <View style={[gStyle.flexRow,{marginHorizontal:15}]}>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                       onPress={() => this.setState({open_task_model_staff : true})}
                       style={[
                         gStyle.flexRowSpace,
@@ -396,14 +392,14 @@ class AddTasks extends React.PureComponent {
                         },
                     ]}>
                         <Text style={{ color:assigner_by ? colors.black :colors.greyInactive, ...gStyle.textBoxme14}}>
-                          {assigner_by ? assigner_by :`${t('screen.module.taks.add.select_staff')}`}
+                          {assigner_by ? assigner_by :`${translate('screen.module.taks.add.select_staff')}`}
                         </Text>
                         <Entypo name="chevron-down" size={18} color={colors.greyInactive} />
                     </TouchableOpacity>
                 </View>
-                <Text style={styles.textLabel}>{t('screen.module.taks.add.due')}</Text>
+                <Text style={styles.textLabel}>{translate('screen.module.taks.add.due')}</Text>
                 <View style={[gStyle.flexRow,{marginHorizontal:15}]}>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         onPress={() => this.setState({open_due_date_time : true})}
                         activeOpacity={gStyle.activeOpacity}
                         style={[gStyle.flexRowSpace,
@@ -430,15 +426,15 @@ class AddTasks extends React.PureComponent {
                     style={[styles.bottomButton]}
                     onPress={() => this.addTasks()}
                   >
-                    <Text style={styles.textButton}>{t('screen.module.taks.add.btn_add')}</Text>
+                    <Text style={styles.textButton}>{translate('screen.module.taks.add.btn_add')}</Text>
                   </TouchableOpacity>
                 </View>
-                {open_due_date_time && <DatetimeDue onSelect={this.onSubmitEditingInputDue} onClose={this.onCloseModel} trans={t} />}
-                {open_task_model && <ModelTaskType t={t} onSelect = {this.onSelectTasks} onClose={this.onCloseModel} onAddBox = {this.onAddBox} /> }
-                {open_task_model_staff && <ModelStaffList t={t} data={list_staff} onSelect={this.onSelectStaff} onClose={this.onCloseModel} />}
-                {open_task_box_model && <ModelBoxList t={t} onSelect={this.onSelectBox} onClose={this.onCloseModel} onBoxList = {box_code}/>}
+                {open_due_date_time && <DatetimeDue onSelect={this.onSubmitEditingInputDue} onClose={this.onCloseModel} />}
+                {open_task_model && <ModelTaskType onSelect = {this.onSelectTasks} onClose={this.onCloseModel} onAddBox = {this.onAddBox} /> }
+                {open_task_model_staff && <ModelStaffList data={list_staff} onSelect={this.onSelectStaff} onClose={this.onCloseModel} />}
+                {open_task_box_model && <ModelBoxList onSelect={this.onSelectBox} onClose={this.onCloseModel} onBoxList = {box_code}/>}
             </View>
-            
+
         </KeyboardAvoidingView>
       </ScrollView>
     );
@@ -448,7 +444,6 @@ class AddTasks extends React.PureComponent {
 AddTasks.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({

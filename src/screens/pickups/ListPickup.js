@@ -1,19 +1,19 @@
 import * as React from "react";
 import PropTypes from "prop-types";
-import { 
-  Text, 
-  View, 
-  StyleSheet, 
+import {
+  Text,
+  View,
+  StyleSheet,
 } from "react-native";
 import ActionButton from "react-native-action-button";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { 
-  TabView, 
-  SceneMap, 
-  TabBar 
+import {
+  TabView,
+  SceneMap,
+  TabBar
 } from "react-native-tab-view";
-import { 
-  colors, 
+import {
+  colors,
   gStyle,
   device
 } from "../../constants";
@@ -22,10 +22,7 @@ import PickupItemTabAwaiting from "./PickupItemTabAwaiting";
 import PickupItemTabTodo from "./PickupItemTabTodo";
 import PickupItemTabPacking from "./PickupItemTabPacking";
 import PickupItemTabException from "./PickupItemTabException";
-import {
-  _getTimeDefaultFrom,
-  _getTimeDefaultTo,
-} from "../../helpers/device-height";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 class PickupsLists extends React.PureComponent {
   constructor(props) {
@@ -44,24 +41,23 @@ class PickupsLists extends React.PureComponent {
   };
 
   UNSAFE_componentWillMount = async () => {
-    const { t } = this.props.screenProps;
     this.setState({
       routes: [
         {
           key: "pickup_await",
-          title: t("screen.module.pickup.list.status_await"),
+          title: translate("screen.module.pickup.list.status_await"),
         },
         {
           key: "pickup_doing",
-          title: t("screen.module.pickup.list.status_doing"),
+          title: translate("screen.module.pickup.list.status_doing"),
         },
         {
           key: "pickup_packing",
-          title: t("screen.module.packed.status_awaiting"),
+          title: translate("screen.module.packed.status_awaiting"),
         },
         {
           key: "pickup_done",
-          title: t("screen.module.pickup.list.status_done"),
+          title: translate("screen.module.pickup.list.status_done"),
         },
       ],
     });
@@ -74,12 +70,11 @@ class PickupsLists extends React.PureComponent {
   render() {
     const { navigation } = this.props;
     const { pickup_code} = this.state;
-    const { t } = this.props.screenProps;
     return (
       <View style={[gStyle.container]}>
         <View >
           <ScreenHeader
-            title={t("screen.module.pickup.list.header")}
+            title={translate("screen.module.pickup.list.header")}
             showBack={false}
             isFull={true}
             showInput={true}
@@ -88,8 +83,8 @@ class PickupsLists extends React.PureComponent {
             bgColor={colors.cardLight}
             onPressCamera={this._searchCameraBarcode}
             onSubmitEditingInput={this._searchCameraBarcode}
-            textPlaceholder={t("screen.module.pickup.list.search_text")}
-          />
+            textPlaceholder={translate("screen.module.pickup.list.search_text")}
+           navigation={navigation}/>
         </View>
         <TabView
           lazy
@@ -97,7 +92,6 @@ class PickupsLists extends React.PureComponent {
           renderScene={SceneMap({
             pickup_await: () => (
               <PickupItemTabAwaiting
-                t={t}
                 navigation={navigation}
                 code={pickup_code}
                 status_id={400}
@@ -105,7 +99,6 @@ class PickupsLists extends React.PureComponent {
             ),
             pickup_doing: () => (
               <PickupItemTabTodo
-                t={t}
                 navigation={navigation}
                 code={pickup_code}
                 status_id={402}
@@ -113,7 +106,6 @@ class PickupsLists extends React.PureComponent {
             ),
             pickup_packing: () => (
               <PickupItemTabPacking
-                t={t}
                 navigation={navigation}
                 code={pickup_code}
                 status_id={407}
@@ -121,7 +113,6 @@ class PickupsLists extends React.PureComponent {
             ),
             pickup_done: () => (
               <PickupItemTabException
-                t={t}
                 navigation={navigation}
                 code={pickup_code}
                 status_id={0}
@@ -135,7 +126,7 @@ class PickupsLists extends React.PureComponent {
               bounces={true}
               {...props}
               indicatorStyle={{ backgroundColor: colors.transparent }}
-              style={{ 
+              style={{
                 backgroundColor:colors.transparent,
                 elevation: 0,
                 shadowOpacity: 0,
@@ -149,7 +140,7 @@ class PickupsLists extends React.PureComponent {
               activeColor={colors.white}
               renderLabel={({ route, focused, color }) => (
                 <View style={[gStyle.flexCenter,]}>
-                  
+
                   <Text
                     style={{ color : focused ? colors.white :colors.greyInactive, ...gStyle.textBoxmeBold14}}
                     numberOfLines={1}
@@ -205,7 +196,6 @@ const styles = StyleSheet.create({
 PickupsLists.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired,
 };
 
 export default PickupsLists;

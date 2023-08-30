@@ -11,6 +11,7 @@ import {
 import { Feather,FontAwesome5} from "@expo/vector-icons";
 import { colors, gStyle, device,images } from "../constants";
 import Badge from "./Badge";
+import {translate} from "../i18n/locales/IMLocalized";
 
 
 const LineItemProducts = ({
@@ -19,7 +20,6 @@ const LineItemProducts = ({
   disableRightSide,
   iconLibrary,
   id,
-  trans,
 }) => {
   const [imageError, setimageError] = React.useState(false);
   return (
@@ -83,7 +83,7 @@ const LineItemProducts = ({
               <View style={styles.containerInfo}>
                 {fnsku_info.total_hold !== 0 && (
                   <Badge
-                    name={`${trans("screen.module.product.onhand")} ${
+                    name={`${translate("screen.module.product.onhand")} ${
                       fnsku_info.total_hold
                     }`}
                     style={{
@@ -96,8 +96,8 @@ const LineItemProducts = ({
                 <Badge
                   name={
                     fnsku_info.storage_type === 1
-                      ? trans("screen.module.product.detail.stock_standard")
-                      : trans("screen.module.product.detail.stock_cold")
+                      ? translate("screen.module.product.detail.stock_standard")
+                      : translate("screen.module.product.detail.stock_cold")
                   }
                   style={{
                     backgroundColor: colors.borderLight,
@@ -122,7 +122,7 @@ const LineItemProducts = ({
             <View style={{ width: 70, marginTop: 5 }}>
               <View style={gStyle.flexCenter}>
                 <Text style={[styles.textValue,{...gStyle.textBoxmeBold16}]}>{fnsku_info.total_stock}</Text>
-                <Text style={styles.textLabel}>{trans("screen.module.product.stock")}</Text>
+                <Text style={styles.textLabel}>{translate("screen.module.product.stock")}</Text>
               </View>
             </View>
             <View
@@ -134,7 +134,7 @@ const LineItemProducts = ({
             >
               <View style={[gStyle.flexRowSpace,{paddingRight:20}]}>
                 <Text style={[styles.textLabel]}>
-                  {trans("screen.module.product.detail.weight")}
+                  {translate("screen.module.product.detail.weight")}
                 </Text>
                 <Text style={[styles.textValue]} numberOfLines={1}>
                   {fnsku_info.weight} (gram)
@@ -142,7 +142,7 @@ const LineItemProducts = ({
               </View>
               <View style={[gStyle.flexRowSpace,{paddingRight:20}]}>
                 <Text style={[styles.textLabel]}>
-                  {trans("screen.module.product.detail.volume")}
+                  {translate("screen.module.product.detail.volume")}
                 </Text>
                 <Text style={[styles.textValue]} numberOfLines={1}>
                   {fnsku_info.volume}
@@ -150,7 +150,7 @@ const LineItemProducts = ({
               </View>
               <View style={[gStyle.flexRowSpace,{paddingRight:20}]}>
                 <Text style={[styles.textLabel]}>
-                  {trans("screen.module.product.detail.outbound_strange")}
+                  {translate("screen.module.product.detail.outbound_strange")}
                 </Text>
                 <Text style={[styles.textValue]} numberOfLines={1}>
                   {fnsku_info.outbound_type === 0 && 'fifo'}

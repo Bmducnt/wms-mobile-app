@@ -51,14 +51,14 @@ class ModalPutawayUpdate extends React.Component {
     componentDidMount() {
         const { navigation } = this.props;
         this.setState({
-            box_code: navigation.getParam('box_code'),
-            tab_id: navigation.getParam('tab_id'),
-            box_id: navigation.getParam('putaway_id'),
-            type_putaway: navigation.getParam('type_putaway'),
-            box_info: navigation.getParam('box_info'),
-            storage_type: navigation.getParam('storage_type'),
-            is_rollback : navigation.getParam('is_rollback'),
-            fnsku_code : navigation.getParam('box_info').fnsku_barcode ? navigation.getParam('type_putaway') : null
+            box_code: navigation.parmams?.box_code,
+            tab_id: navigation.parmams?.tab_id,
+            box_id: navigation.parmams?.putaway_id,
+            type_putaway: navigation.parmams?.type_putaway,
+            box_info: navigation.parmams?.box_info,
+            storage_type: navigation.parmams?.storage_type,
+            is_rollback : navigation.parmams?.is_rollback,
+            fnsku_code : navigation.parmams?.box_info.fnsku_barcode ? navigation.parmams?.type_putaway : null
         });
     };
 
@@ -68,8 +68,9 @@ class ModalPutawayUpdate extends React.Component {
 
     UNSAFE_componentWillMount = async () =>{
         const { navigation } = this.props;
-        if(navigation.getParam('type_putaway')){
-            this._fetchBinProductHandler(navigation.getParam('box_info').fnsku_barcode,navigation.getParam('tab_id'))
+        const { params } = this.props?.route;
+        if(params?.type_putaway){
+            await this._fetchBinProductHandler(params?.box_info.fnsku_barcode, params?.tab_id)
         }
     }
 
@@ -85,7 +86,7 @@ class ModalPutawayUpdate extends React.Component {
             permissionDenied(this.props.navigation);
         }else {
             handleSoundScaner();
-        };
+        }
     };
 
     _fetchPostInboundStock = async (code,body) =>{
@@ -93,7 +94,6 @@ class ModalPutawayUpdate extends React.Component {
             isloading : true,
             bin_scan : code
         })
-        const { t } = this.props.screenProps;
         const response = await postPutawayInbound(code,body);
         if (response.status === 200){
             handleSoundOkScaner();
@@ -138,7 +138,7 @@ class ModalPutawayUpdate extends React.Component {
                     {cancelable: false},
                 );
             }
-        };
+        }
         this.setState({isloading:false});
     };
 
@@ -146,7 +146,6 @@ class ModalPutawayUpdate extends React.Component {
         this.setState({
             isloading : true
         })
-        const { t } = this.props.screenProps;
         const response = await confirmRollbackBinException(body);
         if (response.status === 200){
             handleSoundOkScaner();
@@ -191,7 +190,7 @@ class ModalPutawayUpdate extends React.Component {
                     {cancelable: false},
                 );
             }
-        };
+        }
         this.setState({isloading:false});
     };
 
@@ -200,7 +199,6 @@ class ModalPutawayUpdate extends React.Component {
             isloading : true,
             bin_scan : code,
         })
-        const { t } = this.props.screenProps;
         const response = await postPutawayPA(body);
         console.log(response)
         if (response.status === 200){
@@ -252,7 +250,7 @@ class ModalPutawayUpdate extends React.Component {
                     {cancelable: false},
                 );
             }
-        };
+        }
         this.setState({isloading:false});
     };
 
@@ -260,7 +258,6 @@ class ModalPutawayUpdate extends React.Component {
         this.setState({
             isloading : true
         })
-        const { t } = this.props.screenProps;
         const response = await getListPutawayRMA(params);
         if (response.status === 200){
             if (response.data.results.length > 0){
@@ -276,7 +273,7 @@ class ModalPutawayUpdate extends React.Component {
                 if (response.data.results[0].summary_expire_date.length === 0){
                     this._fetchBinProductHandler(response.data.results[0].bsin_info.bsin,this.state.tab_id);
                 }
-                
+
             }else{
                 handleSoundScaner();
                 Alert.alert(
@@ -312,7 +309,6 @@ class ModalPutawayUpdate extends React.Component {
 
 
     _searchCameraBarcode = async (code) => {
-        const { t } = this.props.screenProps;
         if (code){
             if (this.state.summary_expire_date.length > 0){
                 if (this.state.list_id_commit.length === 0){
@@ -347,7 +343,7 @@ class ModalPutawayUpdate extends React.Component {
                             quantity : this.state.box_info.quantity_box
                     }));
                 }
-                
+
             }else{
                 this._fetchPutawayPA(code,JSON.stringify({
                     bin_id: code,
@@ -359,7 +355,7 @@ class ModalPutawayUpdate extends React.Component {
                     list_id_commit : this.state.list_id_commit
                 }));
             }
-        };
+        }
     };
 
     _onSubmitEditingInput = async (code) => {
@@ -373,7 +369,7 @@ class ModalPutawayUpdate extends React.Component {
                 'is_damaged' : this.state.tab_id === 'RMA_A' ?  0: 1,
                 'v2': 1
             });
-        };
+        }
     };
 
     _onSelectExp = async (list_id_commit ,quantity,fnsku_name,fnsku_barcode) =>{
@@ -391,8 +387,8 @@ class ModalPutawayUpdate extends React.Component {
 
     render() {
         const { navigation } = this.props;
-        const { 
-            box_code, 
+        const {
+            box_code,
             fnsku_code,
             box_info,
             storage_type,
@@ -402,7 +398,6 @@ class ModalPutawayUpdate extends React.Component {
             summary_expire_date,
             list_id_commit,
         } = this.state;
-        const { t } = this.props.screenProps;
         return (
             <View style={gStyle.container}>
                 <ModalHeader
@@ -424,7 +419,7 @@ class ModalPutawayUpdate extends React.Component {
                                 <Text style={styles.productName}>{box_info.fnsku_barcode}</Text>
                             </View>
                             <Text numberOfLines={3} style={styles.productInfoName}>{box_info.fnsku_name}</Text>
-                            
+
                         </View>
                         <View style={styles.separator}></View>
                         <View style={gStyle.flexCenter}>
@@ -466,15 +461,15 @@ class ModalPutawayUpdate extends React.Component {
                                                     borderRadius:3,
                                                 }}>
                                                     <Text style={{color:colors.white,...gStyle.textBoxme14}}>
-                                                        {list_id_commit === prop.list_id_commit ? t('screen.module.putaway.putaway_exp_tick') : 
+                                                        {list_id_commit === prop.list_id_commit ? t('screen.module.putaway.putaway_exp_tick') :
                                                         t('screen.module.putaway.putaway_exp_tick_not') }
                                                     </Text>
                                                 </View>
                                             </View>
-                                            
+
                                     </TouchableOpacity >
                                 );
-                            })} 
+                            })}
                     </View>}
                     <View style={[gStyle.flexRow,{marginTop:5}]}>
                             {storage_type !== 0 && <Badge

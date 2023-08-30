@@ -1,15 +1,16 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { 
-  StyleSheet, 
-  Text, 
-  TouchableOpacity, 
-  View 
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import { colors, gStyle } from '../constants';
 import Badge from './Badge';
+import {translate} from "../i18n/locales/IMLocalized";
 
-const LineBinStock = ({ active, row ,trans}) => {
+const LineBinStock = ({ active, row }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -17,7 +18,7 @@ const LineBinStock = ({ active, row ,trans}) => {
         onPress={null}
         style={gStyle.flex5}
       >
-        
+
         <View style={[gStyle.flexRowSpace]}>
             <Text style={[styles.title, { color: colors.white }]}>
               {row.location.location}
@@ -29,10 +30,10 @@ const LineBinStock = ({ active, row ,trans}) => {
 
         <View style={[gStyle.flexRowSpace]}>
           <Text style={styles.text}>
-            {`${trans('screen.module.pickup.detail.expire_date')} · ${row.expire_date}`}
+            {`${translate('screen.module.pickup.detail.expire_date')} · ${row.expire_date}`}
           </Text>
           <Badge
-          name={row.is_active === 0 ? trans('screen.module.product.bin_active') : trans('screen.module.product.bin_deactive')}
+          name={row.is_active === 0 ? translate('screen.module.product.bin_active') : translate('screen.module.product.bin_deactive')}
           style={{
             backgroundColor: row.is_active === 0 ? colors.boxmeBrand : colors.blackBlur,
             color: colors.white,
@@ -41,15 +42,15 @@ const LineBinStock = ({ active, row ,trans}) => {
         />
         </View>
         <View style={[gStyle.flexRowSpace,{paddingTop:3}]}>
-          <Text style={styles.text}>{trans('screen.module.product.bin_hold')}</Text>
+          <Text style={styles.text}>{translate('screen.module.product.bin_hold')}</Text>
           <Text style={styles.textValue}>{row.quantity_hold}</Text>
         </View>
         <View style={[gStyle.flexRowSpace,{paddingTop:3}]}>
-          <Text style={styles.text}>{trans('screen.module.product.staff_putaway')}</Text>
+          <Text style={styles.text}>{translate('screen.module.product.staff_putaway')}</Text>
           <Text style={styles.textValue}>{row.staff_id}</Text>
         </View>
         <View style={[gStyle.flexRowSpace,{paddingTop:3}]}>
-          <Text style={styles.text}>{trans('screen.module.product.putaway_date')}</Text>
+          <Text style={styles.text}>{translate('screen.module.product.putaway_date')}</Text>
           <Text style={styles.textValue}>{row.created_date}</Text>
         </View>
         <View style={styles.percentBar}></View>

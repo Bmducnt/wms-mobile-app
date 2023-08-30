@@ -24,6 +24,7 @@ import getListPickup from "../../services/pickup/list";
 import getListRulePickup from "../../services/pickup/list-rule";
 
 import { LinearGradient } from "expo-linear-gradient";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 class PickupItemTabAwaiting extends React.PureComponent {
   constructor(props) {
@@ -101,7 +102,7 @@ class PickupItemTabAwaiting extends React.PureComponent {
 
   render() {
     const { list_pickup, isloading, role_id, pickup_rule } = this.state;
-    const { t, navigation } = this.props;
+    const { navigation } = this.props;
     return (
       <View style={[gStyle.container]}>
         {isloading && (
@@ -137,7 +138,7 @@ class PickupItemTabAwaiting extends React.PureComponent {
                   ]}
                 >
                   <FontAwesome5 name="plus" size={14} color={colors.white} />{" "}
-                  {t("screen.module.pickup_rule.btn_add")}
+                  {translate("screen.module.pickup_rule.btn_add")}
                 </Text>
                 {pickup_rule && (
                   <Text
@@ -149,13 +150,13 @@ class PickupItemTabAwaiting extends React.PureComponent {
                       },
                     ]}
                   >
-                    {t("screen.module.pickup_rule.prioritize")} {pickup_rule}
+                    {translate("screen.module.pickup_rule.prioritize")} {pickup_rule}
                   </Text>
                 )}
               </TouchableOpacity>
             </LinearGradient>
           )}
-          {list_pickup.length === 0 && !isloading && <EmptySearch t={t} />}
+          {list_pickup.length === 0 && !isloading && <EmptySearch/>}
           {list_pickup.length > 0 && (
             <FlatList
               data={list_pickup}
@@ -165,7 +166,6 @@ class PickupItemTabAwaiting extends React.PureComponent {
               renderItem={({ item }) => (
                 <ListPickupItems
                   navigation={navigation}
-                  translate={t}
                   itemInfo={{
                     time_created: item.created_date,
                     assigner_by: item.assigner_by.email,

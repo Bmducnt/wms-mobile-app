@@ -27,6 +27,7 @@ import { permissionDenied } from "../../helpers/async-storage";
 
 //service api
 import getDetailOb from "../../services/handover/detail-ob";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 class DetailScreen extends React.PureComponent {
   constructor(props) {
@@ -50,24 +51,26 @@ class DetailScreen extends React.PureComponent {
   }
 
   componentDidMount = async () => {
+    const { params } = this.props?.route;
     const { navigation } = this.props;
     this.setState({
-        code_ob: navigation.getParam("code"),
-        is_approved: navigation.getParam("is_approved"),
-        carrier_name: navigation.getParam("carrier_name"),
-        carrier_logo: navigation.getParam("carrier_logo"),
-        quantity : navigation.getParam("quantity")
+        code_ob: params?.code,
+        is_approved: params?.is_approved,
+        carrier_name: params?.carrier_name,
+        carrier_logo: params?.carrier_logo,
+        quantity : params?.quantity
     });
-    this.willFocusSubscription = this.props.navigation.addListener(
+    // await this._fetchDetailHandover(params?.code, null);
+    this.willFocusSubscription = navigation.addListener(
       'willFocus',
       () => {
-        this._fetchDetailHandover(navigation.getParam("code"),null);
+        this._fetchDetailHandover(params?.code,null);
       }
     );
   };
 
   componentWillUnmount() {
-    this.willFocusSubscription.remove();
+    this.willFocusSubscription();
   };
 
   _printPdf = async () => {
@@ -83,24 +86,25 @@ class DetailScreen extends React.PureComponent {
   };
 
   _fetchDetailHandover = async (code,q) => {
+    console.log('params', code, q)
     this.setState({ isloading: true, list_data: [] });
     const response = await getDetailOb(code,{is_pda:1,page:this.state.page,q:q});
     if (response.status === 200) {
-      this.setState({ 
+      this.setState({
         list_data: response.data.results,
         reason_list :  response.data.reason_list,
-        total_page: response.data.total_page 
+        total_page: response.data.total_page
       });
-    };
+    }
     if (response.status === 403){
-      permissionDenied();
-    };
+      await permissionDenied();
+    }
     this.setState({ isloading: false });
   };
 
   _onRefresh = async () => {
     this.state.page = 1;
-    this._fetchDetailHandover(this.state.code_ob,null);
+    await this._fetchDetailHandover(this.state.code_ob, null);
   };
 
   _handleLoadMore = () => {
@@ -120,9 +124,10 @@ class DetailScreen extends React.PureComponent {
     return layoutMeasurement.height + contentOffset.y >=
       contentSize.height - paddingToBottom
   }
-  
+
   render() {
     const { navigation } = this.props;
+    const { params } = this.props?.route;
     const {
       isloading,
       list_data,
@@ -133,14 +138,13 @@ class DetailScreen extends React.PureComponent {
       scrollY,
       reason_list
     } = this.state;
-    const { t } = this.props.screenProps;
     return (
       <React.Fragment>
         <View style={[gStyle.container]}>
         <View
           style={{ position: "absolute", top: 0, width: "100%", zIndex: 1}}
         >
-          <ScreenHeader title={`${t('screen.module.packed.detail.text')} ${navigation.getParam("code")}`} showBack={true}/>
+          <ScreenHeader title={`${translate('screen.module.packed.detail.text')} ${params?.code}`} showBack={true} navigation={navigation}/>
         </View>
         <Animated.ScrollView
           onScroll={Animated.event(
@@ -165,7 +169,7 @@ class DetailScreen extends React.PureComponent {
         >
           <View style={styles.containerScroll}>
           {list_data.length === 0 && (
-            <EmptySearch t={t}/>
+            <EmptySearch/>
           )}
           {list_data &&
             list_data.map((item, index) => (
@@ -174,7 +178,6 @@ class DetailScreen extends React.PureComponent {
                   navigation={navigation}
                   logo_carrier={item.order_id.image_courier}
                   code={item.order_id.type_order === 8 ? item.order_id.combine_id : item.order_id.tracking_code}
-                  trans={t}
                   reason_note={item.reason_note}
                   is_approved ={is_approved}
                   staff_email={item.outbound_id.created_by.email}
@@ -190,7 +193,7 @@ class DetailScreen extends React.PureComponent {
         </Animated.ScrollView>
         {is_approved == 0 && <View style={styles.containerBottom}>
             <TouchableOpacity style={[styles.bottomButton,
-                     {borderRadius:3,}]} 
+                     {borderRadius:3,}]}
                 onPress={() => navigation.navigate('CreatedHandoverList',{
                     carrier_name: carrier_name,
                     carrier_logo : carrier_logo,
@@ -199,19 +202,19 @@ class DetailScreen extends React.PureComponent {
                   })
                 }>
                 <Text style={styles.textButton}>
-                    {t("screen.module.handover.add_new_tracking")}
+                    {translate("screen.module.handover.add_new_tracking")}
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.bottomButton,
                      {backgroundColor :colors.boxmeBrand,
-                     borderRadius:3,}]} 
+                     borderRadius:3,}]}
                 onPress={() => navigation.navigate('RejectHandover',{
                     code: code_ob,
                     reason_list : reason_list,
                   })
                 }>
                 <Text style={styles.textButton}>
-                    {t("screen.module.handover.btn_remove")}
+                    {translate("screen.module.handover.btn_remove")}
                 </Text>
             </TouchableOpacity>
         </View>}
@@ -231,7 +234,6 @@ class DetailScreen extends React.PureComponent {
 DetailScreen.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({

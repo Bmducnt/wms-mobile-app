@@ -11,7 +11,7 @@ import {
 import {permissionDenied} from '../../helpers/async-storage';
 import { colors, device, gStyle } from '../../constants';
 //Mock
-import { 
+import {
   FontAwesome5,
   Feather
 } from '@expo/vector-icons';
@@ -26,6 +26,7 @@ import EmptySearch from "../../components/EmptySearch";
 import { LinearGradient } from 'expo-linear-gradient';
 
 import getListPacked from '../../services/packed/list';
+import {translate} from "../../i18n/locales/IMLocalized";
 
 class ListPacking extends React.Component {
   constructor(props) {
@@ -39,13 +40,12 @@ class ListPacking extends React.Component {
       list_data : [],
       total_items : 0,
       from_time : _getTimeDefaultFrom(),
-      to_time : _getTimeDefaultTo(), 
+      to_time : _getTimeDefaultTo(),
     };
     this._fetchListPacking = this._fetchListPacking.bind(this);
   }
 
   UNSAFE_componentWillMount = async () =>{
-    const { t } = this.props.screenProps;
     this._fetchListPacking();
   }
 
@@ -66,8 +66,8 @@ class ListPacking extends React.Component {
         total_items : response.data.total_items,
       })
     }else if (response.status === 403){
-      permissionDenied(this.props.navigation);
-    };
+      await permissionDenied(this.props.navigation);
+    }
     this.setState({isloading : false});
   };
 
@@ -85,11 +85,10 @@ class ListPacking extends React.Component {
       list_data,
       is_search
     } = this.state;
-    const { t } = this.props.screenProps;
     return (
       <View style={[gStyle.container]} >
-          <ScreenHeader 
-            title={t('screen.menu.packed')}
+          <ScreenHeader
+            title={translate('screen.menu.packed')}
             showBack={false}
             isFull={true}
             showInput = {is_search}
@@ -98,15 +97,15 @@ class ListPacking extends React.Component {
             bgColor={colors.cardLight}
             onPressCamera={this._searchCameraBarcode}
             onSubmitEditingInput= {this._searchCameraBarcode}
-            textPlaceholder={t('screen.module.packed.tracking_scan')}
-          />
-          {isloading && 
+            textPlaceholder={translate('screen.module.packed.tracking_scan')}
+           navigation={navigation}/>
+          {isloading &&
           <ActivityIndicator animating={true}  style={{opacity:1}} color={colors.white} />}
           <View style={styles.containerScroll}>
-              {list_data.length === 0 && !isloading && 
-                <EmptySearch t={t}/>}
-                
-              {list_data.length > 0 && 
+              {list_data.length === 0 && !isloading &&
+                <EmptySearch/>}
+
+              {list_data.length > 0 &&
               <FlatList
                 data={list_data}
                 onRefresh={() => this._fetchListPacking()}
@@ -119,12 +118,11 @@ class ListPacking extends React.Component {
                        ...gStyle.textBoxme14,
                        color:colors.white,
                        marginVertical:14
-                     }]}><FontAwesome5 name="bullhorn" size={14} color={colors.white} /> {t('screen.module.packed.func')}</Text>
+                     }]}><FontAwesome5 name="bullhorn" size={14} color={colors.white} /> {translate('screen.module.packed.func')}</Text>
                  </LinearGradient>
                 }
                 renderItem={({ item }) => (
                   <ListPackedItem
-                    translate ={t}
                     navigation={navigation}
                     showBtn ={ true}
                     itemInfo={{
@@ -160,7 +158,6 @@ class ListPacking extends React.Component {
 ListPacking.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired
 };
 
 const styles = StyleSheet.create({

@@ -139,4 +139,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default NavigationContainer(ModelGSMaTrix);
+export default ModelGSMaTrix

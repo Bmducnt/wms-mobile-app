@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import { colors, gStyle } from '../constants';
 import  getComplexity from '../services/reports/complexity';
+import {translate} from "../i18n/locales/IMLocalized";
 
 
 const ReportAdmin = props => {
@@ -17,7 +18,7 @@ const ReportAdmin = props => {
     const [summarySlaPack, setsummarySlaPack] = React.useState([]);
 
     React.useEffect( () => {
-        fetchComplexity();
+        fetchComplexity().then(r => {});
       }, []);
 
 
@@ -35,9 +36,9 @@ const ReportAdmin = props => {
         <View style={{ flex: 1,backgroundColor:colors.cardDark,borderRadius:6,marginHorizontal:10,marginTop: 2}}>
             {isLoading ? <View style={{paddingVertical:12}}><ActivityIndicator /></View>:
             <View style={{paddingVertical:10}}>
-                
+
                 <View style={[gStyle.flexRowSpace,{paddingHorizontal:10,paddingBottom:3}]}>
-                    <Text style={{...gStyle.textBoxme16,color:colors.white}}>{props.t("screen.module.handover.packed_order")}</Text>
+                    <Text style={{...gStyle.textBoxme16,color:colors.white}}>{translate("screen.module.handover.packed_order")}</Text>
                     <View style={gStyle.flexRowCenter}>
                         <Text style={{...gStyle.textBoxme16,color:colors.white}}>{totalOrder.toLocaleString()} / </Text>
                         <View style={{
@@ -55,15 +56,15 @@ const ReportAdmin = props => {
                 <View style={[{marginHorizontal:10,marginVertical:3, backgroundColor:colors.cardLight, paddingHorizontal:5,paddingVertical:6}]}>
 
                     <View style ={gStyle.flexRowSpace}>
-                        <Text style={{...gStyle.textBoxme14,color:colors.white}}>{props.t('screen.module.taks.home1')} {summarySlaPack.total_staff}{" "}{props.t('screen.module.taks.text_report')}</Text>
-                        <Text style={{...gStyle.textBoxme14,color:colors.white}}>{summarySlaPack.avg_pack} {props.t('screen.module.taks.unit')}</Text>
+                        <Text style={{...gStyle.textBoxme14,color:colors.white}}>{translate('screen.module.taks.home1')} {summarySlaPack.total_staff}{" "}{translate('screen.module.taks.text_report')}</Text>
+                        <Text style={{...gStyle.textBoxme14,color:colors.white}}>{summarySlaPack.avg_pack} {translate('screen.module.taks.unit')}</Text>
                     </View>
                 </View>
                 <View style={[gStyle.flexRow,{
                     marginHorizontal:10,
                     marginVertical:5,
                 }]}>
-                    
+
                     {listOrderComplexity &&
                         listOrderComplexity.map((item, index) => (
                         <View
@@ -91,7 +92,7 @@ const ReportAdmin = props => {
                             <View key = {index} style={[gStyle.flexRowCenterAlign,{
                                 marginHorizontal:6,marginVertical:3}]}>
                                 <View
-                                    
+
                                     style={{
                                         height:6,
                                         width:6,
@@ -101,20 +102,20 @@ const ReportAdmin = props => {
                                 />
                                 <View style={gStyle.flexRowCenterAlign}>
                                     <Text  style={{...gStyle.textBoxme12,color:colors.greyInactive,paddingLeft:3}}>
-                                        {props.t("screen.module.handover.unit_order")} {item.complexity_code}
+                                        {translate("screen.module.handover.unit_order")} {item.complexity_code}
                                     </Text>
                                     <View style={{
                                             backgroundColor:colors.borderLight,
                                             paddingHorizontal:4,
                                             paddingVertical:2,
                                             marginLeft:3,
-                                            borderRadius:20, 
+                                            borderRadius:20,
                                         }}>
                                         <Text  style={{...gStyle.textBoxme12,color:colors.greyInactive}}>
                                             {item.percent}{" "}%
                                         </Text>
                                     </View>
-                                </View> 
+                                </View>
                             </View>
                         ))
                     }

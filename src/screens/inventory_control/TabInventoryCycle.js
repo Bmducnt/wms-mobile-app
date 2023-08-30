@@ -21,6 +21,7 @@ import { permissionDenied } from "../../helpers/async-storage";
 
 //service api
 import getListCycle from "../../services/rack/list-bin";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 
 class TabInventoryCycle extends React.PureComponent {
@@ -41,13 +42,13 @@ class TabInventoryCycle extends React.PureComponent {
         this.willFocusSubscription = this.props.navigation.addListener(
         'willFocus',
         () => {
-            this._fetchListCycleHandler();
+            this._fetchListCycleHandler().then(r => {});
         }
         );
     }
 
     componentWillUnmount() {
-        this.willFocusSubscription.remove();
+        this.willFocusSubscription();
     };
 
     UNSAFE_componentWillMount = async () => {
@@ -57,27 +58,27 @@ class TabInventoryCycle extends React.PureComponent {
     };
 
 
-    sortColorLabel = (status_id, t, estimated_kpi) => {
+    sortColorLabel = (status_id, estimated_kpi) => {
       const statusLabels = {
         901: {
           label_color: estimated_kpi ? '#f99f00' : colors.red,
-          label_name: estimated_kpi ? t('screen.module.cycle_check.status_new') : t('screen.module.cycle_check.status_cancel'),
+          label_name: estimated_kpi ? translate('screen.module.cycle_check.status_new') : translate('screen.module.cycle_check.status_cancel'),
         },
         902: {
           label_color: estimated_kpi ? colors.boxmeBrand : colors.red,
-          label_name: estimated_kpi ? t('screen.module.cycle_check.status_todo') : t('screen.module.cycle_check.status_cancel'),
+          label_name: estimated_kpi ? translate('screen.module.cycle_check.status_todo') : translate('screen.module.cycle_check.status_cancel'),
         },
         903: {
           label_color: colors.boxmeBrand,
-          label_name: t('screen.module.cycle_check.status_verify'),
+          label_name: translate('screen.module.cycle_check.status_verify'),
         },
         904: {
           label_color: colors.brandPrimary,
-          label_name: t('screen.module.cycle_check.status_done'),
+          label_name: translate('screen.module.cycle_check.status_done'),
         },
         905: {
           label_color: colors.cardLight,
-          label_name: t('screen.module.cycle_check.status_cancel'),
+          label_name: translate('screen.module.cycle_check.status_cancel'),
         },
       };
       return statusLabels[status_id];
@@ -86,7 +87,6 @@ class TabInventoryCycle extends React.PureComponent {
 
     _fetchListCycleHandler = async () => {
       this.setState({ isloading: true,list_cycle_report:[]});
-      const {t} = this.props;
       const response = await getListCycle({
         status_id: this.props.status_id,
         is_report : 1,
@@ -108,8 +108,8 @@ class TabInventoryCycle extends React.PureComponent {
               'created_by': result.created_by.fullname,
               'assigner_by': result.assigner_by.fullname,
               'status_id': result.status_id.status_id,
-              'status_name': this.sortColorLabel(result.status_id.status_id, t, result.estimated_time.estimated_kpi).label_name,
-              'status_color': this.sortColorLabel(result.status_id.status_id, t, result.estimated_time.estimated_kpi).label_color,
+              'status_name': this.sortColorLabel(result.status_id.status_id, result.estimated_time.estimated_kpi).label_name,
+              'status_color': this.sortColorLabel(result.status_id.status_id, result.estimated_time.estimated_kpi).label_color,
               'created_date': result.created_date,
             };
           });
@@ -129,7 +129,7 @@ class TabInventoryCycle extends React.PureComponent {
         list_cycle_report,
         staff_role
       } = this.state;
-      const {t,navigation} = this.props;
+      const {navigation} = this.props;
       return (
         <React.Fragment>
           <View style={[gStyle.container]}>
@@ -159,12 +159,11 @@ class TabInventoryCycle extends React.PureComponent {
                           }
                           staff_role ={staff_role}
                           navigation={navigation}
-                          trans={t}
                         />
                     ))
                   }
                   {list_cycle_report.length === 0 && (
-                    <EmptySearch t={t}/>
+                    <EmptySearch/>
                   )}
               </View>
             </Animated.ScrollView>

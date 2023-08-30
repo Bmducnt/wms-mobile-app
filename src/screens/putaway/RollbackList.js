@@ -5,8 +5,8 @@ import {
   ActivityIndicator,
   FlatList
 } from 'react-native';
-import { 
-  colors, 
+import {
+  colors,
   gStyle
 } from '../../constants';
 
@@ -45,20 +45,20 @@ class RollbackList extends React.PureComponent {
     if (response.status === 200){
       this.setState({list_rollbacks:response.data.results});
     }else if (response.status === 403){
-      permissionDenied(this.props.navigation);
+      await permissionDenied(this.props.navigation);
     }
     this.setState({isloading:false});
   };
 
   render() {
     const {list_rollbacks,isloading} = this.state;
-    const {t,navigation} = this.props;
+    const {navigation} = this.props;
     return (
       <View style={[gStyle.container]}>
-            {isloading && 
+            {isloading &&
             <View style={[gStyle.flexCenter,{marginTop:"20%"}]}><ActivityIndicator animating={true}  style={{opacity:1}} color={colors.white} /></View>}
-            {list_rollbacks.length === 0 ? 
-              <EmptySearch t={t}/>:
+            {list_rollbacks.length === 0 ?
+              <EmptySearch/>:
               <View>
                   <FlatList
                     data={list_rollbacks}
@@ -66,7 +66,6 @@ class RollbackList extends React.PureComponent {
                     renderItem={({ item }) => (
                         <ListItemsPutaway
                         navigation = {navigation}
-                        translate ={t}
                         itemInfo={{
                             'time_created': item.created_date,
                             'created_by': item.staff_id,
@@ -80,10 +79,10 @@ class RollbackList extends React.PureComponent {
                             'is_rollback':true,
                             'condition_goods' :'A',
                             'zone_code':'N/A',
-                            
+
                             'status_name' :null,
                             'fnsku_name' : item.fnsku_info.name,
-                            'fnsku_barcode' : item.fnsku_info.barcode ? item.fnsku_info.barcode  : item.fnsku_info.bsin 
+                            'fnsku_barcode' : item.fnsku_info.barcode ? item.fnsku_info.barcode  : item.fnsku_info.bsin
                         }}
                         disableRightSide={true}
                         />

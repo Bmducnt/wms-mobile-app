@@ -31,16 +31,24 @@ import UpdateTasks from '../screens/tasks/UpdateTasks';
 import HandoverImages from '../screens/handover/HandoverImages';
 import QcScreens from '../screens/quality_control/QcScreens';
 
+const Stack = createStackNavigator();
+
 const StackAuthNavigator = ()=> {
     return(
         <Stack.Navigator
             initialRouteName="SignInScreen"
             screenOptions={{
                   gestureEnabled: true,
-                  gestureDirection: 'horizontal'
+                  gestureDirection: 'horizontal',
+                headerShown: false,
             }}>
-            <Stack.Screen name="SignInScreen" component={SignInScreen} />
-            <Stack.Screen name="ModelWarehouseOption" component={ModelWarehouseOption} />
+            <Stack.Screen name="SignInScreen">
+                {props => <SignInScreen {...props} />}
+            </Stack.Screen>
+            <Stack.Screen name="ModelWarehouseOption" >
+                {props => <ModelWarehouseOption {...props} />}
+
+            </Stack.Screen>
         </Stack.Navigator>
       )
 }
@@ -55,33 +63,78 @@ const StackNavigator = ()=> {
                 gestureEnabled: true,
                 gestureDirection: 'horizontal',
                 animationEnabled: true,
+                headerShown: false,
             }}>
-            <Stack.Screen name="ModalPutawayUpdate" component={ModalPutawayUpdate} />
-            <Stack.Screen name="ModalPickupUpdate" component={ModalPickupUpdate} />
-            <Stack.Screen name="ModalListCarrier" component={ModalListCarrier} />
-            <Stack.Screen name="ModelHandoverB2B" component={ModelHandoverB2B} />
-            <Stack.Screen name="ModalPickupQRCode" component={ModalPickupQRCode} />
-            <Stack.Screen name="ModalImageBase" component={ModalImageBase} />
-            <Stack.Screen name="UpdateException" component={UpdateException} />
-            <Stack.Screen name="ModelTimelineTracking" component={ModelTimelineTracking} />
-            <Stack.Screen name="ModelReceivedShipment" component={ModelReceivedShipment} />
-            <Stack.Screen name="ModelListStaff" component={ModelListStaff} />
-            <Stack.Screen name="CreateResquest" component={CreateResquest} />
-            <Stack.Screen name="UpdateRequest" component={UpdateRequest} />
-            <Stack.Screen name="SignatureScreenBase" component={SignatureScreenBase} />
-            <Stack.Screen name="RejectHandover" component={RejectHandover} />
-            <Stack.Screen name="MoveModel" component={MoveModel} />
-            <Stack.Screen name="ModalUpdatePacked" component={ModalUpdatePacked} />
-            <Stack.Screen name="AddTasks" component={AddTasks} />
-            <Stack.Screen name="ImagesViewList" component={ImagesViewList} />
-            <Stack.Screen name="UpdateTasks" component={UpdateTasks} />
-            <Stack.Screen name="HandoverImages" component={HandoverImages} />
-            <Stack.Screen name="QcScreens" component={QcScreens} />
+            <Stack.Screen name="ModalPutawayUpdate">
+                {props => <ModalPutawayUpdate {...props}/>}
+            </Stack.Screen>
+            <Stack.Screen name="ModalPickupUpdate">
+                {props => <ModalPickupUpdate {...props}/>}
+            </Stack.Screen>
+            <Stack.Screen name="TabNavigation">
+                {props => <TabNavigation {...props}/>}
+            </Stack.Screen>
+            <Stack.Screen name="ModalListCarrier">
+                {props => <ModalListCarrier {...props}/>}
+            </Stack.Screen>
+            <Stack.Screen name="ModelHandoverB2B">
+                {props => <ModelHandoverB2B {...props}/>}
+            </Stack.Screen>
+            <Stack.Screen name="ModalPickupQRCode">
+                {props => <ModalPickupQRCode {...props}/>}
+            </Stack.Screen>
+            <Stack.Screen name="ModalImageBase">
+                {props => <ModalImageBase {...props}/>}
+            </Stack.Screen>
+            <Stack.Screen name="UpdateException">
+                {props => <UpdateException {...props}/>}
+            </Stack.Screen>
+            <Stack.Screen name="ModelTimelineTracking">
+                {props => <ModelTimelineTracking {...props}/>}
+            </Stack.Screen>
+            <Stack.Screen name="ModelReceivedShipment">
+                {props => <ModelReceivedShipment {...props}/>}
+            </Stack.Screen>
+            <Stack.Screen name="ModelListStaff">
+                {props => <ModelListStaff {...props}/>}
+            </Stack.Screen>
+            <Stack.Screen name="CreateResquest">
+                {props => <CreateResquest {...props}/>}
+            </Stack.Screen>
+            <Stack.Screen name="UpdateRequest">
+                {props => <UpdateRequest {...props}/>}
+            </Stack.Screen>
+            <Stack.Screen name="SignatureScreenBase">
+                {props => <SignatureScreenBase {...props}/>}
+            </Stack.Screen>
+            <Stack.Screen name="RejectHandover">
+                {props => <RejectHandover {...props}/>}
+            </Stack.Screen>
+            <Stack.Screen name="MoveModel">
+                {props => <MoveModel {...props}/>}
+            </Stack.Screen>
+            <Stack.Screen name="ModalUpdatePacked">
+                {props => <ModalUpdatePacked {...props}/>}
+            </Stack.Screen>
+            <Stack.Screen name="AddTasks">
+                {props => <AddTasks {...props}/>}
+            </Stack.Screen>
+            <Stack.Screen name="ImagesViewList">
+                {props => <ImagesViewList {...props}/>}
+            </Stack.Screen>
+            <Stack.Screen name="UpdateTasks">
+                {props => <UpdateTasks {...props}/>}
+            </Stack.Screen>
+            <Stack.Screen name="HandoverImages">
+                {props => <HandoverImages {...props}/>}
+            </Stack.Screen>
+            <Stack.Screen name="QcScreens">
+                {props => <QcScreens {...props}/>}
+            </Stack.Screen>
         </Stack.Navigator>
     )
 }
 
-const Stack = createStackNavigator();
 const MainStackNavigator = () => {
     return (
         <Stack.Navigator
@@ -89,8 +142,12 @@ const MainStackNavigator = () => {
             screenOptions={{
                 headerShown: false,
             }}>
-            <Stack.Screen name="App" component={StackNavigator} />
-            <Stack.Screen name="Auth" component={StackAuthNavigator} />
+            <Stack.Screen name="App">
+                {props => <StackNavigator {...props}/>}
+            </Stack.Screen>
+            <Stack.Screen name="Auth">
+                {props => <StackAuthNavigator {...props}/>}
+            </Stack.Screen>
         </Stack.Navigator>
     );
 };

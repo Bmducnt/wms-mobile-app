@@ -18,9 +18,9 @@ import {
     Video as Videocompressor,
   } from "react-native-compressor";
 import { FontAwesome,AntDesign } from '@expo/vector-icons';
-import { 
-  colors, 
-  gStyle, 
+import {
+  colors,
+  gStyle,
   device,
   images
  } from "../../constants";
@@ -35,6 +35,7 @@ import getOrderQC from "../../services/reports/qc_order";
 import CameraModule from "../../components/CameraModule";
 
 import { serviceUploadAsset } from "../../helpers/upload-base";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 const backgroundMode = true;
 class QcScreens extends React.Component {
@@ -59,11 +60,11 @@ class QcScreens extends React.Component {
             this.setState({
                 order_info: response.data.results
             });
-          
+
         } else if (response.status === 403) {
-          permissionDenied(this.props.navigation);
+          await permissionDenied(this.props.navigation);
         } else {
-          handleSoundScaner();
+          await handleSoundScaner();
         }
         this.setState({ is_loading: false });
     };
@@ -103,7 +104,6 @@ class QcScreens extends React.Component {
     };
 
     submitQCResult = async () => {
-        const { t } = this.props.screenProps;
         this.setState({ is_loading: true });
         for (let key = 0; key < this.state.list_asset.length; key++) {
           await serviceUploadAsset(
@@ -118,10 +118,10 @@ class QcScreens extends React.Component {
         this.setState({ is_loading: false });
         return Alert.alert(
           "",
-          t("screen.module.putaway.text_ok"),
+          translate("screen.module.putaway.text_ok"),
           [
             {
-              text: t("base.confirm"),
+              text: translate("base.confirm"),
               onPress: () =>
                 this.setState({ list_asset: [], qc_note: null, code_scan: null }),
             },
@@ -131,7 +131,6 @@ class QcScreens extends React.Component {
     };
 
     pickVideos = async () => {
-        const { t } = this.props.screenProps;
         this.setState({ is_loading: true });
         let result = await ImagePicker.launchImageLibraryAsync({
           mediaTypes: ImagePicker.MediaTypeOptions.Videos,
@@ -162,7 +161,6 @@ class QcScreens extends React.Component {
     };
 
     pickImages = async () => {
-        const { t } = this.props.screenProps;
         this.setState({ is_loading: true });
         let result = await ImagePicker.launchImageLibraryAsync({
           mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -183,14 +181,13 @@ class QcScreens extends React.Component {
     }
 
     render() {
-        const { 
+        const {
             list_asset,
             order_info,
             model_camera,
             qc_note,
             background_percent,
             is_loading } =this.state;
-        const { t } = this.props.screenProps;
         const { navigation } = this.props;
 
 
@@ -201,32 +198,32 @@ class QcScreens extends React.Component {
                 >
                     <View style={gStyle.container}>
                     <ScreenHeader
-                        title={t("screen.module.inbound.header")}
+                        title={translate("screen.module.inbound.header")}
                         showBack={true}
                         iconLeft={"chevron-down"}
                         showInput={true}
                         inputValueSend={null}
                         onPressCamera={this.fetchOrderQC}
                         onSubmitEditingInput={this.fetchOrderQC}
-                        textPlaceholder={t("screen.module.qualitycontrol.scan")}
-                    />
+                        textPlaceholder={translate("screen.module.qualitycontrol.scan")}
+                     navigation={navigation}/>
                     {is_loading && <ActivityIndicator/>}
-                    
+
                     {!order_info ? (
                         <View style={[gStyle.flexCenter,{marginHorizontal:30}]}><LottieView style={{
                         width: 150,
                                     height: 100,
                         }} source={require('../../assets/icons/qr-scan.json')} autoPlay loop />
                                 <Text style={{...gStyle.textBoxme14,color:colors.white}}>
-                                    {t("screen.module.qualitycontrol.step1")}
+                                    {translate("screen.module.qualitycontrol.step1")}
                                 </Text>
-                            <Text style={{...gStyle.textBoxme14,color:colors.white}}>{t("screen.module.qualitycontrol.step2")}</Text>
-                            <Text style={{...gStyle.textBoxme14,color:colors.white}}>{t("screen.module.qualitycontrol.step3")}</Text> 
+                            <Text style={{...gStyle.textBoxme14,color:colors.white}}>{translate("screen.module.qualitycontrol.step2")}</Text>
+                            <Text style={{...gStyle.textBoxme14,color:colors.white}}>{translate("screen.module.qualitycontrol.step3")}</Text>
                         </View>
                     ):
                     <View style={{marginHorizontal:10}}>
                         <View>
-                            <Text style={styles.textValue}>{t("screen.module.qualitycontrol.tracking_code")} {order_info.tracking_code}</Text>
+                            <Text style={styles.textValue}>{translate("screen.module.qualitycontrol.tracking_code")} {order_info.tracking_code}</Text>
                         </View>
                         <TouchableOpacity
                             onPress={() => navigation.navigate("HandoverImages",
@@ -240,24 +237,24 @@ class QcScreens extends React.Component {
                             }]}
                         >
                                 <Text style={{color:colors.white,...gStyle.textBoxme14}}>
-                                {t("screen.module.qualitycontrol.qc_text")}
+                                {translate("screen.module.qualitycontrol.qc_text")}
                                 </Text>
                                 <AntDesign name="right" size={16} color={colors.white} />
                         </TouchableOpacity>
                         <View style={{
                                 backgroundColor:colors.cardLight,marginTop:0.5,paddingVertical:4,paddingHorizontal:10,borderRadius:3,minHeight : 70
                             }}>
-                            <Text style={{paddingVertical:3, color:colors.greyInactive,...gStyle.textBoxme14}}>{t("screen.module.qualitycontrol.qc_note")}</Text>
+                            <Text style={{paddingVertical:3, color:colors.greyInactive,...gStyle.textBoxme14}}>{translate("screen.module.qualitycontrol.qc_note")}</Text>
                             <Text style={{color:colors.white,...gStyle.textBoxme14}}>
                                 {order_info.note_quality_control}
                             </Text>
                         </View>
 
                         <View style={{marginVertical : 5}}>
-                            <Text style={styles.textLabel}>{t("screen.module.qualitycontrol.step")}</Text>
+                            <Text style={styles.textLabel}>{translate("screen.module.qualitycontrol.step")}</Text>
                         </View>
                         <View style={gStyle.flexRow}>
-                            <TouchableOpacity 
+                            <TouchableOpacity
                                 onPress={() => this.pickVideos(true)}
                                 style={[gStyle.flexRowCenterAlign,{
                                     width : '49%',
@@ -276,7 +273,7 @@ class QcScreens extends React.Component {
                                 </View>
                                 <View style={{paddingHorizontal:6,color:colors.white,width:'80%'}}>
                                     <Text style={{color:colors.white,...gStyle.textBoxme14}}>
-                                      {t("screen.module.qualitycontrol.video")}
+                                      {translate("screen.module.qualitycontrol.video")}
                                     </Text>
                                     {background_percent > 0 && <Text style={{color:colors.red}}>
                                         Upload {background_percent} %
@@ -307,10 +304,10 @@ class QcScreens extends React.Component {
                                     <FontAwesome name="image" size={16} color={colors.boxmeBrand} />
                                 </View>
                                 <Text style={{paddingHorizontal:6,color:colors.white,width:'80%'}}>
-                                {t("screen.module.qualitycontrol.camera")}
+                                {translate("screen.module.qualitycontrol.camera")}
                                 </Text>
                             </TouchableOpacity>
-                            
+
                         </View>
                         <TouchableOpacity onPress={() => this.pickImages()} style={[gStyle.flexRowCenterAlign,{
                                 width : '100%',
@@ -329,11 +326,11 @@ class QcScreens extends React.Component {
                                     <FontAwesome name="cloud-upload" size={22} color={colors.white} />
                                 </View>
                                 <Text style={{paddingHorizontal:6,color:colors.white,width:'80%'}}>
-                                    {t("screen.module.qualitycontrol.upload")}
+                                    {translate("screen.module.qualitycontrol.upload")}
                                 </Text>
                             </TouchableOpacity>
                         <View style={{marginVertical : 8}}>
-                            <Text style={styles.textLabel}>{t("screen.module.qualitycontrol.input_note")}</Text>
+                            <Text style={styles.textLabel}>{translate("screen.module.qualitycontrol.input_note")}</Text>
                         </View>
                         <View>
                             <TextInput
@@ -352,7 +349,7 @@ class QcScreens extends React.Component {
                                     height:75,
                                     borderRadius:3,
                                 }}
-                                placeholder={t("screen.module.qualitycontrol.input_note")} />
+                                placeholder={translate("screen.module.qualitycontrol.input_note")} />
                         </View>
 
                     </View>
@@ -364,9 +361,9 @@ class QcScreens extends React.Component {
                                 onPress = {() => this.submitQCResult()}
                                 style={[styles.bottomButton]}
                             >
-                                {is_loading ? <ActivityIndicator color={colors.white}/> : 
+                                {is_loading ? <ActivityIndicator color={colors.white}/> :
                                 <Text style={styles.textButton} numberOfLines={1}>
-                                    {t("screen.module.qualitycontrol.btn")}({list_asset.length})
+                                    {translate("screen.module.qualitycontrol.btn")}({list_asset.length})
                                 </Text>}
                             </TouchableOpacity>
                             </View>
@@ -375,13 +372,12 @@ class QcScreens extends React.Component {
                     {model_camera && (
                         <CameraModule
                             showModal={model_camera}
-                            trans={t}
                             setModalVisible={() => this.toggleCamera()}
                             setImage={(result) => this.cameraSubmit(result.uri)}
                             />
                         )}
                     </View>
-                    
+
                 </KeyboardAvoidingView>
             </ScrollView>
         );
@@ -391,7 +387,6 @@ class QcScreens extends React.Component {
 QcScreens.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({

@@ -1,30 +1,30 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { 
-  StyleSheet, 
-  Text, 
-  TouchableOpacity, 
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
   View,
   Image,
   Dimensions
 } from 'react-native';
 import moment from 'moment';
-import { 
-  colors, 
+import {
+  colors,
   gStyle,
   images
 } from '../constants';
-import { 
+import {
   Entypo,
   FontAwesome5
 } from "@expo/vector-icons";
 import Badge from './Badge';
+import {translate} from "../i18n/locales/IMLocalized";
 
 const ListItemsPutaway = ({
   navigation,
   itemInfo,
   disableRightSide,
-  translate,
   onPressModel
 }) => {
 
@@ -42,26 +42,26 @@ const ListItemsPutaway = ({
               'storage_type' : itemInfo.storage_type
             })}
           style={styles.container}
-          
+
         >
           <View style={[gStyle.flex5]}>
             {itemInfo.tracking_code && <View style={[gStyle.flexRowSpace,{marginBottom:8}]}>
                 <Text style={[styles.textLabel,{color:colors.white}]}>{itemInfo.tracking_code}</Text>
                 <Text style={[styles.textLabel,{color:colors.white}]}>Box : {itemInfo.box_po}</Text>
             </View>}
-            
+
             <View style={[gStyle.flexRow]}>
-              
+
               <TouchableOpacity style={{width:55,marginTop:5}} onPress= {() => navigation.navigate("HandoverImages",
                   {handover_code : null,load_local : true,path :[{uri:itemInfo.image_product},images['no_image_available']]})}>
-                <Image  
+                <Image
                   style={[styles.imageProduct,{marginTop: itemInfo.image_product ? 0 : -8}]} source={itemInfo.image_product ?
                     {uri:itemInfo.image_product}:
                     images['no_image_available']
                   }
                   />
               </TouchableOpacity>
-              
+
               <View style={{marginHorizontal:10}}>
                 <View style={[gStyle.flexRowSpace,{paddingLeft:10}]}>
                   <View style={gStyle.flexRow}>
@@ -75,7 +75,7 @@ const ListItemsPutaway = ({
                       <Text style={styles.textLabel}>{translate('screen.module.putaway.text_quantity')}</Text>
                   </View>
                 </View>
-                
+
                 <View style={[gStyle.flexRowSpace,{paddingLeft:10}]}>
                   <View style={gStyle.flexRow}>
                       <Text style={[styles.textCode]} numberOfLines={1} ellipsizeMode="tail">
@@ -103,7 +103,7 @@ const ListItemsPutaway = ({
                 </View>
               </View>
             </View>
-            
+
             <View style={styles.percentBar}></View>
             <View style={[gStyle.flexRow,{paddingTop:3}]}>
               <Badge
@@ -162,14 +162,14 @@ const ListItemsPutaway = ({
                       backgroundColor:colors.darkgreen
                     }}
                   >
-                    
+
                     <Text style={{ color: colors.white,...gStyle.textBoxme14 }}>
                     {translate('screen.module.putaway.error_text_btn')}
                     </Text>
                 </TouchableOpacity>
             </View>}
           </View>
-              
+
         </TouchableOpacity>
     </View>
   );
@@ -230,7 +230,7 @@ ListItemsPutaway.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  
+
   container: {
     flexDirection: "row",
     paddingHorizontal:5,
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
     top:32,
   },
   imageProduct :{
-    width: 60, 
+    width: 60,
     height: 60,
     borderRadius : 10
   },

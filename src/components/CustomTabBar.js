@@ -11,26 +11,26 @@ import putErrorOrderFF from '../services/reports/put_order_ff';
 import createPickupByStaff from '../services/pickup/create-pickup';
 import BarOrderFFNOW from './BarOrderFFNOW';
 import {permissionDenied} from '../helpers/async-storage';
+import {translate} from "../i18n/locales/IMLocalized";
 
 const CustomTabBar = (props) => {
   const [ orderffNow, setorderffNow ] = React.useState(0);
   const [ loading, setloading ] = React.useState(false);
   const [ timeRequest, settimeRequest ] = React.useState(new Date());
 
-  _rejectOrder = async () =>{
-      re = await putErrorOrderFF(JSON.stringify({
+  const _rejectOrder = async () =>{
+      await putErrorOrderFF(JSON.stringify({
           total_orders: orderffNow
       }));
   }
 
-  _submitPickupCreated = async () =>{
+  const _submitPickupCreated = async () =>{
     setorderffNow(0);
     props.navigation.navigate("ModelListStaff", {is_ff_now : true});
   }
 
-  _createdPickupHandler = async () =>{
+  const _createdPickupHandler = async () =>{
     setloading(true);
-    const { t } = props.screenProps;
     const response = await createPickupByStaff(JSON.stringify({
         arr_orders: [],
         is_pda:1,
@@ -41,10 +41,10 @@ const CustomTabBar = (props) => {
     if (response.status === 200){
         Alert.alert(
             '',
-            t('screen.module.pickup.create.ok'),
+            translate('screen.module.pickup.create.ok'),
             [
                 {
-                text: t("base.confirm"),
+                text: translate("base.confirm"),
                 onPress: () => {setorderffNow(0)},
                 },
             ],
@@ -53,10 +53,10 @@ const CustomTabBar = (props) => {
     }else{
         Alert.alert(
             '',
-            t('screen.module.handover.list_driver_empty'),
+            translate('screen.module.handover.list_driver_empty'),
             [
               {
-                text: t("base.confirm"),
+                text: translate("base.confirm"),
                 onPress: null,
               }
             ],
@@ -66,8 +66,7 @@ const CustomTabBar = (props) => {
     setloading(false)
   };
 
-  _fetchOrderFF = async  () =>{
-    const { t } = props.screenProps;
+  const _fetchOrderFF = async  () =>{
     const response = await getListNotifyByWarehouse({
       status_code:'order_ff_now'
     });
@@ -78,14 +77,14 @@ const CustomTabBar = (props) => {
         Vibration.vibrate();
         // Alert.alert(
         //   "",
-        //   `${t('screen.module.home.handover_total')} ${response.data.results.total_order_now} ${t('screen.module.home.report_order.ff_now')}`,
+        //   `${translate('screen.module.home.handover_total')} ${response.data.results.total_order_now} ${translate('screen.module.home.report_order.ff_now')}`,
         //   [
         //     {
-        //       text: t('screen.module.home.report_order.tab_create_pk'),
+        //       text: translate('screen.module.home.report_order.tab_create_pk'),
         //       onPress: () =>_submitPickupCreated(),
         //     },
         //     {
-        //       text: t('screen.module.home.report_order.btn_reject'),
+        //       text: translate('screen.module.home.report_order.btn_reject'),
         //       onPress: () => _rejectOrder(),
         //     },
         //   ],
@@ -93,17 +92,17 @@ const CustomTabBar = (props) => {
         // );
       }
     }else if (response.status === 403){
-      permissionDenied(props.navigation);
+      await permissionDenied(props.navigation);
     };
   };
 
   React.useEffect(() => {
-    _fetchOrderFF();
+    _fetchOrderFF().then(r => {});
   }, []);
 
   React.useEffect(() => {
     const intervalCall = setInterval(() => {
-      _fetchOrderFF();
+      _fetchOrderFF().then(r => {});
     }, 600000);
     return () => {
       clearInterval(intervalCall);
@@ -127,7 +126,7 @@ const CustomTabBar = (props) => {
 CustomTabBar.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired
+
 };
 
 export default CustomTabBar;

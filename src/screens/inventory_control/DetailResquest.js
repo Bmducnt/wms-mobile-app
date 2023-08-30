@@ -21,6 +21,7 @@ import ScreenHeader from "../../components/ScreenHeader";
 //service
 import getDetailBinInventory from "../../services/rack/detail-bin";
 import putDetailBinInventory from "../../services/rack/update-bin";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 class DetailResquest extends React.PureComponent {
   constructor() {
@@ -39,25 +40,25 @@ class DetailResquest extends React.PureComponent {
   }
 
   componentDidMount() {
-    const { navigation } = this.props;
+    const { params } = this.props?.route;
     this.setState({
-      tracking_code: navigation.getParam("tracking_code"),
-      cycle_type: navigation.getParam("cycle_type"),
-      estimated_kpi : navigation.getParam("estimated_kpi"),
-      cycle_code : navigation.getParam("cycle_code")
+      tracking_code: params.tracking_code,
+      cycle_type: params.cycle_type,
+      estimated_kpi : params.estimated_kpi,
+      cycle_code : params.cycle_code
     });
     this.willFocusSubscription = this.props.navigation.addListener(
       'willFocus',
       () => {
         this._fetchDetailLocationService(
-          this.props.navigation.getParam("cycle_code")
+            params.cycle_code
         );
       }
     );
   }
 
   componentWillUnmount() {
-    this.willFocusSubscription.remove();
+    this.willFocusSubscription();
   };
 
   UNSAFE_componentWillMount = async () => {
@@ -79,7 +80,6 @@ class DetailResquest extends React.PureComponent {
 
   _putStatusRequestCheckLocation = async (code,is_cancel) => {
     this.setState({ is_loading: true });
-    const { t } = this.props.screenProps;
     const response = await putDetailBinInventory(code,
       JSON.stringify({
         status_id: 903,
@@ -97,6 +97,7 @@ class DetailResquest extends React.PureComponent {
 
   render() {
     const { navigation } = this.props;
+    const { params } = this.props?.route;
     const {
       cycle_code,
       is_loading,
@@ -106,15 +107,14 @@ class DetailResquest extends React.PureComponent {
       estimated_kpi,
       staff_role
     } = this.state;
-    const { t } = this.props.screenProps;
     return (
       <React.Fragment>
         <View style={gStyle.container}>
           <View style={styles.containerHeader}>
             <ScreenHeader
-              title={ ` ${t('screen.module.cycle_check.detail.detail_code')} ${navigation.getParam("tracking_code")}` }
+              title={ ` ${translate('screen.module.cycle_check.detail.detail_code')} ${params?.tracking_code}` }
               showBack={true}
-            />
+             navigation={navigation}/>
           </View>
           <View style={styles.container}>
             {is_loading && <ActivityIndicator />}
@@ -145,15 +145,14 @@ class DetailResquest extends React.PureComponent {
                   cycle_type = {cycle_type}
                   cycle_code = {cycle_code}
                   cycle_item = {item}
-                  tracking_code = {navigation.getParam("tracking_code")}
-                  trans={t}
-                  disableRightSide={!estimated_kpi ?  false: true}
+                  tracking_code = {params?.tracking_code}
+                  disableRightSide={estimated_kpi}
                 />
               )}
             />:
               <View style={styles.helperBox}>
                   <Text style={{...gStyle.textBoxme16,color:colors.white}}>
-                  {t('screen.module.cycle_check.add.alert_empty1')} </Text>
+                  {translate('screen.module.cycle_check.add.alert_empty1')} </Text>
               </View>
             }
             </View>
@@ -162,13 +161,13 @@ class DetailResquest extends React.PureComponent {
                 style={[styles.bottomButton,{backgroundColor:colors.boxmeBrand,width:'20%'}]}
                 onPress={() => this._putStatusRequestCheckLocation(this.state.cycle_code,1)}
               >
-                <Text style={styles.textButton} numberOfLines={1}>{t('screen.module.cycle_check.detail.btn_reject')}</Text>
+                <Text style={styles.textButton} numberOfLines={1}>{translate('screen.module.cycle_check.detail.btn_reject')}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.bottomButton,{marginLeft:3}]}
                 onPress={() => this._putStatusRequestCheckLocation(this.state.cycle_code,0)}
               >
-                <Text style={styles.textButton} numberOfLines={1}>{t('screen.module.cycle_check.detail.btn_confirm')}</Text>
+                <Text style={styles.textButton} numberOfLines={1}>{translate('screen.module.cycle_check.detail.btn_confirm')}</Text>
               </TouchableOpacity>
             </View>}
             {estimated_kpi  && <View style={styles.iconRight}>
@@ -186,7 +185,7 @@ class DetailResquest extends React.PureComponent {
                     padding:5
                   }}
                 >
-                  <Text style={{color:colors.boxmeBrand,...gStyle.textBoxme14}}>{t('screen.module.cycle_check.detail.btn_inspection')}</Text>
+                  <Text style={{color:colors.boxmeBrand,...gStyle.textBoxme14}}>{translate('screen.module.cycle_check.detail.btn_inspection')}</Text>
                 </TouchableOpacity>
               </View>}
         </View>
@@ -198,7 +197,6 @@ class DetailResquest extends React.PureComponent {
 DetailResquest.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({

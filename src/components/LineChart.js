@@ -5,10 +5,10 @@ import {
     Text,
     Dimensions
 } from 'react-native';
-import { 
+import {
     FontAwesome5
    } from '@expo/vector-icons';
-import { 
+import {
     VictoryChart,
     VictoryAxis,
     VictoryBar,
@@ -16,25 +16,26 @@ import {
     VictoryLabel
   } from 'victory-native';
 import { colors, gStyle } from '../constants';
+import {translate} from "../i18n/locales/IMLocalized";
 
 
 const LineChart = props => {
     const width = Dimensions.get("window").width -50;
     return (
         <View style={styles.shadow}>
-            <VictoryChart 
+            <VictoryChart
                 animate={{
                     duration: 1000,
                     onLoad: { duration: 500 }
                 }}
                 height={200}
                 width={300}
-                
+
             >
               <VictoryStack
                   style={{ data: { width: 25 }, labels: { fontSize: 15,fill:colors.white } }}
                   >
-                    
+
                     <VictoryBar
                         style={{ data: { fill: colors.brandPrimary, width: 25} }}
                         data={props.data2}
@@ -65,11 +66,11 @@ const LineChart = props => {
             <View style={[gStyle.flexRowCenter]}>
                 <View style={[gStyle.flexCenter,{marginRight:10}]}>
                     <FontAwesome5 name="window-minimize" size={20} color={colors.brandPrimary} />
-                    <Text style={{...gStyle.textBoxme12,color:colors.white}}>{props.t('screen.module.analysis.pickup_code')}</Text>
+                    <Text style={{...gStyle.textBoxme12,color:colors.white}}>{translate('screen.module.analysis.pickup_code')}</Text>
                 </View>
                 <View style={gStyle.flexCenter}>
                     <FontAwesome5 name="window-minimize" size={20} color={colors.boxmeBrand} />
-                    <Text style={{...gStyle.textBoxme12,color:colors.white}}>{props.t('screen.module.analysis.pickup_minute')}</Text>
+                    <Text style={{...gStyle.textBoxme12,color:colors.white}}>{translate('screen.module.analysis.pickup_minute')}</Text>
                 </View>
             </View>
         </View>

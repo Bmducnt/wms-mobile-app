@@ -1,15 +1,14 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { 
-    Alert, 
-    StyleSheet, 
-    Text, 
+import {
+    Alert,
+    StyleSheet,
+    Text,
     View,
     ActivityIndicator,
     FlatList,
     TouchableOpacity,
     KeyboardAvoidingView,
-    Dimensions
 } from 'react-native';
 import * as Device from 'expo-device';
 import { Feather} from '@expo/vector-icons';
@@ -18,12 +17,10 @@ import { colors, gStyle,device} from '../../constants';
 // components
 import ModalHeader from '../../components/ModalHeader';
 import TextInputComponent from '../../components/TextInputComponent';
-import {_getTimeDefaultFrom,_getTimeDefaultTo} from '../../helpers/device-height';
 import {
     handleSoundScaner,
     permissionDenied,
     handleSoundOkScaner,
-    saveLastTrackingByStaff
 } from '../../helpers/async-storage';
 import FNSKUItems from '../../components/ListFNSKUPickup';
 import ModelOrderItems from './OrderItems';
@@ -34,6 +31,7 @@ import getDetailPacked from '../../services/packed/detail';
 import postBoxPacked from '../../services/packed/box';
 import getBoxPacked from '../../services/packed/get_box';
 import postBoxPackedOneByOne from '../../services/packed/overpack';
+import {translate} from "../../i18n/locales/IMLocalized";
 
 class ModalUpdatePacked extends React.Component {
 
@@ -70,15 +68,15 @@ class ModalUpdatePacked extends React.Component {
     };
 
     componentDidMount() {
-        const { navigation } = this.props;
+        const { params } = this.props?.route;
         this.setState({
-            pickup_code: navigation.getParam('pickup_code')
+            pickup_code: params?.pickup_code
         });
     };
 
     UNSAFE_componentWillMount = async () =>{
-        const { navigation } = this.props;
-        this._fetchDetailPacking(navigation.getParam('pickup_code'))
+        const { params } = this.props;
+        this._fetchDetailPacking(params?.pickup_code)
     };
 
     _check_packed_ok = async () => {
@@ -141,8 +139,7 @@ class ModalUpdatePacked extends React.Component {
     };
 
     commitItemToBox = async (code) =>{
-        const { t } = this.props.screenProps;
-        rp = await postBoxPackedOneByOne(JSON.stringify({
+        const rp = await postBoxPackedOneByOne(JSON.stringify({
             overpack_code: this.state.overpack_code,
             overpack_quantity: this.state.overpack_quantity,
             overpack_items: this.state.overpack_items,
@@ -150,14 +147,14 @@ class ModalUpdatePacked extends React.Component {
             overpack_box_packed: code
         }));
         if (rp.status === 400){
-            handleSoundScaner();
+            await handleSoundScaner();
             Alert.alert(
             '',
-            t('screen.module.packed.detail.box_add_error'),
+            translate('screen.module.packed.detail.box_add_error'),
             [
-                
+
                 {
-                text : t('base.confirm'),
+                text : translate('base.confirm'),
                 onPress: () => null,
                 }
             ],
@@ -174,7 +171,7 @@ class ModalUpdatePacked extends React.Component {
             overpack_quantity :0,
             overpack_code: this.state.pickup_code+'-'+parseInt(parseInt(this.state.overpack_code.slice(-1))+1)
         })
-        
+
     };
 
 
@@ -215,7 +212,6 @@ class ModalUpdatePacked extends React.Component {
 
     _postBoxorder = async (code_scan) =>{
         this.setState({isloading:true});
-        const { t } = this.props.screenProps;
         const response = await postBoxPacked(JSON.stringify({
             box_code: code_scan,
             box_code_sugget: code_scan,
@@ -226,11 +222,11 @@ class ModalUpdatePacked extends React.Component {
         if (response.status === 200){
             Alert.alert(
                 '',
-                t('screen.module.packed.detail.packed_ok'),
+                translate('screen.module.packed.detail.packed_ok'),
                 [
-                    
+
                     {
-                    text : t('base.confirm'),
+                    text : translate('base.confirm'),
                     onPress: () => this.props.navigation.goBack(),
                     }
                 ],
@@ -245,17 +241,16 @@ class ModalUpdatePacked extends React.Component {
     };
 
     _confirmRemoveactionBox = async () =>{
-        const { t } = this.props.screenProps;
         Alert.alert(
           '',
-          t('screen.module.packed.detail.box_add'),
+          translate('screen.module.packed.detail.box_add'),
           [
             {
-              text:t('screen.module.packed.detail.box_add_yes'),
+              text:translate('screen.module.packed.detail.box_add_yes'),
               onPress: () => this.addBoxB2BOrder(true),
             },
             {
-              text : t('screen.module.packed.detail.box_add_no'),
+              text : translate('screen.module.packed.detail.box_add_no'),
               onPress: () => this.addBoxB2BOrder(false),
             }
           ],
@@ -267,18 +262,18 @@ class ModalUpdatePacked extends React.Component {
         this.setState({isloading : true,list_data:[]});
         const response = await getDetailPacked(packing_code,{is_put:1});
         if (response.status === 200){
-            
+
             this.setState({
                 list_tracking_outbound: response.data.results.orders,
                 list_box :response.data.results.list_box
             });
             if (response.data.results.list_box.length === 0){
-                this.addBoxB2BOrder(true);
+                await this.addBoxB2BOrder(true);
             }else{
-                this._confirmRemoveactionBox();
+                await this._confirmRemoveactionBox();
             }
         }else if (response.status === 403){
-          permissionDenied(this.props.navigation);
+          await permissionDenied(this.props.navigation);
         };
         this.setState({isloading : false});
     };
@@ -298,10 +293,10 @@ class ModalUpdatePacked extends React.Component {
                 'sold' : element.total_items,
             })
           });
-    
+
         }
         await this.setState({order_items : data,isloading:false,list_label : list_label});
-        
+
         this._setopenModel(true);
     }
 
@@ -312,13 +307,13 @@ class ModalUpdatePacked extends React.Component {
     _onSubmitEditingInput = async (code) => {
         if (code){
             await this.setState({fnsku_quantity_scan : code});
-        };
+        }
     };
 
     _searchCameraBarcode = async (code) => {
         if (code){
             this._postOutBoundHandler(code);
-        };
+        }
     };
 
     _searchCameraBoxScan = async (code) => {
@@ -329,13 +324,15 @@ class ModalUpdatePacked extends React.Component {
                 this.commitItemToBox(code)
                 this._postBoxorder(code);
             }
-            
-        };
+
+        }
     };
 
     render() {
         const { navigation } = this.props;
-        const { 
+        const { params } = this.props?.route;
+
+        const {
             list_item_packed,
             isloading,
             tracking_code,
@@ -347,7 +344,6 @@ class ModalUpdatePacked extends React.Component {
             box_code_sugget,
             overpack_code
         } = this.state;
-        const { t } = this.props.screenProps;
         return (
             <KeyboardAvoidingView
                 style={{ height: '100%', width: '100%' }}
@@ -357,14 +353,14 @@ class ModalUpdatePacked extends React.Component {
                     <ModalHeader
                     left={<Feather color={colors.greyLight} name="chevron-down" />}
                     leftPress={() => navigation.goBack(null)}
-                    text={navigation.getParam('pickup_code')}
+                    text={params?.pickup_code}
                     />
-                    
+
                     {!is_boxscan ?<View style={[gStyle.flexRow,{marginBottom:15}]}>
                         <View style={{width:'30%'}}>
                             <TextInputComponent
                                 navigation={navigation}
-                                textLabel = {t('screen.module.pickup.detail.quantity_out')}
+                                textLabel = {translate('screen.module.pickup.detail.quantity_out')}
                                 inputValue = {'1'}
                                 keyboardType={'numeric'}
                                 autoChange = {true}
@@ -381,10 +377,10 @@ class ModalUpdatePacked extends React.Component {
                                 navigation={navigation}
                                 autoFocus={true}
                                 showSearch = {false}
-                                textLabel = {t('screen.module.pickup.detail.fnsku_code')}
+                                textLabel = {translate('screen.module.pickup.detail.fnsku_code')}
                                 onPressCamera = {this._searchCameraBarcode}
                                 onSubmitEditingInput = {this._searchCameraBarcode}
-                                textPlaceholder={t('screen.module.pickup.detail.fnsku_scan')}>
+                                textPlaceholder={translate('screen.module.pickup.detail.fnsku_scan')}>
                             </TextInputComponent>
                         </View>
                     </View>:
@@ -393,12 +389,12 @@ class ModalUpdatePacked extends React.Component {
                                 navigation={navigation}
                                 autoFocus={true}
                                 showSearch = {true}
-                                textLabel = {t('screen.module.packed.detail.box_label')}
+                                textLabel = {translate('screen.module.packed.detail.box_label')}
                                 onPressCamera = {this._searchCameraBoxScan}
                                 onSubmitEditingInput = {this._searchCameraBoxScan}
-                                textPlaceholder={t('screen.module.packed.detail.box_scan')}>
+                                textPlaceholder={translate('screen.module.packed.detail.box_scan')}>
                             </TextInputComponent>
-                            
+
                         </View>
                     }
                     {isloading && <View style={gStyle.p3}><ActivityIndicator/></View>}
@@ -411,14 +407,14 @@ class ModalUpdatePacked extends React.Component {
                         <Text style={{
                                 ...gStyle.textBoxme14,
                                 color:colors.white
-                        }}>{t('screen.module.packed.detail.box_todo')}</Text>
+                        }}>{translate('screen.module.packed.detail.box_todo')}</Text>
                         <Text style={{
                                 ...gStyle.textBoxmeBold12,
                                 color:colors.boxmeBrand
                             }}>{overpack_code}</Text>
                     </View>}
-                    
-                    {box_code_sugget && <TouchableOpacity 
+
+                    {box_code_sugget && <TouchableOpacity
                         onPress={() => null}
                         style={[gStyle.flexRowSpace,{
                             backgroundColor:colors.borderLight,
@@ -430,14 +426,14 @@ class ModalUpdatePacked extends React.Component {
                         ...gStyle.textBoxme14,
                         color:colors.greyInactive,
                         paddingLeft:10
-                        }}>{t('screen.module.packed.detail.box_sugget')}</Text>
+                        }}>{translate('screen.module.packed.detail.box_sugget')}</Text>
                         <Text style={{
                         ...gStyle.textBoxmeBold14,
                         color:colors.brandPrimary,
                         paddingRight:15
                         }}>{box_code_sugget}</Text>
                     </TouchableOpacity>}
-                    {tracking_code_done && <TouchableOpacity 
+                    {tracking_code_done && <TouchableOpacity
                         onPress={() => this._onGetOrderInfo(tracking_code_done)}
                         style={[gStyle.flexRowSpace,{
                             backgroundColor:colors.borderLight,
@@ -449,7 +445,7 @@ class ModalUpdatePacked extends React.Component {
                         ...gStyle.textBoxme14,
                         color:colors.boxmeBrand,
                         paddingLeft:15
-                        }}>{t('screen.module.packed.tracking_last')}</Text>
+                        }}>{translate('screen.module.packed.tracking_last')}</Text>
                         <Text style={{
                         ...gStyle.textBoxmeBold14,
                         color:colors.boxmeBrand,
@@ -463,38 +459,36 @@ class ModalUpdatePacked extends React.Component {
                             renderItem={({ item }) => (
                                 <FNSKUItems
                                     navigation = {navigation}
-                                    textLabelLeft = {t('screen.module.pickup.detail.fnsku_code')}
-                                    textLabelRight = {t('screen.module.pickup.list.sold')}
+                                    textLabelLeft = {translate('screen.module.pickup.detail.fnsku_code')}
+                                    textLabelRight = {translate('screen.module.pickup.list.sold')}
                                     fnsku_info={{
                                         code: item.product_barcode.left > 0 ? item.product_barcode[0] : item.product_bsin,
                                         quantity_oubound: item.total_items,
                                         fnsku_name : item.product_name,
                                         pickup_box_id :15151991,
                                         quantity_pick:item.total_pick,
-                                        is_pick :item.total_pick === item.total_items ? true : false,
+                                        is_pick :item.total_pick === item.total_items,
                                         total_product : 0,
                                         activebg : item.activebg ? item.activebg : colors.blackBg,
                                         expire_date : null,
                                         box_code : null
                                 }}
-                                trans ={t}
                                 disableRightSide={true}
                                 />
                             )}
                             />
                     </View>
                     <View style={[gStyle.flexCenter,styles.containerBottom]}>
-                            <TouchableOpacity style={[styles.bottomButton]} 
+                            <TouchableOpacity style={[styles.bottomButton]}
                                 onPress={() => this.setState({is_boxscan : true,overpack_box_scan_box:true})}>
                                 <Text style={styles.textButton}>
-                                {t('screen.module.packed.detail.btn_box_scan')}
+                                {translate('screen.module.packed.detail.btn_box_scan')}
                                 </Text>
                             </TouchableOpacity>
                         </View>
-                    {is_model && 
+                    {is_model &&
                         <ModelOrderItems
                             listData = {order_items}
-                            t={t}
                             load_by = {false}
                             list_label = {list_label}
                             onClose = {this._setopenModel}

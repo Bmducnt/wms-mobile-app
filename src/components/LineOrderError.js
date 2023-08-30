@@ -1,27 +1,26 @@
-import React, { useState, useEffect } from "react";
-import { 
-    Modal, 
-    Text, 
-    TouchableOpacity, 
+import React from "react";
+import {
+    Modal,
+    Text,
+    TouchableOpacity,
     View,StyleSheet,
-    ActivityIndicator,
     FlatList,
-    Alert
 } from "react-native";
-import { 
+import {
     Feather,
     Ionicons,
     FontAwesome5
   } from "@expo/vector-icons";
-import { 
-    colors, 
-    device, 
-    gStyle 
+import {
+    colors,
+    device,
+    gStyle
 } from "../constants";
 import EmptySearch from './EmptySearch';
+import {translate} from "../i18n/locales/IMLocalized";
 
 const LineOrderError = props => {
-    renderOrderItem = (order_id) =>{
+    const renderOrderItem = (order_id) =>{
         return (
             <TouchableOpacity
               activeOpacity={gStyle.activeOpacity}
@@ -33,10 +32,10 @@ const LineOrderError = props => {
                         <FontAwesome5 name="barcode" size={12} color={colors.black} />{" "}{order_id.tracking_code}
                     </Text>
                     <Text style={styles.title}>
-                    {props.trans("screen.module.handover.error_update_at")} {order_id.time_approved}
+                    {translate("screen.module.handover.error_update_at")} {order_id.time_approved}
                     </Text>
                 </View>
-                <Ionicons name="ios-checkmark-circle" size={24} 
+                <Ionicons name="ios-checkmark-circle" size={24}
                 color={ order_id.is_approved === 1 ? colors.darkgreen : colors.greyInactive} />
               </View>
             </TouchableOpacity>
@@ -60,14 +59,14 @@ const LineOrderError = props => {
                         <View style={[gStyle.flexRowSpace,{
                             paddingVertical:13,
                         }]}>
-                            <Text>{props.trans("screen.module.handover.error_order_list")}</Text>
+                            <Text>{translate("screen.module.handover.error_order_list")}</Text>
                         </View>
-                        <TouchableOpacity 
+                        <TouchableOpacity
                                 onPress={() => props.onClose(false)}
                                 activeOpacity={gStyle.activeOpacity}
                             >
                                 <Feather color={colors.black70} name='chevron-down' size={20}/>
-                                
+
                         </TouchableOpacity>
                 </View>
                 {props.data && <View style={[gStyle.flexRow,{marginTop:10,marginHorizontal:10}]}>
@@ -82,18 +81,18 @@ const LineOrderError = props => {
                     <View style={gStyle.spacer11} />
                 </View>}
                 {props.data.length === 0 && (
-              <EmptySearch t={props.trans}/>
+              <EmptySearch/>
             )}
                 <View style={[styles.containerBottom]}>
-                    <TouchableOpacity style={[styles.bottomButton]} 
+                    <TouchableOpacity style={[styles.bottomButton]}
                         onPress={() => props.onClose(false)}>
                         <Text style={styles.textButton}>
-                            {props.trans("screen.module.handover.error_btn")}
+                            {translate("screen.module.handover.error_btn")}
                         </Text>
                     </TouchableOpacity>
                 </View>
             </View>
-            
+
         </Modal>
     );
 };

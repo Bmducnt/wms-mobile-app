@@ -15,27 +15,27 @@ import { colors, gStyle, device } from "../../constants";
 import addRulePickup from "../../services/pickup/add-rule";
 import getListRulePickup from "../../services/pickup/list-rule";
 import removeRulePickup from "../../services/pickup/remove_rule";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 const BySLAconfig = (props) => {
-  const t = props.t;
 
   const [listSLAPack, setlistSLAPack] = React.useState([]);
   const [slaSelect, setslaSelect] = React.useState(null);
   const [sla, setsla] = React.useState(null);
 
-  fetchConfig = async () => {
+  const fetchConfig = async () => {
     const response = await getListRulePickup({ key: "by_sla" });
     if (response?.status === 200) {
       setsla(response?.data?.results);
     }
   };
 
-  removeSLAConfig = async () => {
+  const removeSLAConfig = async () => {
     await removeRulePickup(JSON.stringify({ rule_type: "by_sla" }));
     setsla(null);
   };
 
-  addRuleSLA = async () => {
+  const addRuleSLA = async () => {
     if (slaSelect) {
       const response = await addRulePickup(
         JSON.stringify({
@@ -46,10 +46,10 @@ const BySLAconfig = (props) => {
       if (response?.status === 200) {
         Alert.alert(
           "",
-          t("screen.module.pickup_rule.add_ok"),
+          translate("screen.module.pickup_rule.add_ok"),
           [
             {
-              text: t("base.confirm"),
+              text: translate("base.confirm"),
               onPress: () => props.onClose(false),
             },
           ],
@@ -61,7 +61,7 @@ const BySLAconfig = (props) => {
     }
   };
 
-  onSelectSLA = async (sla_date) => {
+  const onSelectSLA = async (sla_date) => {
     let is_submmit = false;
 
     let updatedList = listSLAPack.map((item) => {
@@ -107,7 +107,7 @@ const BySLAconfig = (props) => {
               },
             ]}
           >
-            <Text>{t("screen.module.pickup_rule.by_sla_title")}</Text>
+            <Text>{translate("screen.module.pickup_rule.by_sla_title")}</Text>
             <TouchableOpacity
               onPress={() => props.onClose(false)}
               style={gStyle.flexRowSpace}
@@ -121,7 +121,7 @@ const BySLAconfig = (props) => {
             </TouchableOpacity>
           </View>
           <View style={{ paddingHorizontal: 15, paddingVertical: 13 }}>
-            <Text>{t("screen.module.pickup_rule.by_sla_title_sub")}</Text>
+            <Text>{translate("screen.module.pickup_rule.by_sla_title_sub")}</Text>
           </View>
           <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
             <View
@@ -132,7 +132,7 @@ const BySLAconfig = (props) => {
                 marginVertical: 5,
               }}
             >
-              <Text>{t("screen.module.pickup_rule.by_sla_list")}</Text>
+              <Text>{translate("screen.module.pickup_rule.by_sla_list")}</Text>
               {sla && (
                 <View
                   style={[
@@ -161,7 +161,7 @@ const BySLAconfig = (props) => {
                     <Text
                       style={{ color: colors.darkgreen, ...gStyle.textBoxme14 }}
                     >
-                      {t("screen.module.pickup_rule.prioritize")}
+                      {translate("screen.module.pickup_rule.prioritize")}
                     </Text>
                     <TouchableOpacity
                       style={gStyle.flexRowCenterAlign}
@@ -230,7 +230,7 @@ const BySLAconfig = (props) => {
               onPress={() => addRuleSLA()}
             >
               <Text style={styles.textButton}>
-                {t("screen.module.pickup_rule.btn_submit")}
+                {translate("screen.module.pickup_rule.btn_submit")}
               </Text>
             </TouchableOpacity>
           </View>

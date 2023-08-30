@@ -1,16 +1,13 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { 
+import {
   Animated,
-  ActivityIndicator,
   View,
   Text,
   StatusBar
 } from 'react-native';
-import { 
-  device, 
+import {
   gStyle,
-  images,
   colors
 } from '../../constants';
 
@@ -25,9 +22,9 @@ import ByVasConfig from './ByVasConfig';
 import ByCarrierConfig from './ByCarrierConfig';
 
 import getListRulePickup from "../../services/pickup/list-rule";
+import {translate} from "../../i18n/locales/IMLocalized";
 
-const PickupRules = ({navigation,screenProps}) => {
-    const { t} = screenProps;
+const PickupRules = ({navigation}) => {
 
     const [openSellerConfig, setopenSellerConfig] = React.useState(false);
     const [openSLA, setopenSLA] = React.useState(false);
@@ -42,9 +39,9 @@ const PickupRules = ({navigation,screenProps}) => {
     const [bySource, setbySource] = React.useState(0);
 
 
-    fetchListRules = async () => {
+    const fetchListRules = async () => {
         const response = await getListRulePickup({});
-        
+
         if (response?.status === 200) {
           const ruleValues = {
             by_email: setbySeller,
@@ -53,13 +50,13 @@ const PickupRules = ({navigation,screenProps}) => {
             by_vas: setbyVas,
             by_source: setbySource,
           };
-          
+
           response?.data?.results.forEach((result) => {
             const setValue = ruleValues[result?.key];
             if (setValue) {
               setValue(result?.value);
             }
-            
+
           });
         }
     };
@@ -71,7 +68,8 @@ const PickupRules = ({navigation,screenProps}) => {
 
     return (
         <View style={gStyle.container}>
-            <ScreenHeader title={t('screen.module.pickup_rule.btn_add')} bgColor={colors.cardLight} textAlign={"center"} showBack={true} />
+            <ScreenHeader title={translate('screen.module.pickup_rule.btn_add')} bgColor={colors.cardLight}
+                          textAlign={"center"} showBack={true}  navigation={navigation}/>
             <Animated.ScrollView
                     style={[gStyle.container,{flex: 1,
                     paddingTop: StatusBar.currentHeight,
@@ -81,37 +79,37 @@ const PickupRules = ({navigation,screenProps}) => {
                     showsVerticalScrollIndicator={false}
             >
                 <View style={{marginVertical : 5}}>
-                    <Text style={{...gStyle.textBoxme22,color : colors.white}}>{t('screen.module.pickup_rule.note')}</Text>
+                    <Text style={{...gStyle.textBoxme22,color : colors.white}}>{translate('screen.module.pickup_rule.note')}</Text>
                     <Text style={{...gStyle.textBoxme14,color : colors.greyInactive,paddingTop:10}}
-                    >{t('screen.module.pickup_rule.title')}</Text>
+                    >{translate('screen.module.pickup_rule.title')}</Text>
                 </View>
-                <Text style={{marginTop:5,color:colors.white,...gStyle.textBoxme16}}>{t('screen.module.pickup_rule.by_seller_text1')}</Text>
-                <Text style={{color:colors.greyInactive,marginVertical:4}}>{t('screen.module.pickup_rule.by_seller_text2')}</Text>
+                <Text style={{marginTop:5,color:colors.white,...gStyle.textBoxme16}}>{translate('screen.module.pickup_rule.by_seller_text1')}</Text>
+                <Text style={{color:colors.greyInactive,marginVertical:4}}>{translate('screen.module.pickup_rule.by_seller_text2')}</Text>
 
-                <RuleItems  
+                <RuleItems
                     icon={"user"}
-                    textRule={t('screen.module.pickup_rule.by_seller')}
-                    textRuleActive={`${t('screen.module.pickup_rule.have')} ${bySeller} ${t('screen.module.pickup_rule.by_seller_sub')}`}
+                    textRule={translate('screen.module.pickup_rule.by_seller')}
+                    textRuleActive={`${translate('screen.module.pickup_rule.have')} ${bySeller} ${translate('screen.module.pickup_rule.by_seller_sub')}`}
                     iconColor= {colors.boxmeBrand}
                     ruleType={'by_email'}
                     onPressConfig ={setopenSellerConfig}
                 />
-                <Text style={{marginTop:8,color:colors.white,...gStyle.textBoxme16}}>{t('screen.module.pickup_rule.by_seller_text3')}</Text>
-                <Text style={{color:colors.greyInactive,marginVertical:4}}>{t('screen.module.pickup_rule.by_seller_text4')}</Text>
-                <RuleItems  
+                <Text style={{marginTop:8,color:colors.white,...gStyle.textBoxme16}}>{translate('screen.module.pickup_rule.by_seller_text3')}</Text>
+                <Text style={{color:colors.greyInactive,marginVertical:4}}>{translate('screen.module.pickup_rule.by_seller_text4')}</Text>
+                <RuleItems
                     icon={"home"}
-                    textRule={t('screen.module.pickup_rule.by_source')}
-                    textRuleActive={`${t('screen.module.pickup_rule.have')} ${bySource} ${t('screen.module.pickup_rule.by_source_sub')}`}
+                    textRule={translate('screen.module.pickup_rule.by_source')}
+                    textRuleActive={`${translate('screen.module.pickup_rule.have')} ${bySource} ${translate('screen.module.pickup_rule.by_source_sub')}`}
                     iconColor= {colors.darkgreen}
                     ruleType={'by_source'}
                     onPressConfig ={setopenSource}
 
                 />
 
-                <RuleItems  
+                <RuleItems
                     icon={"paper-plane"}
-                    textRule={t('screen.module.pickup_rule.by_carrier')}
-                    textRuleActive={`${t('screen.module.pickup_rule.have')} ${byCarrier} ${t('screen.module.pickup_rule.by_carrier')}`}
+                    textRule={translate('screen.module.pickup_rule.by_carrier')}
+                    textRuleActive={`${translate('screen.module.pickup_rule.have')} ${byCarrier} ${translate('screen.module.pickup_rule.by_carrier')}`}
                     iconColor= {colors.darkgreen}
                     ruleType={'by_carrier'}
                     onPressConfig ={setopenCarrier}
@@ -119,10 +117,10 @@ const PickupRules = ({navigation,screenProps}) => {
                 />
 
 
-                <RuleItems  
+                <RuleItems
                     icon={"calendar"}
-                    textRule={t('screen.module.pickup_rule.by_sla')}
-                    textRuleActive={`${t('screen.module.pickup_rule.have')} ${bySla} ${t('screen.module.pickup_rule.by_sla')}`}
+                    textRule={translate('screen.module.pickup_rule.by_sla')}
+                    textRuleActive={`${translate('screen.module.pickup_rule.have')} ${bySla} ${translate('screen.module.pickup_rule.by_sla')}`}
                     iconColor= {colors.lightPurple}
                     ruleType={'by_sla'}
 
@@ -130,10 +128,10 @@ const PickupRules = ({navigation,screenProps}) => {
 
                 />
 
-                <RuleItems  
+                <RuleItems
                     icon={"present"}
-                    textRule={t('screen.module.pickup_rule.by_vas')}
-                    textRuleActive={byVas > 0  ? t('screen.module.pickup_rule.by_vas_active'): t('screen.module.pickup_rule.by_vas_deactive')}
+                    textRule={translate('screen.module.pickup_rule.by_vas')}
+                    textRuleActive={byVas > 0  ? translate('screen.module.pickup_rule.by_vas_active'): translate('screen.module.pickup_rule.by_vas_deactive')}
                     iconColor= {colors.lightGreen}
                     ruleType={'by_vas'}
 
@@ -143,12 +141,12 @@ const PickupRules = ({navigation,screenProps}) => {
 
 
             </Animated.ScrollView>
-            {openSellerConfig && <BySellerConfig  onClose={setopenSellerConfig} navigation={navigation} t={t} onReload ={fetchListRules} />}
-            {openSource && <BySourceConfig onClose={setopenSource} navigation={navigation} t={t} onReload ={fetchListRules}/> }
-            {openSLA && <BySLAconfig onClose={setopenSLA} navigation={navigation} t={t} onReload ={fetchListRules}/> }
-            {openVas && <ByVasConfig onClose={setopenVas} navigation={navigation} t={t} onReload ={fetchListRules}/> }
-            {openCarrier && <ByCarrierConfig onClose={setopenCarrier} navigation={navigation} t={t}onReload ={fetchListRules} /> }
-            
+            {openSellerConfig && <BySellerConfig  onClose={setopenSellerConfig} navigation= {navigation} onReload = {fetchListRules} />}
+            {openSource && <BySourceConfig onClose={setopenSource} navigation={navigation} onReload ={fetchListRules}/> }
+            {openSLA && <BySLAconfig onClose={setopenSLA} navigation={navigation} onReload = {fetchListRules}/> }
+            {openVas && <ByVasConfig onClose={setopenVas} navigation={navigation} onReload = {fetchListRules}/> }
+            {openCarrier && <ByCarrierConfig onClose={setopenCarrier} navigation={navigation} onReload = {fetchListRules} /> }
+
         </View>
     )
 };
@@ -157,7 +155,7 @@ const PickupRules = ({navigation,screenProps}) => {
 PickupRules.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired
+
 };
 
 export default PickupRules;

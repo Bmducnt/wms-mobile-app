@@ -9,7 +9,6 @@ import {
   Text,
   Dimensions
 } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import { colors, device, gStyle } from '../constants';
 
@@ -193,4 +192,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default NavigationContainer(ScreenHeader);
+export default ScreenHeader

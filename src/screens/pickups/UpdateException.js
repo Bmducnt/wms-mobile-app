@@ -1,7 +1,6 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import {
-  Alert,
   StyleSheet,
   Text,
   View,
@@ -14,10 +13,6 @@ import { colors, gStyle } from "../../constants";
 // components
 import ModalHeader from "../../components/ModalHeader";
 import {
-  _getTimeDefaultFrom,
-  _getTimeDefaultTo,
-} from "../../helpers/device-height";
-import {
   handleSoundScaner,
   permissionDenied,
   handleSoundOkScaner,
@@ -26,9 +21,9 @@ import FNSKUItems from "../../components/ListFNSKUPickup";
 
 //service api
 import getDetailOrderExceptionPickup from "../../services/pickup/exception-detail";
-import putItemOutBound from "../../services/pickup/update";
 import confirmOrderException from "../../services/pickup/exception";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 class UpdateException extends React.Component {
   constructor(props) {
@@ -45,18 +40,18 @@ class UpdateException extends React.Component {
   }
 
   componentDidMount() {
-    const { navigation } = this.props;
+    const { params } = this.props?.route;
     this.setState({
-      tracking_code: navigation.getParam("tracking_code"),
-      is_show_btn: navigation.getParam("is_show_btn"),
-      pickup_box_id: navigation.getParam("pickup_box_id"),
+      tracking_code: params?.tracking_code,
+      is_show_btn: params?.is_show_btn,
+      pickup_box_id: params?.pickup_box_id,
     });
   }
 
   UNSAFE_componentWillMount = async () => {
-    const { navigation } = this.props;
+    const { params } = this.props?.route;
     this._fetchBinOutBoundtHandler({
-      tracking_code: navigation.getParam("tracking_code"),
+      tracking_code: params?.tracking_code,
     });
   };
   _putOrderException = async () => {
@@ -100,15 +95,15 @@ class UpdateException extends React.Component {
 
   render() {
     const { navigation } = this.props;
+    const { params } = this.props?.route;
     const { list_fnsku_outbound, isloading, is_show_btn } = this.state;
-    const { t } = this.props.screenProps;
 
     return (
       <View style={gStyle.container}>
         <ModalHeader
           left={<Feather color={colors.greyLight} name="chevron-down" />}
           leftPress={() => this._onRefresh()}
-          text={navigation.getParam("tracking_code")}
+          text={params?.tracking_code}
         />
         {isloading && (
           <View style={gStyle.p3}>
@@ -116,7 +111,7 @@ class UpdateException extends React.Component {
           </View>
         )}
         <Text style={styles.sectionHeading}>
-          {t("screen.module.pickup.detail.list_order_return")}
+          {translate("screen.module.pickup.detail.list_order_return")}
         </Text>
         <View style={styles.containerScroll}>
           <FlatList
@@ -125,8 +120,8 @@ class UpdateException extends React.Component {
             renderItem={({ item }) => (
               <FNSKUItems
                 navigation={navigation}
-                textLabelLeft = {t('screen.module.pickup.detail.fnsku_code')}
-                textLabelRight = {t('screen.module.pickup.list.sold')}
+                textLabelLeft = {translate('screen.module.pickup.detail.fnsku_code')}
+                textLabelRight = {translate('screen.module.pickup.list.sold')}
                 fnsku_info={{
                   code: item.bsin_info.fnsku_barcode
                     ? item.bsin_info.fnsku_barcode
@@ -134,14 +129,13 @@ class UpdateException extends React.Component {
                   quantity_oubound: item.quantity,
                   fnsku_name: item.bsin_info.fnsku_name,
                   quantity_pick: item.quantity_pick,
-                  is_pick: item.quantity_pick === item.quantity ? true : false,
+                  is_pick: item.quantity_pick === item.quantity,
                   activebg: item.activebg ? item.activebg : colors.blackBg,
                   expire_date: null,
                   total_product: 0,
                   bin_id: item.bin_id,
                   box_code: item.box_id,
                 }}
-                trans={t}
                 disableRightSide={true}
               />
             )}
@@ -154,7 +148,7 @@ class UpdateException extends React.Component {
               onPress={() => this._putOrderException()}
             >
               <Text style={styles.textButton}>
-                {t("screen.module.pickup.detail.status_confirm_order_fail")}
+                {translate("screen.module.pickup.detail.status_confirm_order_fail")}
               </Text>
             </TouchableOpacity>
           </View>

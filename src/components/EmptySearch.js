@@ -1,14 +1,15 @@
 import React from 'react';
 import {
-  Text, 
+  Text,
   View
  } from 'react-native';
-import { 
+import {
   gStyle,
-  colors 
+  colors
 } from '../constants';
 import LottieView from 'lottie-react-native';
-const EmptySearch = props => 
+import {translate} from "../i18n/locales/IMLocalized";
+const EmptySearch = props =>
   <View style={[gStyle.flexCenter,{marginTop:"12%"}]}>
     <LottieView style={{
               width: 160,
@@ -17,7 +18,7 @@ const EmptySearch = props =>
     <Text style={{
       ...gStyle.textBoxme14,
         color: colors.white
-    }}>{props.t("base.empty")}</Text>
+    }}>{translate("base.empty")}</Text>
 </View>
 
 export default React.memo(EmptySearch);
