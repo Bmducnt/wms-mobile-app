@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { 
-    Modal, 
-    Text, 
-    TouchableOpacity, 
+import {
+    Modal,
+    Text,
+    TouchableOpacity,
     View,StyleSheet,
     Alert,
     Image,
@@ -10,26 +10,27 @@ import {
     KeyboardAvoidingView,
     Dimensions
 } from "react-native";
-import { 
+import {
     FontAwesome,
     Feather,
     AntDesign,
     Ionicons
 } from '@expo/vector-icons';
-import { 
-    colors, 
-    device, 
+import {
+    colors,
+    device,
     gStyle
  } from "../../constants";
  import * as Device from "expo-device"
 import * as ImagePicker from 'expo-image-picker';
 import ScanDocument from "../../components/ScanDocument";
-import { 
+import {
     Image as Imagecompressor,
     Video as Videocompressor
 } from 'react-native-compressor';
 import CameraModule from "../../components/CameraModule";
 import { serviceUploadAsset } from "../../helpers/upload-base";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 const ModelCamera = props => {
 
@@ -47,7 +48,7 @@ const ModelCamera = props => {
     const [totalImagePush,settotalImagePush] = useState(0);
     const [isVideo,setisVideo] = useState(false);
     const [isScan,setisScan] = useState(false);
-    
+
     const openCameraStep = async (code) =>{
         setstepUpload(code);
         setopenCamera(true);
@@ -57,11 +58,11 @@ const ModelCamera = props => {
         if(!imageFull || !imageOrder || !imageProduct){
             Alert.alert(
                 "",
-                
-                props.t("screen.module.handover.alert_image"),
+
+                translate("screen.module.handover.alert_image"),
                 [
                   {
-                    text: props.t('base.confirm'),
+                    text: translate('base.confirm'),
                     onPress: () => null,
                   },
                 ],
@@ -71,10 +72,10 @@ const ModelCamera = props => {
         else if(!isVideo){
             Alert.alert(
                 "",
-                props.t("screen.module.handover.alert_video"),
+                translate("screen.module.handover.alert_video"),
                 [
                   {
-                    text: props.t('base.confirm'),
+                    text: translate('base.confirm'),
                     onPress: () => null,
                   },
                 ],
@@ -84,10 +85,10 @@ const ModelCamera = props => {
         else if (countryId === 237 && !isScan && Device.osName !== "Android"){
             Alert.alert(
                 "",
-                props.t("screen.module.handover.alert_scan"),
+                translate("screen.module.handover.alert_scan"),
                 [
                   {
-                    text: props.t('base.confirm'),
+                    text: translate('base.confirm'),
                     onPress: () => null,
                   },
                 ],
@@ -96,7 +97,7 @@ const ModelCamera = props => {
         }else{
             props.onClose(false)
         }
-        
+
     }
     const pickImageorVideo = async () => {
         setisLoading(true);
@@ -109,7 +110,7 @@ const ModelCamera = props => {
           const resultcompress = await Imagecompressor.compress(result.assets[0].uri, {
             compressionMethod: 'auto',
           });
-          
+
           if (!result.canceled) {
             setisLoading(true);
             await serviceUploadAsset(
@@ -212,19 +213,19 @@ const ModelCamera = props => {
                             marginBottom:5,
                             backgroundColor:colors.whiteBg
                         }]}>
-                            <TouchableOpacity 
+                            <TouchableOpacity
                                 onPress={() => onClose()}
                                 activeOpacity={gStyle.activeOpacity}
                                 style={gStyle.flexCenter}
                             >
                                 <Feather color={colors.black70} name='chevron-down' size={20}/>
-                                <Text>{props.t("screen.module.handover.order_need_image")}</Text>
+                                <Text>{translate("screen.module.handover.order_need_image")}</Text>
                             </TouchableOpacity>
-                        
+
                         </View>
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             disabled={isLoading}
-                            onPress={() => openCameraStep(1)} 
+                            onPress={() => openCameraStep(1)}
                             style={[gStyle.flexRow,{
                             paddingHorizontal:10,
                             marginHorizontal:10,
@@ -233,7 +234,7 @@ const ModelCamera = props => {
                             paddingVertical:10,
                             backgroundColor:colors.whiteBg
                         }]}>
-                            { !imageFull ? <FontAwesome name="image" size={50} color={colors.greyInactive} /> : 
+                            { !imageFull ? <FontAwesome name="image" size={50} color={colors.greyInactive} /> :
                             <Image source={{ uri: imageFull }} style={{
                                 width:50,height:undefined,
                                 resizeMode: 'contain',
@@ -243,11 +244,11 @@ const ModelCamera = props => {
                             <View style={[gStyle.flexRowSpace,{paddingLeft:10,width: Dimensions.get("window").width-100}]}>
                                 <View style={{width:'65%'}}>
                                     <Text style={{...gStyle.textBoxmeBold14,color:colors.black70}}>
-                                        
-                                        {props.t("screen.module.handover.overview_text")}
+
+                                        {translate("screen.module.handover.overview_text")}
                                     </Text>
                                     <Text style={{...gStyle.textBoxme12,color:colors.black70}}>
-                                        {props.t("screen.module.handover.overview_text_sub")}
+                                        {translate("screen.module.handover.overview_text_sub")}
                                     </Text>
                                 </View>
                                 <View style={[gStyle.flexCenter,{
@@ -255,11 +256,11 @@ const ModelCamera = props => {
                                     borderRadius:3,
                                     backgroundColor:colors.boxmeBrand
                                 }]}>
-                                    <Text style={{...gStyle.textBoxmeBold14,color:colors.white}}>{props.t("screen.module.camera.btn_camera")}</Text>
+                                    <Text style={{...gStyle.textBoxmeBold14,color:colors.white}}>{translate("screen.module.camera.btn_camera")}</Text>
                                 </View>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             disabled={isLoading}
                             onPress={() => openCameraStep(2)} style={[gStyle.flexRow,{
                             paddingHorizontal:10,
@@ -269,7 +270,7 @@ const ModelCamera = props => {
                             paddingVertical:10,
                             backgroundColor:colors.whiteBg
                         }]}>
-                            { !imageOrder ? <FontAwesome name="image" size={50} color={colors.greyInactive} /> : 
+                            { !imageOrder ? <FontAwesome name="image" size={50} color={colors.greyInactive} /> :
                             <Image source={{ uri: imageOrder }} style={{
                                 width:50,height:undefined,
                                 resizeMode: 'contain',
@@ -279,11 +280,11 @@ const ModelCamera = props => {
                             <View style={[gStyle.flexRowSpace,{paddingLeft:10,width: Dimensions.get("window").width-100}]}>
                                 <View style={{width:'65%'}}>
                                     <Text style={{...gStyle.textBoxmeBold14,color:colors.black70}}>
-                                        
-                                        {props.t("screen.module.handover.orders_text")}
+
+                                        {translate("screen.module.handover.orders_text")}
                                     </Text>
                                     <Text style={{...gStyle.textBoxme12,color:colors.black70}}>
-                                        {props.t("screen.module.handover.orders_text_sub")}
+                                        {translate("screen.module.handover.orders_text_sub")}
                                     </Text>
                                 </View>
                                 <View style={[gStyle.flexCenter,{
@@ -291,11 +292,11 @@ const ModelCamera = props => {
                                     borderRadius:3,
                                     backgroundColor:colors.boxmeBrand
                                 }]}>
-                                    <Text style={{...gStyle.textBoxmeBold14,color:colors.white}}>{props.t("screen.module.camera.btn_camera")}</Text>
+                                    <Text style={{...gStyle.textBoxmeBold14,color:colors.white}}>{translate("screen.module.camera.btn_camera")}</Text>
                                 </View>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             disabled={isLoading}
                             onPress={() => openCameraStep(3)}
                             style={[gStyle.flexRow,{
@@ -306,7 +307,7 @@ const ModelCamera = props => {
                                 paddingVertical:10,
                                 backgroundColor:colors.whiteBg
                         }]}>
-                            { !imageProduct ? <FontAwesome name="image" size={50} color={colors.greyInactive} /> : 
+                            { !imageProduct ? <FontAwesome name="image" size={50} color={colors.greyInactive} /> :
                             <Image source={{ uri: imageProduct }} style={{
                                 width:50,height:undefined,
                                 resizeMode: 'contain',
@@ -316,11 +317,11 @@ const ModelCamera = props => {
                             <View style={[gStyle.flexRowSpace,{paddingLeft:10,width: Dimensions.get("window").width-100}]}>
                                 <View style={{width:'65%'}}>
                                     <Text style={{...gStyle.textBoxmeBold14,color:colors.black70}}>
-                                        
-                                        {props.t("screen.module.handover.fnskus_text")}
+
+                                        {translate("screen.module.handover.fnskus_text")}
                                     </Text>
                                     <Text style={{...gStyle.textBoxme12,color:colors.black70}}>
-                                        {props.t("screen.module.handover.fnskus_text_sub")}
+                                        {translate("screen.module.handover.fnskus_text_sub")}
                                     </Text>
                                 </View>
                                 <View style={[gStyle.flexCenter,{
@@ -328,14 +329,14 @@ const ModelCamera = props => {
                                     borderRadius:3,
                                     backgroundColor:colors.boxmeBrand
                                 }]}>
-                                    <Text style={{...gStyle.textBoxmeBold14,color:colors.white}}>{props.t("screen.module.camera.btn_camera")}</Text>
+                                    <Text style={{...gStyle.textBoxmeBold14,color:colors.white}}>{translate("screen.module.camera.btn_camera")}</Text>
                                 </View>
                             </View>
-                            
+
                         </TouchableOpacity>
                         <View style={[gStyle.flexCenter,{marginVertical:5}]}>
-                            <Text style={{...gStyle.textBoxmeBold12,color:colors.black50}}>{props.t("screen.module.handover.fnskus_upload_option")}</Text>
-                            <TouchableOpacity 
+                            <Text style={{...gStyle.textBoxmeBold12,color:colors.black50}}>{translate("screen.module.handover.fnskus_upload_option")}</Text>
+                            <TouchableOpacity
                                 disabled={isLoading}
                                 onPress={() => pickImageorVideo()}
                                 style={[gStyle.flexRow,{
@@ -348,7 +349,7 @@ const ModelCamera = props => {
                                     <Feather color={colors.greyInactive} name="file-text" size={35} />
                                 </View>
                                 <View style={[{width:Dimensions.get("window").width -75,marginLeft:8}]}>
-                                    <Text style={{color:colors.black70,...gStyle.textBoxme16}}>{props.t("screen.module.camera.upload_select")}</Text>
+                                    <Text style={{color:colors.black70,...gStyle.textBoxme16}}>{translate("screen.module.camera.upload_select")}</Text>
                                     <Text style={{color:colors.greyInactive,
                                         ...gStyle.textBoxme12}}>PNG , JPG or MP4, MOV</Text>
                                 </View>
@@ -356,7 +357,7 @@ const ModelCamera = props => {
                         </View>
                         {Device.osName !== "Android" && <View style={[gStyle.flexCenter,{marginVertical:5}]}>
                             <Ionicons name="ios-arrow-down-sharp" size={24} color={colors.greyInactive}/>
-                            <TouchableOpacity 
+                            <TouchableOpacity
                                 onPress={() => setopenScan(true)}
                                 style={[gStyle.flexRow,{
                                     paddingVertical:15,
@@ -368,7 +369,7 @@ const ModelCamera = props => {
                                     <AntDesign name="pdffile1" size={35} color={colors.greyInactive}  />
                                 </View>
                                 <View style={[{width:Dimensions.get("window").width -75,marginLeft:8}]}>
-                                    <Text style={{color:colors.black70,...gStyle.textBoxme16}}>{props.t("screen.module.inbound.scan_btn")}</Text>
+                                    <Text style={{color:colors.black70,...gStyle.textBoxme16}}>{translate("screen.module.inbound.scan_btn")}</Text>
                                     <Text style={{color:colors.greyInactive,
                                         ...gStyle.textBoxme12}}>PDF / WORD ...</Text>
                                 </View>
@@ -380,17 +381,17 @@ const ModelCamera = props => {
                                     ...gStyle.textBoxmeBold14,
                                 }}
                                 >
-                                    {props.t("screen.module.inbound.upload_text_1")}{" "}
+                                    {translate("screen.module.inbound.upload_text_1")}{" "}
                                     {totalImagePush}{" "}
-                                    {props.t("screen.module.inbound.upload_text_2")}
+                                    {translate("screen.module.inbound.upload_text_2")}
                                 </Text>
                             </View>
                         </View>}
                         <View style={[styles.containerBottom]}>
-                            <View style={gStyle.flexRowCenter}> 
-                            {!isLoading ?  <TouchableOpacity disabled={isLoading} style={[styles.bottomButton]} 
+                            <View style={gStyle.flexRowCenter}>
+                            {!isLoading ?  <TouchableOpacity disabled={isLoading} style={[styles.bottomButton]}
                                 onPress={() => onClose()}>
-                                    <Text style={styles.textButton} numberOfLines={1}>{props.t("screen.module.handover.upload_all")} </Text>
+                                    <Text style={styles.textButton} numberOfLines={1}>{translate("screen.module.handover.upload_all")} </Text>
                                 </TouchableOpacity>:
                                     <View style={[styles.bottomButton,gStyle.flexCenter]}>
                                         <ActivityIndicator color={colors.white}/>
@@ -401,14 +402,12 @@ const ModelCamera = props => {
                         {openCamera && (
                             <CameraModule
                                 showModal={openCamera}
-                                trans={props.t}
                                 setModalVisible={() => setopenCamera(false)}
                                 setImage={(result) => imageCompress(result.uri)}
                             />
                         )}
                         {openScan && (
                             <ScanDocument
-                            t={props.t}
                             setModalVisible={setopenScan}
                             onSubmit={imageCompressDocumentScan}
                             />

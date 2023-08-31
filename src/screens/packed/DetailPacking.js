@@ -17,6 +17,7 @@ import {_getTimeDefaultFrom,_getTimeDefaultTo} from '../../helpers/device-height
 import ItemOrderPacked from './ItemOrderPacked';
 import ModelOrderItems from './OrderItems';
 import getDetailPacked from '../../services/packed/detail';
+import {translate} from "../../i18n/locales/IMLocalized";
 
 class DetailPacking extends React.Component {
 
@@ -39,13 +40,13 @@ class DetailPacking extends React.Component {
       list_data : [],
       list_data_full : [],
       from_time : _getTimeDefaultFrom(),
-      to_time : _getTimeDefaultTo(), 
+      to_time : _getTimeDefaultTo(),
     };
   }
 
   UNSAFE_componentWillMount = async () =>{
-    const {navigation} = this.props
-    this._fetchDetailPacking(navigation.getParam("pickup_code"))
+    const {params} = this.props?.route
+    await this._fetchDetailPacking(params?.pickup_code)
   }
 
   _onSelectOrder = async (code,order_items) =>{
@@ -101,15 +102,15 @@ class DetailPacking extends React.Component {
       })
     }else if (response.status === 403){
       permissionDenied(this.props.navigation);
-    };
+    }
     this.setState({isloading : false});
   };
 
   handleLoadMore = async () => {
     if(this.state.page+1 > this.state.total_page){ return null; }
     this.state.page = this.state.page + 1
-    offset = (this.state.page-1)*8
-    end_offset =  (this.state.page)*8
+    const offset = (this.state.page-1)*8
+    const end_offset =  (this.state.page)*8
     this.setState({
       page: this.state.page + 1,
       list_data: [...this.state.list_data,...this.state.list_data_full.slice(offset,end_offset)]
@@ -117,9 +118,7 @@ class DetailPacking extends React.Component {
   };
 
   render() {
-    const {
-      navigation
-    } = this.props;
+    const {navigation} = this.props;
     const {
       isloading,
       list_data,
@@ -131,12 +130,12 @@ class DetailPacking extends React.Component {
       isloadingBox,
       list_label
     } = this.state;
-    const { t } = this.props.screenProps;
+    const { params } = this.props?.route;
     return (
       <View style={[gStyle.container]} >
         <View style={{ position: 'absolute', top: 0, width: '100%',zIndex:100}}>
-          <ScreenHeader 
-            title={`${t('screen.module.packed.detail.text')} ${navigation.getParam("pickup_code")}`}
+          <ScreenHeader
+            title={`${translate('screen.module.packed.detail.text')} ${params?.pickup_code}`}
             showBack={true}
             isFull={false}
             showInput = {false}
@@ -144,13 +143,12 @@ class DetailPacking extends React.Component {
             autoFocus={false}
             onPressCamera={null}
             onSubmitEditingInput= {null}
-            
-          />
-          {isloading && 
+           navigation={navigation}/>
+          {isloading &&
           <View >
             <ActivityIndicator />
           </View>}
-          
+
         </View>
         <View style={styles.containerScroll}>
             {list_data.length > 0 && <FlatList
@@ -162,16 +160,16 @@ class DetailPacking extends React.Component {
                       color:colors.white,
                       marginVertical:14,
                       paddingLeft:10
-                    }}>{t('screen.module.packed.detail.staff')} {staff_packed}</Text>
+                    }}>{translate('screen.module.packed.detail.staff')} {staff_packed}</Text>
                     <Text style={{
                       ...gStyle.textBoxme14,
                       color:colors.white,
                       marginVertical:10,
                       paddingRight:10
-                    }}>{t('screen.module.packed.detail.have')}  {total_items} item</Text>
+                    }}>{translate('screen.module.packed.detail.have')}  {total_items} item</Text>
                 </View>
               }
-              onRefresh={() => this._fetchDetailPacking(navigation.getParam("pickup_code"))}
+              onRefresh={() => this._fetchDetailPacking(params?.pickup_code)}
               refreshing={isloading}
               initialNumToRender={8}
               onEndReachedThreshold={0.5}
@@ -181,7 +179,6 @@ class DetailPacking extends React.Component {
               keyExtractor={({ tracking_code__tracking_code }) => tracking_code__tracking_code.toString()}
               renderItem={({ item }) => (
                 <ItemOrderPacked
-                  translate ={t}
                   navigation={navigation}
                   isloading={isloadingBox}
                   onSelect = {this._onSelectOrder}
@@ -205,10 +202,9 @@ class DetailPacking extends React.Component {
               )}
             />}
         </View>
-        {openModel && 
+        {openModel &&
           <ModelOrderItems
             listData = {order_items}
-            t={t}
             load_by = {load_by}
             list_label = {list_label}
             onClose = {this._setopenModel}
@@ -222,7 +218,6 @@ class DetailPacking extends React.Component {
 DetailPacking.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired
 };
 
 const styles = StyleSheet.create({

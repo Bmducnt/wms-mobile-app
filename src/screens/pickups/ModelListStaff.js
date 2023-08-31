@@ -27,6 +27,7 @@ import getListStaffPickup from "../../services/pickup/list-staff";
 import getListZoneStaffPickup from "../../services/pickup/list-zone";
 import getListRulePickup from "../../services/pickup/list-rule";
 import ModelOptionPickup from "./ModelOptionPickup";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 const pickup_option = [
   {
@@ -182,6 +183,8 @@ class ModelListStaff extends React.Component {
   _fetchListStaffHandler = async () => {
     this.setState({ loading_order: true });
     const { navigation } = this.props;
+    const { params } = this.props?.route;
+
     const response = await getListStaffPickup({
       from_time: _getTimeDefaultFrom(),
       to_time: _getTimeDefaultTo(),
@@ -200,7 +203,7 @@ class ModelListStaff extends React.Component {
         });
       }
       this.setState({
-        total_pickup: navigation.getParam("is_ff_now")
+        total_pickup: params?.is_ff_now
           ? 0
           : response.data.results.pickup_pending,
         pickup_pending_code: response.data.results.pickup_pending_code,
@@ -228,7 +231,6 @@ class ModelListStaff extends React.Component {
 
   _createdPickupHandler = async () => {
     this.setState({ isLoading: true, is_model: false });
-    const { t } = this.props.screenProps;
     const response = await createPickupByStaff(
       JSON.stringify({
         arr_orders: [],
@@ -242,10 +244,10 @@ class ModelListStaff extends React.Component {
     if (response.status === 200) {
       Alert.alert(
         "",
-        t("screen.module.pickup.create.ok"),
+        translate("screen.module.pickup.create.ok"),
         [
           {
-            text: t("base.confirm"),
+            text: translate("base.confirm"),
             onPress: () => {
               this._onGoback();
             },
@@ -258,10 +260,10 @@ class ModelListStaff extends React.Component {
     } else {
       Alert.alert(
         "",
-        t("screen.module.handover.list_driver_empty"),
+        translate("screen.module.handover.list_driver_empty"),
         [
           {
-            text: t("base.confirm"),
+            text: translate("base.confirm"),
             onPress: null,
           },
         ],
@@ -276,14 +278,13 @@ class ModelListStaff extends React.Component {
   };
 
   _confirmCreated = async () => {
-    const { t } = this.props.screenProps;
     if (!this.state.staff_id) {
       Alert.alert(
         "",
-        t("screen.module.pickup.create.empty_zone"),
+        translate("screen.module.pickup.create.empty_zone"),
         [
           {
-            text: t("base.confirm"),
+            text: translate("base.confirm"),
             onPress: null,
           },
         ],
@@ -324,7 +325,6 @@ class ModelListStaff extends React.Component {
       loading_order,
       pickup_rule,
     } = this.state;
-    const { t } = this.props.screenProps;
     return (
       <View
         style={[
@@ -335,7 +335,7 @@ class ModelListStaff extends React.Component {
         <ModalHeader
           right={<Feather color={colors.white} name="x" />}
           rightPress={() => navigation.goBack(null)}
-          text={t("screen.module.pickup.create.select_zone")}
+          text={translate("screen.module.pickup.create.select_zone")}
         />
         <View style={styles.containerScroll}>
           {isLoading ? (
@@ -354,7 +354,7 @@ class ModelListStaff extends React.Component {
                   text_note2={"screen.module.staff_report.text2"}
                   text_note3={
                     pickup_rule
-                      ? `${t(
+                      ? `${translate(
                           "screen.module.pickup_rule.prioritize"
                         )} ${pickup_rule}`
                       : null
@@ -362,7 +362,6 @@ class ModelListStaff extends React.Component {
                   quantity={item.total_bin}
                   avarta={true}
                   avarta_name={"zone_pick"}
-                  trans={t}
                   onPress={this._onSelectStaffPick}
                 />
               )}
@@ -383,7 +382,7 @@ class ModelListStaff extends React.Component {
                   ...gStyle.textBoxme14,
                 }}
               >
-                {t("screen.module.pickup.create.pickup_full")}{" "}
+                {translate("screen.module.pickup.create.pickup_full")}{" "}
                 {pickup_pending_code}.
               </Text>
               <Text
@@ -392,7 +391,7 @@ class ModelListStaff extends React.Component {
                   ...gStyle.textBoxme14,
                 }}
               >
-                {t("screen.module.pickup.create.pickup_full_de")}
+                {translate("screen.module.pickup.create.pickup_full_de")}
               </Text>
             </View>
           )}
@@ -402,7 +401,7 @@ class ModelListStaff extends React.Component {
           >
             {!loading_order ? (
               <Text style={styles.textButton}>
-                {t("screen.module.pickup.create.btn_create")}
+                {translate("screen.module.pickup.create.btn_create")}
               </Text>
             ) : (
               <ActivityIndicator />
@@ -411,7 +410,6 @@ class ModelListStaff extends React.Component {
         </View>
         {is_model && (
           <ModelOptionPickup
-            t={t}
             listData={pickup_option}
             listDataReport={order_report}
             onClose={this._onCloseModel}

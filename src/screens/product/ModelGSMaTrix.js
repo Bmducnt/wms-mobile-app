@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import moment from 'moment';
 import { Feather} from '@expo/vector-icons';
-import { withNavigation } from 'react-navigation';
+import { NavigationContainer } from '@react-navigation/native';
 import { colors, gStyle,images,device } from '../../constants';
 
 
@@ -50,8 +50,8 @@ const ModelGSMaTrix = props  => {
         <TouchableWithoutFeedback
                 >
                 <View style={{
-                    flex: 1, 
-                    alignItems: 'center', 
+                    flex: 1,
+                    alignItems: 'center',
                     justifyContent: 'center',
                     position:'absolute',
                     bottom:0
@@ -70,15 +70,15 @@ const ModelGSMaTrix = props  => {
                             borderBottomWidth:1
                         }]}>
                             <Text>{props.trans("screen.module.product.detail.gs1_scan")}</Text>
-                            <TouchableOpacity 
+                            <TouchableOpacity
                                 onPress={() => props.onClose(false)}
                                 style={gStyle.flexCenter}
                                 activeOpacity={gStyle.activeOpacity}
                             >
                                 <Feather color={colors.black70} name='chevron-down' size={20}/>
-                                
+
                             </TouchableOpacity>
-                        
+
                         </View>
                         <View style={[{
                             backgroundColor:colors.transparent,
@@ -98,13 +98,13 @@ const ModelGSMaTrix = props  => {
                                     <Text>Expiration date</Text>
                                     {expiration && <Text>{moment(expiration, 'YYMMDD').format('MMMM DD, YYYY')}</Text>}
                                 </View>
-                                
+
                         </View>
-                        <TouchableOpacity 
-                                    style={[styles.bottomButton]} 
+                        <TouchableOpacity
+                                    style={[styles.bottomButton]}
                                         onPress={() => props.onSubmit(gtin)}>
                                         <Text style={styles.textButton}>
-                                            {props.trans("screen.module.product.detail.btn_detail")} 
+                                            {props.trans("screen.module.product.detail.btn_detail")}
                                         </Text>
                         </TouchableOpacity>
                     </View>
@@ -120,7 +120,7 @@ ModelGSMaTrix.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  
+
     bottomButton: {
         justifyContent: "center",
         alignContent: "center",
@@ -139,4 +139,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default withNavigation(ModelGSMaTrix);
+export default ModelGSMaTrix

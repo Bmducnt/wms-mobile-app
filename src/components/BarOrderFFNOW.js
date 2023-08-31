@@ -1,19 +1,20 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { 
-  StyleSheet, 
-  Text, 
-  TouchableOpacity, 
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
   View,
-  ActivityIndicator 
+  ActivityIndicator
 } from 'react-native';
-import { withNavigation } from 'react-navigation';
+import { NavigationContainer } from '@react-navigation/native';
 
 import * as Animatable from "react-native-animatable";
-import { 
+import {
   colors,
   gStyle } from '../constants';
+import {translate} from "../i18n/locales/IMLocalized";
 class BarOrderFFNOW extends React.Component {
 
   constructor() {
@@ -21,24 +22,23 @@ class BarOrderFFNOW extends React.Component {
   }
 
   render() {
-    const { 
-      navigation, 
+    const {
+      navigation,
       orderffNow,
       timeRequest,
       loading } = this.props;
-    const { t } = this.props.screenProps;
     return (
       <View
         style={styles.container}
       >
-        <View style={[gStyle.flexRowSpace,gStyle.flexRowCenterAlign]}> 
+        <View style={[gStyle.flexRowSpace,gStyle.flexRowCenterAlign]}>
             <View style={{width:'70%'}}>
               <Text style={{
                   ...gStyle.textBoxme14,
                     color: colors.white,
                 }}
                 numberOfLines={1}
-              >{t('screen.module.home.handover_total')} {orderffNow} {t('screen.module.home.report_order.ff_now')}</Text>
+              >{translate('screen.module.home.handover_total')} {orderffNow} {translate('screen.module.home.report_order.ff_now')}</Text>
               <Text style={{
                     ...gStyle.textBoxme10,
                     color: colors.greyInactive}}
@@ -61,7 +61,7 @@ class BarOrderFFNOW extends React.Component {
               >
                 {!loading ? <Text style={{
                     fontSize:14,
-                    color: colors.white}}>{t('screen.module.home.report_order.tab_create_pk')}
+                    color: colors.white}}>{translate('screen.module.home.report_order.tab_create_pk')}
                 </Text>:<ActivityIndicator/>}
               </TouchableOpacity>
             </Animatable.View>
@@ -90,4 +90,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default withNavigation(BarOrderFFNOW);
+export default NavigationContainer(BarOrderFFNOW);

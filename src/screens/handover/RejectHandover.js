@@ -27,6 +27,7 @@ import ModelReason from "./ModelReason";
 import ModalHeader from "../../components/ModalHeader";
 //service api
 import removeTrackingOB from "../../services/handover/remove-tracking";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 class RejectHandover extends React.PureComponent {
   constructor(props) {
@@ -48,12 +49,12 @@ class RejectHandover extends React.PureComponent {
   }
 
   componentDidMount = async () => {
-    const { navigation } = this.props;
+    const { params } = this.props?.route;
     this.setState({
-        code_ob: navigation.getParam("code"),
-        is_approved: navigation.getParam("is_approved"),
-        quantity : navigation.getParam("quantity"),
-        reason_list : navigation.getParam("reason_list")
+        code_ob: params?.code,
+        is_approved: params?.is_approved,
+        quantity : params?.quantity,
+        reason_list : params?.reason_list
       });
   };
 
@@ -70,7 +71,6 @@ class RejectHandover extends React.PureComponent {
 
   _fetchDetailHandover = async (code,q,reason_note) => {
     this.setState({ isloading: true});
-    const { t } = this.props.screenProps;
     const response = await removeTrackingOB(this.state.code_ob,JSON.stringify({
       list_tracking: [q],
       reason_note : reason_note
@@ -80,38 +80,37 @@ class RejectHandover extends React.PureComponent {
             if (this.state.list_data.length >= 1 && this.state.list_data.length <= 10){
               this.setState({ list_data:[...this.state.list_data, ...response.data.results]});
             }
-            if (this.state.list_data.length == 0 || this.state.list_data.length > 10){
+            if (this.state.list_data.length === 0 || this.state.list_data.length > 10){
               this.setState({ list_data: response.data.results});
             }
             this.state.quantity_scan =this.state.quantity_scan+1;
-            handleSoundOkScaner();
+            await handleSoundOkScaner();
         }else{
-            handleSoundScaner();
-            await this.setState({textError:t('screen.module.handover.order_status_fail')}); 
+            await handleSoundScaner();
+            await this.setState({textError:translate('screen.module.handover.order_status_fail')});
         }
-    };
+    }
     if (response.status === 400){
-        handleSoundScaner();
-        await this.setState({textError:t('screen.module.handover.order_fail')}); 
-      };
+        await handleSoundScaner();
+        await this.setState({textError:translate('screen.module.handover.order_fail')});
+      }
     if (response.status === 403){
-      permissionDenied();
-    };
+      await permissionDenied();
+    }
     this.setState({ isloading: false });
   };
 
   _confirmRemoveaction = async () =>{
-    const { t } = this.props.screenProps;
     Alert.alert(
       '',
-      t('screen.module.handover.text_confirm_remove'),
+      translate('screen.module.handover.text_confirm_remove'),
       [
         {
-          text:t('base.confirm'),
+          text:translate('base.confirm'),
           onPress: () => this.props.navigation.goBack(null),
         },
         {
-          text : t("screen.module.product.move.btn_cancel"),
+          text : translate("screen.module.product.move.btn_cancel"),
           onPress: null,
         }
       ],
@@ -125,9 +124,10 @@ class RejectHandover extends React.PureComponent {
       this.setState({code_scan : code,open_model : true});
     }
   };
-  
+
   render() {
     const { navigation } = this.props;
+    const { params } = this.props?.route;
     const {
       isloading,
       list_data,
@@ -138,26 +138,25 @@ class RejectHandover extends React.PureComponent {
       reason_list,
       open_model
     } = this.state;
-    const { t } = this.props.screenProps;
     return (
       <React.Fragment>
         <View style={[gStyle.container]}>
         <ModalHeader
             right={<Feather color={colors.white} name="x" />}
             rightPress={() => navigation.goBack(null)}
-            text={navigation.getParam("code")}
+            text={params?.code}
           />
         <View style={{marginHorizontal:5}}>
           <TextInputComponent
             navigation={navigation}
             labeView={false}
-            textLabel={t("screen.module.handover.input_tracking")}
+            textLabel={translate("screen.module.handover.input_tracking")}
             autoFocus={true}
             is_close={false}
             textError={textError}
             onPressCamera={this._searchCameraBarcode}
             onSubmitEditingInput={this._searchCameraBarcode}
-            textPlaceholder={t("screen.module.handover.input_tracking")}
+            textPlaceholder={translate("screen.module.handover.input_tracking")}
           />
         </View>
         <Animated.ScrollView
@@ -175,10 +174,10 @@ class RejectHandover extends React.PureComponent {
           {list_data.length === 0 && (
             <View style={styles.containerSearch}>
                 <Text style={styles.searchInfo}>
-                    {t("screen.module.handover.text1_handover_rollback")}
+                    {translate("screen.module.handover.text1_handover_rollback")}
                 </Text>
                 <Text style={styles.searchInfo}>
-                    {t("screen.module.handover.text2_handover_rollback")}
+                    {translate("screen.module.handover.text2_handover_rollback")}
                 </Text>
             </View>
           )}
@@ -189,7 +188,6 @@ class RejectHandover extends React.PureComponent {
                   navigation={navigation}
                   logo_carrier={item.order_id.image_courier}
                   code={item.order_id.tracking_code}
-                  trans={t}
                   is_approved ={is_approved}
                   staff_email={item.outbound_id.created_by.email}
                   quantity={item.order_id.quantity}
@@ -202,22 +200,21 @@ class RejectHandover extends React.PureComponent {
         </View>
         </Animated.ScrollView>
         <View style={styles.containerBottom}>
-            <TouchableOpacity 
+            <TouchableOpacity
                 style={[styles.bottomButton]}
-                disabled={quantity_scan === 0} 
+                disabled={quantity_scan === 0}
                 onPress={() => this._confirmRemoveaction()}>
                 <Text style={styles.textButton}>
-                    {t("screen.module.handover.btn_handover_rollback")}{" "}{quantity_scan}{" "}{t("screen.module.handover.unit_order").toLowerCase()}
+                    {translate("screen.module.handover.btn_handover_rollback")}{" "}{quantity_scan}{" "}{translate("screen.module.handover.unit_order").toLowerCase()}
                 </Text>
             </TouchableOpacity>
         </View>
       </View>
-      {open_model && 
+      {open_model &&
         <ModelReason
           listData = {reason_list}
           onClose ={this.onClose}
           onSelect ={this.onSelect}
-          t={t}
         />
       }
       {Device.osName === 'Android' && textError &&
@@ -233,7 +230,6 @@ class RejectHandover extends React.PureComponent {
 RejectHandover.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({

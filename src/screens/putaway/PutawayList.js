@@ -18,6 +18,8 @@ import InboundList from './InboundList';
 import RMAList from './RMAList';
 import RollbackList from './RollbackList';
 import {_getTimeDefaultFrom,_getTimeDefaultTo} from '../../helpers/device-height';
+import {translate} from "../../i18n/locales/IMLocalized";
+
 
 class PutawayLists extends React.PureComponent {
 
@@ -30,18 +32,17 @@ class PutawayLists extends React.PureComponent {
       isDatePickerVisible: false,
       index:0,
       routes : [
-        
+
       ]
     };
   };
 
   UNSAFE_componentWillMount = async () =>{
-    const { t } = this.props.screenProps;
     this.setState({
       routes :[
-        { key: 'inbound', title: t('screen.module.putaway.tab_inbound') },
-        { key: 'rma', title: t('screen.module.putaway.tab_rma') },
-        { key: 'binrollback', title:t('screen.module.putaway.tab_rollback') }
+        { key: 'inbound', title: translate('screen.module.putaway.tab_inbound') },
+        { key: 'rma', title: translate('screen.module.putaway.tab_rma') },
+        { key: 'binrollback', title:translate('screen.module.putaway.tab_rollback') }
       ]
     })
   }
@@ -53,7 +54,7 @@ class PutawayLists extends React.PureComponent {
   codescan = async (code) =>{
     this.setState({codescan : code})
   }
-  
+
   _openModelTime = async (code) => {
     this.setState((prev) => ({
       isDatePickerVisible: !prev.isDatePickerVisible
@@ -75,29 +76,28 @@ class PutawayLists extends React.PureComponent {
       from_time,
       to_time
     } = this.state;
-    const {t} = this.props.screenProps;
     return (
       <View style={[gStyle.container]}>
         <View>
-          <ScreenHeader 
-            title={t('screen.module.putaway.list')}
+          <ScreenHeader
+            title={translate('screen.module.putaway.list')}
             showBack={true}
             showInput = {true}
             inputValueSend ={null}
             bgColor = {colors.cardLight}
-            autoFocus={Device.osName === 'Android' ? true : false}
+            autoFocus={Device.osName === 'Android'}
             onPressCamera={this.codescan}
             onSubmitEditingInput= {this.codescan}
-            textPlaceholder={t('screen.module.putaway.text_search_input')}
-          />
+            textPlaceholder={translate('screen.module.putaway.text_search_input')}
+           navigation={navigation}/>
         </View>
         <TabView
             lazy
             navigationState={this.state}
             renderScene={SceneMap({
-              inbound: () => <InboundList t={t} navigation={navigation} code={codescan} fromTime ={from_time} toTime ={to_time}/>,
-              rma: () => <RMAList t={t} navigation={navigation} code={codescan} fromTime ={from_time} toTime ={to_time}/>,
-              binrollback: () => <RollbackList t={t} navigation={navigation} code={codescan} fromTime ={from_time} toTime ={to_time}/>,
+              inbound: () => <InboundList navigation={navigation} code={codescan} fromTime ={from_time} toTime ={to_time}/>,
+              rma: () => <RMAList navigation={navigation} code={codescan} fromTime ={from_time} toTime ={to_time}/>,
+              binrollback: () => <RollbackList navigation={navigation} code={codescan} fromTime ={from_time} toTime ={to_time}/>,
             })}
             onIndexChange={this.setIndex}
             initialLayout={{ width: Dimensions.get("window").width }}
@@ -116,7 +116,7 @@ class PutawayLists extends React.PureComponent {
                   activeColor ={colors.white}
                   renderLabel={({ route, focused, color }) => (
                     <View style={[gStyle.flexCenter,]}>
-                  
+
                       <Text
                         style={{ color : focused ? colors.white :colors.greyInactive, ...gStyle.textBoxmeBold14}}
                         numberOfLines={1}
@@ -147,9 +147,8 @@ class PutawayLists extends React.PureComponent {
             />
         </View>
         <ModelDate
-            t={t}
             isVisible = {isDatePickerVisible}
-            onClose = {this._openModelTime} 
+            onClose = {this._openModelTime}
             onSelect = {this._onConfirmTime}
             fromTime = {from_time}
             toTime = {to_time}
@@ -162,7 +161,7 @@ class PutawayLists extends React.PureComponent {
 PutawayLists.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired
+
 };
 const styles = StyleSheet.create({
   iconRight: {

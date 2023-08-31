@@ -1,22 +1,23 @@
 import * as React from 'react';
 import * as Animatable from "react-native-animatable";
 import PropTypes from 'prop-types';
-import { 
-  StyleSheet, 
-  Text, 
-  TouchableOpacity, 
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
   View,
   Dimensions
 } from 'react-native';
-import { 
+import {
   FontAwesome5,
   MaterialIcons
 } from "@expo/vector-icons";
 import Badge from './Badge';
-import { 
-  colors, 
-  gStyle 
+import {
+  colors,
+  gStyle
 } from '../constants';
+import {translate} from "../i18n/locales/IMLocalized";
 
 const FNSKUItems = ({
   navigation,
@@ -51,7 +52,7 @@ const FNSKUItems = ({
               </View>
               <View style={gStyle.flexRow}>
                   <Text style={styles.textLabel}>{textLabelRight}</Text>
-                  
+
               </View>
             </View>
             <View style={gStyle.flexRowSpace}>
@@ -74,7 +75,7 @@ const FNSKUItems = ({
                   width:65,height:65,borderRadius:3,
                   backgroundColor:fnsku_info.activebg}]}>
                     <Text style={{color:colors.black}} numberOfLines={1}>
-                    {trans('screen.module.pickup.detail.box_code')}
+                    {translate('screen.module.pickup.detail.box_code')}
                     </Text>
                     <Text style={{color:colors.black}} numberOfLines={1}>
                     {fnsku_info.box_code}</Text>
@@ -82,18 +83,18 @@ const FNSKUItems = ({
                 <View style={{width : (fnsku_info.box_code !== '' && fnsku_info.out_of_stock_action ===0) ? Dimensions.get("window").width-90 :'100%',
                   paddingLeft : (fnsku_info.box_code !== '' && fnsku_info.out_of_stock_action ===0) ? 5 : 0,}}>
                     {fnsku_info.fnsku_name && <View>
-                      <Text style={styles.textLabel}>{trans('screen.module.product.move.product_name')}</Text>
+                      <Text style={styles.textLabel}>{translate('screen.module.product.move.product_name')}</Text>
                       <Text style={[styles.titleNote,{color:colors.white}]} numberOfLines={2} ellipsizeMode="tail">
                         {fnsku_info.fnsku_name.toLowerCase()}</Text>
                     </View>}
                     {fnsku_info.total_product !== 0 && <View style={[gStyle.flexRow]}>
                         <Text style={[styles.titleNote]} numberOfLines={1} >
-                          {trans('screen.module.pickup.detail.have')} {fnsku_info.total_product} {trans('screen.module.pickup.detail.have_sub')}
+                          {translate('screen.module.pickup.detail.have')} {fnsku_info.total_product} {translate('screen.module.pickup.detail.have_sub')}
                         </Text>
                     </View>}
                     {fnsku_info.bin_id && <View style={[gStyle.flexRowSpace]}>
                         <Text style={[styles.titleNote]} numberOfLines={1}>
-                          {trans('screen.module.pickup.list.location')}
+                          {translate('screen.module.pickup.list.location')}
                         </Text>
                         <Text style={[styles.titleNote]} numberOfLines={1}>
                           {fnsku_info.bin_id}
@@ -101,18 +102,18 @@ const FNSKUItems = ({
                     </View>}
                     <View style={[gStyle.flexRowSpace]}>
                         <Text style={[styles.titleNote]} numberOfLines={1}>
-                          {trans('screen.module.pickup.detail.expire_date')} 
+                          {translate('screen.module.pickup.detail.expire_date')}
                         </Text>
                         <Text style={[styles.titleNote,{color:colors.white}]} numberOfLines={1}>
                           {fnsku_info.expire_date ? fnsku_info.expire_date : 'N/A'}
                         </Text>
                     </View>
-                    
-                    {fnsku_info.out_of_stock_action === 1 && 
+
+                    {fnsku_info.out_of_stock_action === 1 &&
                       <View style={[gStyle.flexRow,styles.btnConfirm,
                         {backgroundColor: colors.borderLight,top:55,right:5}]}>
                         <Text style={{color:colors.yellow,...gStyle.textboxme14}}>
-                          {trans('screen.module.pickup.detail.out_of_stock_action')}
+                          {translate('screen.module.pickup.detail.out_of_stock_action')}
                         </Text>
                       </View>
                     }
@@ -123,15 +124,15 @@ const FNSKUItems = ({
         {/* List all action */}
         <View style={[styles.blockItem,{marginVertical:6}]}>
           {/* Confirm rollback product */}
-          {!fnsku_info.is_rollback && fnsku_info.is_error && 
+          {!fnsku_info.is_rollback && fnsku_info.is_error &&
             <View style={{marginVertical:4}}>
 
               <View style={[styles.percentBar,{marginBottom:5}]}/>
               <View style={gStyle.flexRowSpace}>
                 <Text style={{color:colors.greyInactive,...gStyle.textboxme14}}>
-                  {trans('screen.module.pickup.detail.staff_rollback_admin')}
+                  {translate('screen.module.pickup.detail.staff_rollback_admin')}
                 </Text>
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={[styles.btnAction]}
                     onPress={() => navigation.navigate('UpdateException',{
                       'tracking_code' : fnsku_info.code,
@@ -140,7 +141,7 @@ const FNSKUItems = ({
                     })}
                   >
                     <Text style={{color:colors.white,...gStyle.textboxme14}}>
-                      {trans('screen.module.pickup.detail.status_confirm_order_fail')}
+                      {translate('screen.module.pickup.detail.status_confirm_order_fail')}
                     </Text>
                 </TouchableOpacity>
               </View>
@@ -150,9 +151,9 @@ const FNSKUItems = ({
             <View >
               <View style={gStyle.flexRowSpace}>
                 <Text style={{color:colors.greyInactive,...gStyle.textboxme14}}>
-                {trans('screen.module.pickup.detail.status_order_now')}
+                {translate('screen.module.pickup.detail.status_order_now')}
                 </Text>
-                <TouchableOpacity 
+                <TouchableOpacity
                   style={{borderColor:colors.transparent,backgroundColor:colors.transparent}}
                   onPress = {() =>navigation.navigate('UpdateException',{
                     'tracking_code' : fnsku_info.code,
@@ -161,7 +162,7 @@ const FNSKUItems = ({
                   })}
                 >
                   <Text style={{color:colors.yellow,...gStyle.textboxme14}}>
-                    {trans('screen.module.pickup.detail.status_confirm_lost')}
+                    {translate('screen.module.pickup.detail.status_confirm_lost')}
                     </Text>
                 </TouchableOpacity>
                 </View>
@@ -172,36 +173,36 @@ const FNSKUItems = ({
 
             {/* Refind location */}
 
-            {fnsku_info.is_error_rollback === 3  && fnsku_info.is_sugget_location && 
+            {fnsku_info.is_error_rollback === 3  && fnsku_info.is_sugget_location &&
               <View style={gStyle.flexRowSpace}>
                 <Text style={{color:colors.greyInactive,...gStyle.textboxme14}}>
-                    
-                    {trans('screen.module.pickup.detail.lost_text')}
+
+                    {translate('screen.module.pickup.detail.lost_text')}
                   </Text>
-                <TouchableOpacity 
+                <TouchableOpacity
                   style={[gStyle.flexRowCenterAlign,{borderColor:colors.borderLight,
                     backgroundColor:colors.borderLight,paddingHorizontal:10,paddingVertical:6,borderRadius:3}]}
                     onPress={() => onChangeLocation(fnsku_info.code,4)}
                   >
                     <MaterialIcons name="my-location" size={18} color={colors.boxmeBrand} />
                     <Text style={{color:colors.boxmeBrand,...gStyle.textboxme14,paddingHorizontal:5,paddingVertical:3}}>
-                      {trans('screen.module.pickup.detail.status_confirm_location')}
+                      {translate('screen.module.pickup.detail.status_confirm_location')}
                     </Text>
                   </TouchableOpacity>
               </View>
             }
 
             {/* End status */}
-            {fnsku_info.is_rollback &&  fnsku_info.is_lost_items && 
+            {fnsku_info.is_rollback &&  fnsku_info.is_lost_items &&
               <View style={gStyle.flexRowSpace}>
                   <Text style={{ color: colors.boxmeBrand,...gStyle.textboxme14,paddingTop:6}}>
-                    {trans('screen.module.pickup.detail.text_status_lost')}
+                    {translate('screen.module.pickup.detail.text_status_lost')}
                   </Text>
               </View>
             }
             <View style={[gStyle.flexRowSpace,{paddingVertical:3}]}>
               <Text style={{ color: colors.white,...gStyle.textBoxme14}}>
-                {trans('screen.module.pickup.detail.condition_goods')} {fnsku_info.condition_goods ? fnsku_info.condition_goods : "A"}
+                {translate('screen.module.pickup.detail.condition_goods')} {fnsku_info.condition_goods ? fnsku_info.condition_goods : "A"}
               </Text>
               {fnsku_info.uom && <Badge
                 name={`${fnsku_info.uom}`}
@@ -225,21 +226,21 @@ const FNSKUItems = ({
               <View style={gStyle.flexRowSpace}>
                 <View/>
                 <View style={gStyle.flexRow}>
-                  <TouchableOpacity 
+                  <TouchableOpacity
                       style={[styles.btnAction,{backgroundColor:colors.greyOff}]}
                       onPress={() => onPressLost(fnsku_info.code)}
                     >
                       <Text style={{color:colors.white,...gStyle.textboxme14}}>
-                        {trans('screen.module.pickup.detail.not_found_fnsku')}
+                        {translate('screen.module.pickup.detail.not_found_fnsku')}
                       </Text>
                   </TouchableOpacity>
-                  <TouchableOpacity 
+                  <TouchableOpacity
                     disabled={fnsku_info.quantity_pick !== fnsku_info.quantity_oubound}
                     style={[styles.btnAction,{backgroundColor:colors.brandPrimary,marginLeft:5}]}
                     onPress={() => onPressPack(fnsku_info.code)}
                   >
                     <Text style={{color:colors.white,...gStyle.textboxme14}}>
-                      {trans('screen.module.pickup.detail.fnsku_ok')}
+                      {translate('screen.module.pickup.detail.fnsku_ok')}
                       </Text>
                   </TouchableOpacity>
                 </View>

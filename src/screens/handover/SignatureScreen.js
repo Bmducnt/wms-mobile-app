@@ -1,28 +1,25 @@
 import * as React from "react";
 import PropTypes from "prop-types";
-import { 
-  StyleSheet, 
-  View, 
-  Text, 
+import {
+  StyleSheet,
+  View,
+  Text,
   TouchableOpacity,
   Alert,
-  Image,
   ActivityIndicator,
   Share
 } from "react-native";
-import * as FileSystem from "expo-file-system";
 import { Feather } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import { 
-  Image as Imagecompressor 
+import {
+  Image as Imagecompressor
 } from "react-native-compressor";
 import { FontAwesome5 } from '@expo/vector-icons';
 import SignatureCapture from 'react-native-signature-capture';
-import { 
-  colors, 
+import {
+  colors,
   gStyle,
   device,
-  images
 } from "../../constants";
 
 // components
@@ -33,6 +30,7 @@ import confirmOBSend from '../../services/handover/approved-ob';
 import getReportHandover from "../../services/handover/report";
 
 import { serviceUploadAsset } from "../../helpers/upload-base";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 class SignatureScreenBase extends React.PureComponent {
 
@@ -56,22 +54,21 @@ class SignatureScreenBase extends React.PureComponent {
       quantity_rollback :0,
       list_driver:[]
     };
-    this.myRef = React.createRef();
     this.toggleCamera = this.toggleCamera.bind(this);
   }
 
   componentDidMount= async () =>{
-    const { navigation } = this.props;
+    const { params } = this.props?.route;
     let time_created = new Date().toLocaleString();
     this.setState({
-      ob_code: navigation.getParam('ob_code'),
-      warehouse_name: navigation.getParam('warehouse_name'),
-      quantity: navigation.getParam('quantity'),
-      quantity_rollback :navigation.getParam('quantity_rollback'),
+      ob_code: params?.ob_code,
+      warehouse_name: params?.warehouse_name,
+      quantity: params?.quantity,
+      quantity_rollback :params?.quantity_rollback,
       time_created: time_created,
-      carrier_name: navigation.getParam('carrier_name')
+      carrier_name: params?.carrier_name
     });
-    this._fetchListCarrierDriverHandover(navigation.getParam('carrier_name'))
+    await this._fetchListCarrierDriverHandover(params?.carrier_name)
   }
 
   _fetchListCarrierDriverHandover = async (carrier_name) => {
@@ -85,18 +82,18 @@ class SignatureScreenBase extends React.PureComponent {
     this.setState({ is_loading: false });
   };
 
-  _shareInfoOb = async (trans) => {
+  _shareInfoOb = async () => {
     const path_pdf = 'https://wms.boxme.asia/api/handover/pdf/' +this.state.ob_code;
     this.setState({ is_loading: true });
     try {
       await Share.share({
-        message: `${this.state.ob_code}\n${trans("screen.module.handover.mess_time")} ${this.state.time_created} \n`+
-                `${trans("screen.module.handover.mess_warehouse_name")} ${this.state.warehouse_name} \n`+
-                `${trans("screen.module.handover.mess_carrier_name")} ${this.state.carrier_name} \n`+
-                `${trans("screen.module.handover.driver_vehicle")} ${this.state.driver_vehicle} \n`+
-                `${trans("screen.module.handover.mess_qt")} ${this.state.quantity}\n${trans("screen.module.handover.mess_rollback")} ${this.state.quantity_rollback} \n`+
-                `${trans("screen.module.handover.driver_name")} ${this.state.driver_name} - ${this.state.driver_phone} \n`+
-                `${trans("screen.module.handover.mess_body")} ${path_pdf}`
+        message: `${this.state.ob_code}\n${translate("screen.module.handover.mess_time")} ${this.state.time_created} \n`+
+                `${translate("screen.module.handover.mess_warehouse_name")} ${this.state.warehouse_name} \n`+
+                `${translate("screen.module.handover.mess_carrier_name")} ${this.state.carrier_name} \n`+
+                `${translate("screen.module.handover.driver_vehicle")} ${this.state.driver_vehicle} \n`+
+                `${translate("screen.module.handover.mess_qt")} ${this.state.quantity}\n${translate("screen.module.handover.mess_rollback")} ${this.state.quantity_rollback} \n`+
+                `${translate("screen.module.handover.driver_name")} ${this.state.driver_name} - ${this.state.driver_phone} \n`+
+                `${translate("screen.module.handover.mess_body")} ${path_pdf}`
       });
       await confirmOBSend(this.state.ob_code,JSON.stringify({
         is_verify_send : 1,
@@ -135,7 +132,6 @@ class SignatureScreenBase extends React.PureComponent {
   };
 
   pickImageorVideoHandover = async () => {
-    const { t } = this.props.screenProps;
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       aspect: [4, 3],
@@ -153,7 +149,7 @@ class SignatureScreenBase extends React.PureComponent {
         0,
         false
       );
-      return;
+
     }
   };
 
@@ -181,24 +177,23 @@ class SignatureScreenBase extends React.PureComponent {
       driver_phone : this.state.driver_phone,
       driver_name : this.state.driver_name
     }));
-    const { t } = this.props.screenProps;
     this.setState({is_commit : true});
     Alert.alert(
       '',
-      t('screen.module.handover.mess_confirm_text'),
+      translate('screen.module.handover.mess_confirm_text'),
       [
         {
-          text: t("base.confirm"),
-          onPress: () => this._shareInfoOb(t),
+          text: translate("base.confirm"),
+          onPress: () => this._shareInfoOb(),
         },
         {
-          text: t('screen.module.product.move.btn_cancel'),
+          text: translate('screen.module.product.move.btn_cancel'),
           onPress: () => this._goToListOb(),
         },
       ],
       {cancelable: false},
     );
-    
+
   };
 
   _goToListOb = async() =>{
@@ -229,7 +224,6 @@ class SignatureScreenBase extends React.PureComponent {
 
   render() {
     const { navigation } = this.props;
-    const { t } = this.props.screenProps;
     const {
       open_camera,
       image_path_signature,
@@ -239,17 +233,17 @@ class SignatureScreenBase extends React.PureComponent {
       open_created,
       list_driver
     } = this.state;
-    
+
     return (
       <View style={gStyle.container}>
         <ModalHeader
           left={<Feather color={colors.greyLight} name="chevron-down" />}
           leftPress={() => navigation.goBack(null)}
-          text={t('screen.module.handover.btn_sign')}
-        /> 
+          text={translate('screen.module.handover.btn_sign')}
+        />
         {is_loading && <ActivityIndicator/>}
-        {image_path_signature && 
-        <TouchableOpacity 
+        {image_path_signature &&
+        <TouchableOpacity
         onPress={() => navigation.navigate("HandoverImages",
           {handover_code : null,load_local : true,path :[{ uri: image_path_signature }]})}
         style={[gStyle.flexRowSpace,{
@@ -268,7 +262,7 @@ class SignatureScreenBase extends React.PureComponent {
             </View>
             <FontAwesome5 name="angle-right" size={24} color="black" />
         </TouchableOpacity>}
-        {image_path && <TouchableOpacity 
+        {image_path && <TouchableOpacity
           onPress={() => navigation.navigate("HandoverImages",
             {handover_code : null,load_local : true,path :[{ uri: image_path }]})}
           style={[gStyle.flexRowSpace,{
@@ -287,7 +281,7 @@ class SignatureScreenBase extends React.PureComponent {
             </View>
             <FontAwesome5 name="angle-right" size={24} color="black" />
         </TouchableOpacity>}
-        {!image_path_signature && 
+        {!image_path_signature &&
         (
           <SignatureCapture
             style={{flex: 1}}
@@ -303,14 +297,14 @@ class SignatureScreenBase extends React.PureComponent {
             viewMode={"portrait"}
           />
         )}
-        
+
         {!is_commit ? <View style={styles.containerBottom}>
           {!image_path_signature && <TouchableOpacity
             style={[styles.bottomButton,{backgroundColor:colors.yellow}]}
             onPress={() => this.handleEmpty()}
           >
             <Text style={[styles.textButton]} numberOfLines={1} ellipsizeMode="tail">
-              {t('screen.module.handover.btn_re_sign')}
+              {translate('screen.module.handover.btn_re_sign')}
             </Text>
           </TouchableOpacity>}
           {!image_path &&<TouchableOpacity
@@ -321,14 +315,14 @@ class SignatureScreenBase extends React.PureComponent {
             onPress={() => this.saveSign()}
           >
             <Text style={[styles.textButton]} numberOfLines={1} ellipsizeMode="tail">
-              {t('screen.module.handover.btn_next_step')}</Text>
+              {translate('screen.module.handover.btn_next_step')}</Text>
           </TouchableOpacity>}
           {image_path && <TouchableOpacity
             style={[styles.bottomButton,{backgroundColor:colors.yellow}]}
             onPress={() => this.toggleCamera(true)}
           >
             <Text style={styles.textButton} numberOfLines={1} ellipsizeMode="tail">
-              {t('screen.module.handover.btn_photo')}
+              {translate('screen.module.handover.btn_photo')}
             </Text>
           </TouchableOpacity>}
           {image_path &&<TouchableOpacity
@@ -339,9 +333,9 @@ class SignatureScreenBase extends React.PureComponent {
             onPress={() => this.setState({open_created : true})}//this._submitImage()
           >
             <Text style={styles.textButton} numberOfLines={1} ellipsizeMode="tail">
-              {t('screen.module.handover.btn_end_step')}</Text>
+              {translate('screen.module.handover.btn_end_step')}</Text>
           </TouchableOpacity>}
-          
+
         </View>:<View style={styles.containerBottom}>
             <TouchableOpacity
               style={[
@@ -351,14 +345,13 @@ class SignatureScreenBase extends React.PureComponent {
               onPress={() => this._goToListOb()}
             >
             <Text style={styles.textButton} numberOfLines={1} ellipsizeMode="tail">
-              {t('screen.module.handover.header')}
+              {translate('screen.module.handover.header')}
             </Text>
           </TouchableOpacity>
           </View>}
         {open_camera && (
             <CameraModule
               showModal={open_camera}
-              trans={t}
               allowClose={true}
               setModalVisible={() => this.toggleCamera(false)}
               setImage={(result) => this.onUploadImageByCamera(result.uri)}
@@ -367,7 +360,6 @@ class SignatureScreenBase extends React.PureComponent {
         {open_created && (
           <ConfirmHandover
             navigation ={navigation}
-            t={t}
             onUploadAsset={this.pickImageorVideoHandover}
             onConfirm = {this._submitImage}
             onClose = {this._onCloseModel}

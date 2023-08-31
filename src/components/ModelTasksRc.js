@@ -2,6 +2,7 @@ import React, { useRef,memo } from "react";
 import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
 import { colors, gStyle } from "../constants";
 import CountDown from './CountDown';
+import {translate} from "../i18n/locales/IMLocalized";
 
 const ModelTasksRc = props => {
 
@@ -33,11 +34,11 @@ const ModelTasksRc = props => {
                   />
                   <Text style={{
                     ...gStyle.textBoxme14
-                  }}>{props.t('screen.module.taks.alert1')}{" "}{props.t('screen.module.taks.alert2')} </Text>
+                  }}>{translate('screen.module.taks.alert1')}{" "}{translate('screen.module.taks.alert2')} </Text>
                   <Pressable
                       style={[styles.button, styles.buttonClose]}
                       onPress={() => onPressMenu()}>
-                      <Text style={styles.textStyle}>{props.t('screen.module.taks.btn_received')}</Text>
+                      <Text style={styles.textStyle}>{translate('screen.module.taks.btn_received')}</Text>
                   </Pressable>
                 </View>
             </View>

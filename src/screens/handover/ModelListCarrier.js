@@ -8,17 +8,17 @@ import {
     TouchableOpacity,
     Text} from 'react-native';
 import { Feather} from '@expo/vector-icons';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors, gStyle,device} from '../../constants';
 
 // components
 import ModalHeader from '../../components/ModalHeader';
-import {_getTimeDefaultFrom,_getTimeDefaultTo} from '../../helpers/device-height';
 import {permissionDenied} from '../../helpers/async-storage';
 import ListCarrierName from '../../components/ListCarrierAtWarehouse';
 
 //service api
 import getListCarrier from '../../services/handover/courier';
+import {translate} from "../../i18n/locales/IMLocalized";
 
 class ModalListCarrier extends React.PureComponent {
 
@@ -36,9 +36,9 @@ class ModalListCarrier extends React.PureComponent {
     };
 
     componentDidMount = async () => {
-        const { navigation } = this.props;
+        const { params } = this.props?.route;
         this.setState({
-            handover_type: navigation.getParam("handover_type"),
+            handover_type: params?.handover_type,
         });
     };
 
@@ -55,7 +55,7 @@ class ModalListCarrier extends React.PureComponent {
             this.setState({list_carrier:response.data.results})
         }else if (response.status === 403){
           permissionDenied(this.props.navigation);
-        };
+        }
         this.setState({isLoading : false});
     };
 
@@ -68,21 +68,20 @@ class ModalListCarrier extends React.PureComponent {
     };
 
     _confirmCreated = async (code,order_type) =>{
-        const { t } = this.props.screenProps;
         if (!this.state.carrier_name){
             Alert.alert(
                 '',
-                t('screen.module.handover.alert_carrier_null'),
+                translate('screen.module.handover.alert_carrier_null'),
                 [
                     {
-                    text: t('base.confirm'),
+                    text: translate('base.confirm'),
                     onPress: null,
                     },
                 ],
                 {cancelable: false},
             );
             return;
-        };
+        }
         this.props.navigation.navigate('CreatedHandoverList',{
             carrier_name: this.state.carrier_name,
             carrier_logo : this.state.logo_carrier,
@@ -99,13 +98,12 @@ class ModalListCarrier extends React.PureComponent {
             isLoading,
             handover_type
         } = this.state;
-        const { t } = this.props.screenProps;
         return (
             <View style={gStyle.containerModel}>
                 <ModalHeader
                     right={<Feather color={colors.white} name="x" />}
                     rightPress={() => navigation.goBack(null)}
-                    text={t('screen.module.handover.select_carrier')}
+                    text={translate('screen.module.handover.select_carrier')}
                 />
                 <View style={styles.containerScroll}>
                     {isLoading ? <ActivityIndicator/>:
@@ -122,7 +120,6 @@ class ModalListCarrier extends React.PureComponent {
                                     text_note2 = {'screen.module.handover.alert_carrier_null'}
                                     is_show_note = {false}
                                     is_select = {courier_id}
-                                    trans = {t}
                                     onPress ={this._onSelectCarrier}
                                 />
                             )}
@@ -130,13 +127,13 @@ class ModalListCarrier extends React.PureComponent {
                     }
                 </View>
                 {handover_type === 2 ? <View style={styles.containerBottom}>
-                    <TouchableOpacity style={[styles.bottomButton,{backgroundColor:colors.boxmeBrand,width:'20%'}]} 
+                    <TouchableOpacity style={[styles.bottomButton,{backgroundColor:colors.boxmeBrand,width:'20%'}]}
                     onPress={() => this._confirmCreated(2,'b2b')}>
                         <Text style={styles.textButton} numberOfLines={1} ellipsizeMode="tail">
                         B2B
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.bottomButton,{width:'66%'}]} 
+                    <TouchableOpacity style={[styles.bottomButton,{width:'66%'}]}
                     onPress={() => this._confirmCreated(2,'b2c')}>
                         <Text style={styles.textButton} numberOfLines={1} ellipsizeMode="tail">
                         B2C
@@ -146,9 +143,9 @@ class ModalListCarrier extends React.PureComponent {
                     <View style={styles.containerBottom}>
                     <TouchableOpacity style={[styles.bottomButton,
                     {
-                        width:'90%'}]} 
+                        width:'90%'}]}
                     onPress={() => this._confirmCreated(0,'rma')}>
-                        <Text style={styles.textButton} numberOfLines={1} ellipsizeMode="tail">{t('screen.module.handover.btn_rma_text')}</Text>
+                        <Text style={styles.textButton} numberOfLines={1} ellipsizeMode="tail">{translate('screen.module.handover.btn_rma_text')}</Text>
                     </TouchableOpacity>
                 </View>
                 }
@@ -190,6 +187,6 @@ const styles = StyleSheet.create({
         color:colors.white,
         ...gStyle.textBoxmeBold14,
     }
-  
+
 });
 export default React.memo(ModalListCarrier);

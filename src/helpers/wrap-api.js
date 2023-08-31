@@ -1,4 +1,5 @@
-import AsyncStorage from "@react-native-community/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {LIST_API} from "../constants/envs";
 
 /**
  *
@@ -54,6 +55,5 @@ export const getCachedUrlContent = async () => {
  * @returns {cacheValue}
  */
 export const getvalueUrlContent = async (cacheKey) => {
-  let cache_value = await AsyncStorage.getItem(cacheKey);
-  return cache_value;
+  return LIST_API[cacheKey];
 };

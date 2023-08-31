@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import * as Device from 'expo-device';
-import { 
+import {
   StyleSheet,
   View,
   TextInput,
@@ -9,7 +9,6 @@ import {
   Text,
   Dimensions
 } from 'react-native';
-import { withNavigation } from 'react-navigation';
 import { Feather } from '@expo/vector-icons';
 import { colors, device, gStyle } from '../constants';
 
@@ -21,7 +20,7 @@ import LinearGradient from './LinearGradient';
 // icons
 import SvgSearch from './icons/Svg.Search';
 
-const ScreenHeader = ({ 
+const ScreenHeader = ({
   navigation,
   showBack,
   title ,
@@ -48,7 +47,7 @@ const ScreenHeader = ({
       }
     })();
   }, []);
-  
+
   const cameraScanHandel =  (code) => {
     setopenCamera(false);
     onPressCamera(code);
@@ -60,10 +59,10 @@ const ScreenHeader = ({
       }else{
         setinputValue(code);
       }
-      
+
     }
   };
-  
+
   const onChangeTextSubmit =  (code) => {
     onSubmitEditingInput(code);
     if (autoFocus){
@@ -99,7 +98,7 @@ const ScreenHeader = ({
               <View style={[gStyle.mR1,gStyle.mL1]}>
                 <SvgSearch fill={colors.white}/>
               </View>
-              <TextInput  
+              <TextInput
                 style={[styles.searchPlaceholderText,
                   {width: isFull ? Dimensions.get("window").width-135:Dimensions.get("window").width-200}]}
                 placeholderTextColor={colors.white}
@@ -122,7 +121,7 @@ const ScreenHeader = ({
               />
             </View>
             </TouchableOpacity>
-            
+
         </View>:<View style={styles.containerText}>
           <Text style={[styles.text,{textAlign:textAlign}]}>{title}</Text>
         </View>}
@@ -193,4 +192,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default withNavigation(ScreenHeader);
+export default ScreenHeader

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {
   Animated,
   StyleSheet,
-  Text,
   View,
   FlatList,
   ActivityIndicator
@@ -20,6 +19,8 @@ import {_getTimeDefaultFrom,_getTimeDefaultTo} from '../../helpers/device-height
 import ModelFilter from './ModelFilter';
 // mock
 import menuProduct from '../../mockdata/menuProduct.json';
+import {translate} from "../../i18n/locales/IMLocalized";
+
 
 //service api
 import getListFnsku from '../../services/products/list';
@@ -41,24 +42,23 @@ class Products extends React.Component {
   }
 
   UNSAFE_componentWillMount = async () =>{
-    this._fetchListProductsHandler({
+    const { params } = this.props?.route
+    await this._fetchListProductsHandler({
       'from_time': _getTimeDefaultFrom(),
       'to_time': _getTimeDefaultTo(),
       'tab': 'all',
-      'page':1,
-      'q' : this.props.navigation.getParam("code")
+      'page': 1,
+      'q': params?.code
     })
   }
 
 
   _checkGS1Value = (code) => {
-      gs1Data = code.replace("]d2", "")
-      if (parseInt(gs1Data.slice(0, 2)) !== 91 || !gs1Data.includes('37117')) {
-        return false;
-      }
-      return true;
+      const gs1Data = code.replace("]d2", "")
+      return !(parseInt(gs1Data.slice(0, 2)) !== 91 || !gs1Data.includes('37117'));
+
   }
-  
+
   _searchCameraBarcode = async (code) => {
     if (code) {
       await this.setState({code_scan : code})
@@ -73,7 +73,7 @@ class Products extends React.Component {
       }else{
         this._onCloseModelGS1(true);
       }
-      
+
     }
   };
 
@@ -98,17 +98,17 @@ class Products extends React.Component {
     });
   };
 
-  _handleLoadMore = () => {
-    if (!this.state.isloading) {
-      this.state.page = this.state.page + 1; // increase page by 1
-      this._fetchListProductsHandler({
-        'from_time': _getTimeDefaultFrom(),
-        'to_time': _getTimeDefaultTo(),
-        'tab': 'all',
-        'page':this.state.page,
-      });
-    }
-  };
+  // _handleLoadMore = () => {
+  //   if (!this.state.isloading) {
+  //     this.state.page = this.state.page + 1; // increase page by 1
+  //     this._fetchListProductsHandler({
+  //       'from_time': _getTimeDefaultFrom(),
+  //       'to_time': _getTimeDefaultTo(),
+  //       'tab': 'all',
+  //       'page':this.state.page,
+  //     });
+  //   }
+  // };
 
   _fetchListProductsHandler = async  (parram) =>{
     this.setState({isloading:true,list_fnskus:[]});
@@ -120,19 +120,19 @@ class Products extends React.Component {
   };
 
   _filterByTab = async (tab_value,from_time) =>{
-    this._onCloseModel(false);
-    this._fetchListProductsHandler({
-      'from_time':from_time,
+    await this._onCloseModel(false);
+    await this._fetchListProductsHandler({
+      'from_time': from_time,
       'to_time': _getTimeDefaultTo(),
       'tab': tab_value,
-      'page':1
+      'page': 1
     })
   };
 
   _onCloseModel = async ( code) =>{
     await this.setState({is_model : code})
   };
-  
+
   _onCloseModelGS1 = async (code) => {
     await this.setState({gx_matrix : code})
   }
@@ -149,28 +149,27 @@ class Products extends React.Component {
       gx_matrix,
       code_scan
     } = this.state;
-    const { t } = this.props.screenProps;
     return (
       <View style={[gStyle.container]}>
         <View style={{ position: 'absolute', top: 0, width: '100%',zIndex:100}}>
-          <ScreenHeader 
-            title={t('screen.module.product.list')}
+          <ScreenHeader
+            title={translate('screen.module.product.list')}
             showBack={true}
             showInput = {true}
             inputValueSend ={null}
             autoFocus={false}
             onPressCamera={this._searchCameraBarcode}
             onSubmitEditingInput= {this._searchCameraBarcode}
-            textPlaceholder={t("screen.module.putaway.text_fnsku_code")}
-            
-          />
-          {isloading && 
+            textPlaceholder={translate("screen.module.putaway.text_fnsku_code")}
+
+           navigation={navigation}/>
+          {isloading &&
           <View style={[gStyle.flexCenter,{marginTop:"20%"}]}><ActivityIndicator animating={true}  style={{opacity:1}} color={colors.white} /></View>}
         </View>
-        
+
         <View style={styles.containerScroll}>
-          {list_fnskus.length === 0 && !isloading && 
-            <EmptySearch t={t}/>}
+          {list_fnskus.length === 0 && !isloading &&
+            <EmptySearch/>}
           {list_fnskus.length > 0 && <FlatList
               onRefresh={() => this._onRefresh()}
               refreshing={isloading}
@@ -181,7 +180,6 @@ class Products extends React.Component {
                   navigation = {navigation}
                   id={item.product_id}
                   fnsku_info={item}
-                  trans ={t}
                   disableRightSide={false}
                 />
               )}
@@ -194,16 +192,15 @@ class Products extends React.Component {
             onPress={() => this._onCloseModel(true)}
           />
         </View>
-      {is_model && 
+      {is_model &&
           <ModelFilter
-              t={t}
               listData={menuProduct}
-              onClose = {this._onCloseModel} 
+              onClose = {this._onCloseModel}
               onSelect = {this._filterByTab}
               from_time = {_getTimeDefaultFrom()}
           >
           </ModelFilter>}
-      {gx_matrix && <ModelGSMaTrix text={code_scan} trans={t} onClose={this._onCloseModelGS1} onSubmit = {this._onFindGtin} /> }
+      {gx_matrix && <ModelGSMaTrix text={code_scan} onClose={this._onCloseModelGS1} onSubmit = {this._onFindGtin} /> }
       </View>
     );
   }
@@ -212,7 +209,7 @@ class Products extends React.Component {
 Products.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired
+
 };
 
 const styles = StyleSheet.create({

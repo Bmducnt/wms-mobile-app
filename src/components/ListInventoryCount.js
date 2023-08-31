@@ -10,12 +10,12 @@ import { Feather} from '@expo/vector-icons';
 import moment from 'moment';
 import { colors, gStyle} from "../constants";
 import Badge from './Badge';
+import {translate} from "../i18n/locales/IMLocalized";
 
 
 const ListInventoryCount = ({
   data,
   navigation,
-  trans,
   staff_role
 }) => {
 
@@ -35,11 +35,11 @@ const ListInventoryCount = ({
         <View style={gStyle.flex5}>
           <View style={gStyle.flexRowSpace}>
             <View style={gStyle.flexCenter}>
-                <Text style={styles.textLabel}>{trans('screen.module.cycle_check.detail.detail_code')}</Text>
-                
+                <Text style={styles.textLabel}>{translate('screen.module.cycle_check.detail.detail_code')}</Text>
+
             </View>
             <View style={gStyle.flexCenter}>
-              <Text style={styles.textLabel}>{trans('screen.module.cycle_check.list.quantity_fnsku')}</Text>
+              <Text style={styles.textLabel}>{translate('screen.module.cycle_check.list.quantity_fnsku')}</Text>
             </View>
           </View>
           <View style={gStyle.flexRowSpace}>
@@ -53,9 +53,9 @@ const ListInventoryCount = ({
             </View>
           </View>
           <View style={[gStyle.flexRow,{marginTop:5}]}>
-              
+
               {[1, 2].includes(staff_role) && <Badge
-                name={`${data.quantity_stock} ${trans('screen.module.cycle_check.list.quantity_fnsku_stock')}`}
+                name={`${data.quantity_stock} ${translate('screen.module.cycle_check.list.quantity_fnsku_stock')}`}
                 style={{
                   backgroundColor: colors.borderLight,
                   color: colors.white,
@@ -63,7 +63,7 @@ const ListInventoryCount = ({
                 }}
               />}
               <Badge
-                name={`${data.quantity_check} ${trans('screen.module.cycle_check.list.quantity_fnsku_check')}`}
+                name={`${data.quantity_check} ${translate('screen.module.cycle_check.list.quantity_fnsku_check')}`}
                 style={{
                   backgroundColor: colors.borderLight,
                   color: colors.white,
@@ -74,15 +74,15 @@ const ListInventoryCount = ({
 
           <View style={styles.percentBar}/>
           <View style={[gStyle.flexRowSpace]}>
-            <Text style={[styles.textLabel]}>{trans('screen.module.putaway.inspection_by')}</Text>
+            <Text style={[styles.textLabel]}>{translate('screen.module.putaway.inspection_by')}</Text>
             <Text style={[styles.textValue,{...gStyle.textBoxme14}]} numberOfLines={1}>{data.created_by}</Text>
           </View>
           <View style={[gStyle.flexRowSpace]}>
-            <Text style={[styles.textLabel]}>{trans('screen.module.putaway.update_by')}</Text>
+            <Text style={[styles.textLabel]}>{translate('screen.module.putaway.update_by')}</Text>
             <Text style={[styles.textValue,{...gStyle.textBoxme14}]} numberOfLines={1}>{data.assigner_by}</Text>
           </View>
           <View style={[gStyle.flexRowSpace]}>
-              <Text style={styles.textLabel}>{trans('screen.module.pickup.list.time')}</Text>
+              <Text style={styles.textLabel}>{translate('screen.module.pickup.list.time')}</Text>
               <Text style={[styles.textValue,{...gStyle.textBoxme16,color:colors.white}]} numberOfLines={1} >
               {moment(data.created_date).fromNow()}</Text>
           </View>
@@ -112,7 +112,7 @@ const ListInventoryCount = ({
                 }]}
               >
                 <Text style={{ color: colors.white,...gStyle.textBoxme14,paddingLeft:4}}>
-                  {trans('screen.module.putaway.error_text_btn')}
+                  {translate('screen.module.putaway.error_text_btn')}
                 </Text>
               </View>
           </View>
@@ -120,14 +120,14 @@ const ListInventoryCount = ({
               <Feather name="clock" size={14} color={colors.white} />
               <View style={{paddingHorizontal:4}}>
                 <Text style={{ color: colors.white,...gStyle.textBoxme14}}>
-                  {trans('screen.module.pickup.detail.kpi_text_ok')} {data.estimated_time_now} {trans('screen.module.pickup.detail.kpi_text_unit')}.
+                  {translate('screen.module.pickup.detail.kpi_text_ok')} {data.estimated_time_now} {translate('screen.module.pickup.detail.kpi_text_unit')}.
                 </Text>
-                
+
               </View>
           </View> }
         </View>
       </TouchableOpacity>
-      
+
     </View>
   );
 };

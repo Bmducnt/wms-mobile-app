@@ -1,25 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { 
-    Modal, 
-    Text, 
-    TouchableOpacity, 
+import React, { useState } from "react";
+import {
+    Modal,
+    Text,
+    TouchableOpacity,
     View,StyleSheet,
     ActivityIndicator,
     FlatList,
     Alert
 } from "react-native";
-import { 
-    Feather,
+import {
     Entypo,
     FontAwesome5
   } from "@expo/vector-icons";
 import TextInputComponent from "./TextInputComponent";
 import ListDriverComponent from "./ListDriverComponent";
-import { 
-    colors, 
-    device, 
-    gStyle 
+import {
+    colors,
+    gStyle
 } from "../constants";
+import {translate} from "../i18n/locales/IMLocalized";
 
 const ConfirmHandover = props => {
 
@@ -28,7 +27,7 @@ const ConfirmHandover = props => {
   const [driverPhone,setdriverPhone] = useState(null);
   const [driverVehicle,setdriverVehicle] = useState(null);
   const [loading,setLoading] = useState(false);
-  
+
   const getDriver = (driver_name,driver_phone,driver_vehicle) => {
     setdriverName(driver_name)
     setdriverPhone(driver_phone)
@@ -48,10 +47,10 @@ const ConfirmHandover = props => {
       if (props.list_driver.length === 0){
         Alert.alert(
             '',
-            props.t('screen.module.handover.list_driver_empty'),
+            translate('screen.module.handover.list_driver_empty'),
             [
               {
-                text: props.t("base.confirm"),
+                text: translate("base.confirm"),
                 onPress: () => null,
               }
             ],
@@ -75,11 +74,11 @@ const ConfirmHandover = props => {
                 paddingHorizontal:15,
                 backgroundColor:colors.cardLight
             }]}>
-                <TouchableOpacity 
+                <TouchableOpacity
                     onPress={() => props.onClose(false)}
                     activeOpacity={gStyle.activeOpacity}
                 >
-                    <Text style={[styles.textValue,{...gStyle.textBoxme16}]}>{props.t('base.back')}</Text>
+                    <Text style={[styles.textValue,{...gStyle.textBoxme16}]}>{translate('base.back')}</Text>
                     </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => onUpload()}
@@ -87,10 +86,10 @@ const ConfirmHandover = props => {
                     style={[gStyle.flexRowCenter,{backgroundColor:colors.borderLight,borderRadius:6,paddingHorizontal:6}]}
                 >
                     {!loading ? <FontAwesome5 name="photo-video" size={16} color={colors.boxmeBrand} /> : <ActivityIndicator/>}
-                    <Text style={{...gStyle.textBoxme14,paddingVertical:12,paddingHorizontal:4,color:colors.boxmeBrand}}>{props.t('screen.module.handover.upload_asset')}</Text>
+                    <Text style={{...gStyle.textBoxme14,paddingVertical:12,paddingHorizontal:4,color:colors.boxmeBrand}}>{translate('screen.module.handover.upload_asset')}</Text>
                 </TouchableOpacity>
             </View>
-            <TouchableOpacity 
+            <TouchableOpacity
                 style={[gStyle.flexRowSpace,{
                     backgroundColor:colors.cardLight,
                     marginTop:10,
@@ -106,7 +105,7 @@ const ConfirmHandover = props => {
                     ...gStyle.textBoxme14,
                     color:colors.white
                 }} >
-                    {props.t('screen.module.handover.list_driver_name')}
+                    {translate('screen.module.handover.list_driver_name')}
                 </Text>
                 <Entypo name="arrow-long-right" size={14} color={colors.white} />
             </TouchableOpacity>
@@ -114,7 +113,7 @@ const ConfirmHandover = props => {
                 <TextInputComponent
                     navigation={props.navigation}
                     labeView={false}
-                    textLabel={props.t("screen.module.handover.driver_name")}
+                    textLabel={translate("screen.module.handover.driver_name")}
                     autoFocus={false}
                     showSearch = {false}
                     showScan = {false}
@@ -123,7 +122,7 @@ const ConfirmHandover = props => {
                     inputValue ={driverName}
                     onPressCamera={props.onSetName}
                     onSubmitEditingInput={props.onSetName}
-                    textPlaceholder={`${props.t("screen.module.handover.driver_name")} ...`}
+                    textPlaceholder={`${translate("screen.module.handover.driver_name")} ...`}
                 />
             </View>}
 
@@ -137,11 +136,11 @@ const ConfirmHandover = props => {
                     autoChange = {true}
                     inputValue ={driverPhone}
                     heightInput= {46}
-                    textLabel={props.t("screen.module.handover.driver_phone")}
+                    textLabel={translate("screen.module.handover.driver_phone")}
                     autoFocus={false}
                     onPressCamera={props.onSetPhone}
                     onSubmitEditingInput={props.onSetPhone}
-                    textPlaceholder={`${props.t("screen.module.handover.driver_phone")} ...`}
+                    textPlaceholder={`${translate("screen.module.handover.driver_phone")} ...`}
                     />
             </View>}
             {!openListdriver && <View style={[gStyle.flexRow,{marginTop:10}]}>
@@ -149,7 +148,7 @@ const ConfirmHandover = props => {
                     navigation={props.navigation}
                     labeView={false}
                     inputValue ={driverVehicle}
-                    textLabel={props.t("screen.module.handover.driver_vehicle")}
+                    textLabel={translate("screen.module.handover.driver_vehicle")}
                     autoFocus={false}
                     autoChange = {true}
                     showSearch = {false}
@@ -157,7 +156,7 @@ const ConfirmHandover = props => {
                     showScan = {false}
                     onPressCamera={props.onSetVehicle}
                     onSubmitEditingInput={props.onSetVehicle}
-                    textPlaceholder={`${props.t("screen.module.handover.driver_vehicle")} ...`}
+                    textPlaceholder={`${translate("screen.module.handover.driver_vehicle")} ...`}
                 />
             </View>}
             {openListdriver && <View style={[gStyle.flexRow,{marginTop:10,marginHorizontal:10}]}>
@@ -177,23 +176,23 @@ const ConfirmHandover = props => {
                 <View style={gStyle.spacer11} />
             </View>}
             {openListdriver &&<View style={[gStyle.flexRow,{marginTop:20}]}>
-                <TouchableOpacity style={[styles.bottomButton]} 
+                <TouchableOpacity style={[styles.bottomButton]}
                     onPress={() => setopenListdriver(false)}>
                     {!props.isLoading ? <Text style={styles.textButton}>
-                        {props.t('screen.module.handover.list_driver_back')}
+                        {translate('screen.module.handover.list_driver_back')}
                     </Text>:<ActivityIndicator/>}
                 </TouchableOpacity>
             </View>}
             {!openListdriver &&<View style={[gStyle.flexRow,{marginTop:20}]}>
-                <TouchableOpacity style={[styles.bottomButton]} 
+                <TouchableOpacity style={[styles.bottomButton]}
                     onPress={() => props.onConfirm()}>
                     {!props.isLoading ? <Text style={styles.textButton}>
-                    {props.t('screen.module.handover.btn_end_step')}
+                    {translate('screen.module.handover.btn_end_step')}
                     </Text>:<ActivityIndicator/>}
                 </TouchableOpacity>
             </View>}
         </View>
-        
+
     </Modal>
   );
 };

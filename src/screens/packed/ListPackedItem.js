@@ -5,10 +5,10 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import moment from 'moment';
 import { colors, gStyle } from '../../constants';
 import  Badge  from '../../components/Badge';
+import {translate} from "../../i18n/locales/IMLocalized";
 
 const ListPackedItem = ({
   itemInfo,
-  translate,
   showBtn,
   navigation
 }) => {
@@ -25,7 +25,7 @@ const ListPackedItem = ({
             <View style={[gStyle.flexRowSpace]}>
               <View style={gStyle.flexRow}>
                   <Text style={styles.textLabel}>{translate('screen.module.pickup.list.pickup_code')}</Text>
-                  
+
               </View>
               <View style={gStyle.flexRow}>
                   <Text style={styles.textLabel}>{translate('screen.module.pickup.list.sold')}</Text>
@@ -108,8 +108,8 @@ const ListPackedItem = ({
             </View>
           </View>
         </TouchableOpacity>
-        
-        
+
+
     </View>
   );
 };

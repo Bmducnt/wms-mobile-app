@@ -5,11 +5,13 @@ import {
   View,
   Dimensions,
 } from 'react-native';
-import { 
-  colors, 
+import {
+  colors,
   gStyle ,
 } from '../../constants';
 import ChartModule from '../../components/ChartModule';
+import {translate} from "../../i18n/locales/IMLocalized";
+
 
 
 
@@ -17,7 +19,7 @@ const SLAPack = props => {
     const [data, setdata] = React.useState([]);
     const chartColor = [colors.boxmeBrand,colors.darkgreen,colors.purple,colors.lightBlue,colors.lightGreen]
     React.useEffect(() => {
-      caclulateDataChar();     
+      caclulateDataChar();
     }, []);
 
     const caclulateDataChar = async () =>{
@@ -49,9 +51,8 @@ const SLAPack = props => {
             {data.length >0 &&
               <ChartModule
                 data={data}
-                trans ={props.t}
                 bg={colors.cardLight}
-                text_info = {props.t("screen.module.staff_report.unit_item")}
+                text_info = {translate("screen.module.staff_report.unit_item")}
               />
             }
             </View>

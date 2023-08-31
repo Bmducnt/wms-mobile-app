@@ -1,29 +1,29 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { 
-  StyleSheet, 
-  Text, 
+import {
+  StyleSheet,
+  Text,
   TouchableOpacity,
   Image,
   View } from 'react-native';
-import { 
+import {
   Feather,
   FontAwesome5
 } from "@expo/vector-icons";
-import { 
-  colors, 
+import {
+  colors,
   gStyle ,
   device,
   images
 } from '../constants';
 import Badge from "./Badge";
+import {translate} from "../i18n/locales/IMLocalized";
 
 const ListFnskuInventoryBin = ({
   navigation,
   fnsku_info,
   disableRightSide,
   onChangeLocation,
-  trans,
   tracking_code,
   cycle_code,
   cycle_type,
@@ -42,11 +42,11 @@ const ListFnskuInventoryBin = ({
             <View style={[gStyle.flexRowSpace,{paddingHorizontal:10}]}>
               <View style={gStyle.flexRow}>
                   <Text style={styles.textLabel}>
-                  {cycle_type ?  trans('screen.module.pickup.list.location') : trans('screen.module.pickup.detail.fnsku_code')}</Text>
-                  
+                  {cycle_type ?  translate('screen.module.pickup.list.location') : translate('screen.module.pickup.detail.fnsku_code')}</Text>
+
               </View>
               <View style={gStyle.flexRow}>
-                  <Text style={styles.textLabel}>{trans('screen.module.cycle_check.detail.stock_bin_check')}</Text>
+                  <Text style={styles.textLabel}>{translate('screen.module.cycle_check.detail.stock_bin_check')}</Text>
               </View>
             </View>
             <View style={[gStyle.flexRowSpace,{paddingHorizontal:10}]}>
@@ -93,11 +93,11 @@ const ListFnskuInventoryBin = ({
             </View>
             <View style={[styles.percentBar,{marginLeft:'2%'}]}></View>
             <View style={[gStyle.flexRowSpace,{paddingTop:3,paddingHorizontal:10}]}>
-                <Text style={styles.textLabel}>{trans('screen.module.putaway.uom')}</Text>
+                <Text style={styles.textLabel}>{translate('screen.module.putaway.uom')}</Text>
                 <Text style={[styles.textValue]} numberOfLines={1} >{fnsku_info.fnsku_uom}</Text>
             </View>
             <View style={[gStyle.flexRowSpace,{paddingHorizontal:10}]}>
-                <Text style={styles.textLabel}>{trans('screen.module.pickup.detail.expire_date')}</Text>
+                <Text style={styles.textLabel}>{translate('screen.module.pickup.detail.expire_date')}</Text>
                 <Text style={[styles.textValue]} numberOfLines={1} >
                   {fnsku_info.expire_date.substring(0,10)}
                 </Text>
@@ -120,16 +120,16 @@ const ListFnskuInventoryBin = ({
                     }}/>
             </View>
 
-            
+
             {cycle_item.is_error && <View style={[gStyle.flexRowCenterAlign,{padding:5,backgroundColor:colors.borderLight,marginTop:5}]}>
               <Feather name="alert-triangle" size={16} color={colors.boxmeBrand} />
               <Text style={{ color: colors.boxmeBrand,...gStyle.textBoxme14,paddingLeft:6}}>
-                {trans('screen.module.cycle_check.detail.location_error')}
+                {translate('screen.module.cycle_check.detail.location_error')}
               </Text>
             </View>}
           </View>
         </TouchableOpacity>
-        
+
     </View>
   );
 };

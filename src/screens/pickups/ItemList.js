@@ -8,9 +8,9 @@ import {
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { colors, gStyle, device } from "../../constants";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 const ItemList = (props) => {
-  const t = props.t;
   const [listData, setlistData] = React.useState(props.data);
 
   return (
@@ -46,18 +46,18 @@ const ItemList = (props) => {
                 <View>
                   <Text key={track} style={{ paddingRight: 15 }}>
                     {!props.isCombo
-                      ? `${t(
+                      ? `${translate(
                           "screen.module.pickup_rule.by_seller_quantity_text"
                         )} ${track.quantity} pcs`
-                      : `${t(
+                      : `${translate(
                           "screen.module.pickup_rule.by_seller_combo_name"
                         )} ${track.combo_name}`}
                   </Text>
                   {track.dcount && (
                     <View style={gStyle.flexRowCenterAlign}>
                       <Text style={{ color: colors.boxmeBrand }}>
-                        {t("screen.module.pickup_rule.have")} {track.dcount}{" "}
-                        {t(
+                        {translate("screen.module.pickup_rule.have")} {track.dcount}{" "}
+                        {translate(
                           "screen.module.pickup_rule.by_seller_quantity_text_1"
                         )}
                       </Text>
@@ -74,7 +74,7 @@ const ItemList = (props) => {
           ) : (
             <View style={gStyle.flexCenter}>
               <Text style={{ color: colors.greyInactive, paddingVertical: 12 }}>
-                {t("screen.module.pickup_rule.by_seller_empty")}
+                {translate("screen.module.pickup_rule.by_seller_empty")}
               </Text>
             </View>
           )}

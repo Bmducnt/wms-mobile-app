@@ -1,17 +1,18 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { 
-  StyleSheet, 
-  Text, 
-  TouchableOpacity, 
-  View 
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
-import { 
+import {
   FontAwesome5
 } from "@expo/vector-icons";
 import { colors, gStyle } from '../constants';
+import {translate} from "../i18n/locales/IMLocalized";
 
-const LineParcelShipment = ({parcel,trans}) => {
+const LineParcelShipment = ({parcel}) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -20,8 +21,8 @@ const LineParcelShipment = ({parcel,trans}) => {
         style={gStyle.flex5}
       >
         <View style={gStyle.flexRowSpace}>
-          <Text style={styles.textLabel}>{trans('screen.module.inbound.box_code')}</Text>
-          <Text style={styles.textLabel}>{trans('screen.module.inbound.box_quantity')}</Text>
+          <Text style={styles.textLabel}>{translate('screen.module.inbound.box_code')}</Text>
+          <Text style={styles.textLabel}>{translate('screen.module.inbound.box_quantity')}</Text>
         </View>
         <View style={gStyle.flexRowSpace}>
           <Text style={[styles.textValue]}>
@@ -31,15 +32,15 @@ const LineParcelShipment = ({parcel,trans}) => {
 
         </View>
         <View style={[gStyle.flexRowSpace]}>
-          <Text style={styles.textLabel}>{trans('screen.module.inbound.box_weight')}</Text>
+          <Text style={styles.textLabel}>{translate('screen.module.inbound.box_weight')}</Text>
           <Text style={[styles.textValue,{...gStyle.textBoxme14}]}>{parcel.weight} gram</Text>
         </View>
         <View style={[gStyle.flexRowSpace]}>
-          <Text style={styles.textLabel}>{trans('screen.module.inbound.box_volume')}</Text>
+          <Text style={styles.textLabel}>{translate('screen.module.inbound.box_volume')}</Text>
           <Text style={[styles.textValue,{...gStyle.textBoxme14}]}>{parcel.volume}</Text>
         </View>
         <View style={[gStyle.flexRowSpace]}>
-          <Text style={styles.textLabel}>{trans('screen.module.inbound.box_created')}</Text>
+          <Text style={styles.textLabel}>{translate('screen.module.inbound.box_created')}</Text>
           <Text style={[styles.textValue,{...gStyle.textBoxme14}]}>{parcel.created_date}</Text>
         </View>
         <View style={styles.percentBar}></View>

@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { 
-    Modal, 
-    Text, 
-    TouchableOpacity, 
+import {
+    Modal,
+    Text,
+    TouchableOpacity,
     View,StyleSheet,
     FlatList
 } from "react-native";
 import {_getDatetimeToTimestamp,_convertDatetimeToTimestamp} from '../helpers/device-height';
 import { colors, device, gStyle } from "../constants";
+import {translate} from "../i18n/locales/IMLocalized";
 
 const ModelFilterStaff = props => {
   return (
@@ -23,22 +24,22 @@ const ModelFilterStaff = props => {
                 paddingHorizontal:15,
                 backgroundColor:colors.cardLight
             }]}>
-                <TouchableOpacity 
+                <TouchableOpacity
                     onPress={() => props.onClose(false)}
                     activeOpacity={gStyle.activeOpacity}
                 >
-                    <Text style={[styles.textValue,{...gStyle.textBoxme16}]}>{props.t('base.back')}</Text>
+                    <Text style={[styles.textValue,{...gStyle.textBoxme16}]}>{translate('base.back')}</Text>
                 </TouchableOpacity>
                 <Text style={{...gStyle.textBoxmeBold14,color:colors.brandPrimary}}>{props.rightText}</Text>
             </View>
             <View style={[gStyle.flexRow,{marginTop:10,paddingBottom:80}]}>
-                
+
             <FlatList
                 data={props.listData}
                 keyExtractor={({ staff_id }) => staff_id.toString()}
                 renderItem={({ item }) => (
                     <TouchableOpacity
-                        onPress={() => props.onSelect(item.staff_id)} 
+                        onPress={() => props.onSelect(item.staff_id)}
                         key={item.staff_id}
                         style={[gStyle.flex1,{
                         marginHorizontal:10,
@@ -46,7 +47,7 @@ const ModelFilterStaff = props => {
                     }]}>
                             <View style={gStyle.flexRowSpace}>
                                 <Text style={{ marginLeft: 3, color: colors.greyInactive , ...gStyle.textBoxme14 }}>
-                                {props.t('screen.module.staff_report.text_email')}
+                                {translate('screen.module.staff_report.text_email')}
                                 </Text>
                                 <Text style={{ color:  colors.greyInactive, ...gStyle.textBoxme14 }}>
                                     Đã đóng gói
@@ -54,7 +55,7 @@ const ModelFilterStaff = props => {
                             </View>
                             <View style={gStyle.flexRowSpace}>
                                 <Text style={{ marginLeft: 3, color: colors.white , ...gStyle.textBoxme14 }}>
-                                    {item.fullname} 
+                                    {item.fullname}
                                 </Text>
                                 <Text style={{ color:  colors.white, ...gStyle.textBoxmeBold14 }}>{item.value.toLocaleString()}</Text>
                             </View>

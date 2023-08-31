@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { 
-    Modal, 
-    Text, 
-    TouchableOpacity, 
+import {
+    Modal,
+    Text,
+    TouchableOpacity,
     View,StyleSheet,
     ActivityIndicator,
     FlatList,
@@ -14,6 +14,7 @@ import { Feather} from '@expo/vector-icons';
 import DatePickerBase from '../../components/Datepicker';
 import {_getDatetimeToTimestamp,_convertDatetimeToTimestamp} from '../../helpers/device-height';
 import { colors, device, gStyle } from "../../constants";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 const ModelFilter = props => {
   const [listData,setlistData] = useState(props.listData);
@@ -46,13 +47,13 @@ const ModelFilter = props => {
                 </View>
                 <View style={{width:Dimensions.get("window").width-90,paddingVertical:6}}>
                     <View style={[gStyle.flexRowSpace]}>
-                        <Text style={[styles.textValue,{color:tabSelect ===obj.tab ? colors.brandPrimary:colors.black70}]}>{props.t(obj.title)}</Text>
+                        <Text style={[styles.textValue,{color:tabSelect ===obj.tab ? colors.brandPrimary:colors.black70}]}>{translate(obj.title)}</Text>
                     </View>
-                    
+
                 </View>
-                
+
             </View>
-            
+
         </TouchableOpacity>
       )
   }
@@ -65,8 +66,8 @@ const ModelFilter = props => {
         <TouchableWithoutFeedback
             >
             <View style={{
-                flex: 1, 
-                alignItems: 'center', 
+                flex: 1,
+                alignItems: 'center',
                 justifyContent: 'center',
                 position:'absolute',
                 bottom:0
@@ -87,16 +88,16 @@ const ModelFilter = props => {
                         borderBottomWidth:1.5,
                         backgroundColor:colors.whiteBg
                     }]}>
-                        <Text>{props.t('screen.module.product.filter')}</Text>
-                        <TouchableOpacity 
+                        <Text>{translate('screen.module.product.filter')}</Text>
+                        <TouchableOpacity
                             onPress={() => props.onClose()}
                             activeOpacity={gStyle.activeOpacity}
                         >
                             <Feather color={colors.black70} name='chevron-down' size={26}/>
                         </TouchableOpacity>
-                    
+
                     </View>
-                    
+
                     <View style={[gStyle.flexRow,{paddingBottom:20}]}>
                         <FlatList
                             data={listData}
@@ -106,10 +107,10 @@ const ModelFilter = props => {
                             )}
                         />
                     </View>
-                    <Text style={[styles.textLabel,{marginHorizontal:15}]}>{props.t('screen.datetimepicker.text_begin')}</Text>
+                    <Text style={[styles.textLabel,{marginHorizontal:15}]}>{translate('screen.datetimepicker.text_begin')}</Text>
                     <View style={[gStyle.flexRow,{marginHorizontal:15}]}>
-                            
-                        <TouchableOpacity 
+
+                        <TouchableOpacity
                             onPress={() => setisDatePickerVisiblex(true)}
                             activeOpacity={gStyle.activeOpacity}
                             style={[gStyle.flexRowSpace,
@@ -134,17 +135,17 @@ const ModelFilter = props => {
                     <DatePickerBase
                         isDatePickerVisible = {isDatePickerVisiblex}
                         typeLoad = {false}
-                        trans = {props.t}
-                        headerText ={props.t('screen.datetimepicker.text_begin')}
+                        trans = {translate}
+                        headerText ={translate('screen.datetimepicker.text_begin')}
                         onCancel= {setisDatePickerVisiblex}
                         onConfirm={onConfirm}
                         >
-                    </DatePickerBase>      
+                    </DatePickerBase>
                     <View style={[gStyle.flexRow,{marginTop:20,paddingHorizontal:15}]}>
-                        <TouchableOpacity style={[styles.bottomButton]} 
+                        <TouchableOpacity style={[styles.bottomButton]}
                             onPress={() => props.onSelect(tabSelect,fromTimeFilter)}>
                             {!props.isLoading ? <Text style={styles.textButton}>
-                                {props.t('base.search')}
+                                {translate('base.search')}
                             </Text>:<ActivityIndicator/>}
                         </TouchableOpacity>
                     </View>

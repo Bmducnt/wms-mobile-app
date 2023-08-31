@@ -1,17 +1,18 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { SvgUri } from "react-native-svg";
-import { 
-  StyleSheet, 
-  Text, 
-  TouchableOpacity, 
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
   View,
-  Dimensions 
+  Dimensions
 } from 'react-native';
 import moment from 'moment';
 import { colors, gStyle } from '../constants';
+import {translate} from "../i18n/locales/IMLocalized";
 
-const LineOrderTracking = ({ active, onPress, orderData,t}) => {
+const LineOrderTracking = ({ active, onPress, orderData}) => {
   const activeColor = active ? colors.brandPrimary : colors.white;
 
   return (
@@ -28,11 +29,11 @@ const LineOrderTracking = ({ active, onPress, orderData,t}) => {
           <View style={[{width:Dimensions.get("window").width - 90,marginLeft:5}]}>
               <View style={gStyle.flexRowSpace}>
                 <View style={gStyle.flexRow}>
-                    <Text style={styles.textLabel}>{t('screen.module.handover.tracking_code')}</Text>
-                    
+                    <Text style={styles.textLabel}>{translate('screen.module.handover.tracking_code')}</Text>
+
                 </View>
                 <View style={[gStyle.flexRow]}>
-                    <Text style={[styles.textLabel]}>{t('screen.module.handover.tracking_status')}</Text>
+                    <Text style={[styles.textLabel]}>{translate('screen.module.handover.tracking_status')}</Text>
                 </View>
               </View>
               <View style={[gStyle.flexRowSpace,{paddingTop:3}]}>
@@ -46,19 +47,19 @@ const LineOrderTracking = ({ active, onPress, orderData,t}) => {
               </View>
               <View style={[gStyle.flexRowSpace,{paddingTop:3}]}>
                 <Text style={styles.orderTime}>{moment(orderData.created_date).fromNow()}</Text>
-                {orderData.status_name !== 'Shipped' ? 
+                {orderData.status_name !== 'Shipped' ?
                   <Text style={[styles.textLabelValue,{color:colors.boxmeBrand}]}>
-                    {t('screen.module.handover.kpi_fail')} - {orderData.failed_time_kpi} {t('screen.module.handover.kpi_hour')}
+                    {translate('screen.module.handover.kpi_fail')} - {orderData.failed_time_kpi} {translate('screen.module.handover.kpi_hour')}
                   </Text>
                 : <Text style={[styles.textLabelValue,{color:colors.brandPrimary}]}>
-                  Sẵn sàng giao sau  - {orderData.ready_to_ship} {t('screen.module.handover.kpi_hour')}
+                  Sẵn sàng giao sau  - {orderData.ready_to_ship} {translate('screen.module.handover.kpi_hour')}
                 </Text>}
               </View>
           </View>
         </View>
         <View style={[gStyle.flexRowSpace,{marginTop:5}]}>
             <View style={gStyle.flexRow}>
-                <Text style={styles.textLabel}>{t('screen.module.handover.tracking_quantity')}</Text>
+                <Text style={styles.textLabel}>{translate('screen.module.handover.tracking_quantity')}</Text>
             </View>
             <View style={[gStyle.flexRow]}>
                 <Text style={styles.textLabelValue}>{orderData.total}(pcs)</Text>
@@ -66,7 +67,7 @@ const LineOrderTracking = ({ active, onPress, orderData,t}) => {
         </View>
         <View style={gStyle.flexRowSpace}>
             <View style={gStyle.flexRow}>
-                <Text style={styles.textLabel}>{t('screen.module.handover.tracking_weight')}</Text>
+                <Text style={styles.textLabel}>{translate('screen.module.handover.tracking_weight')}</Text>
             </View>
             <View style={[gStyle.flexRow]}>
                 <Text style={styles.textLabelValue}>{orderData.weight}(gram)</Text>
@@ -74,7 +75,7 @@ const LineOrderTracking = ({ active, onPress, orderData,t}) => {
         </View>
         <View style={gStyle.flexRowSpace}>
             <View style={gStyle.flexRow}>
-                <Text style={styles.textLabel}>{t('screen.module.handover.tracking_box')}</Text>
+                <Text style={styles.textLabel}>{translate('screen.module.handover.tracking_box')}</Text>
             </View>
             <View style={[gStyle.flexRow]}>
                 <Text style={styles.textLabelValue}>{orderData.box_packed}</Text>
@@ -82,7 +83,7 @@ const LineOrderTracking = ({ active, onPress, orderData,t}) => {
         </View>
         <View style={gStyle.flexRowSpace}>
             <View style={gStyle.flexRow}>
-                <Text style={styles.textLabel}>{t('screen.module.handover.tracking_scan')}</Text>
+                <Text style={styles.textLabel}>{translate('screen.module.handover.tracking_scan')}</Text>
             </View>
             <View style={[gStyle.flexRow]}>
                 <Text style={[styles.textLabelValue,{color:colors.boxmeBrand,...gStyle.textBoxmeBold16}]}>{orderData.handover_scan}</Text>

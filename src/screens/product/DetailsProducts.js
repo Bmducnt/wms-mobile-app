@@ -1,7 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Alert,
   Animated,
   Image,
   StyleSheet,
@@ -11,11 +10,10 @@ import {
   ActivityIndicator
 } from 'react-native';
 import { FontAwesome5} from "@expo/vector-icons";
-import { 
-  colors, 
-  device, 
+import {
+  colors,
+  device,
   gStyle,images } from '../../constants';
-import { withNavigation } from 'react-navigation';
 
 // components
 import ScreenHeader from '../../components/ScreenHeader';
@@ -24,9 +22,10 @@ import LineBinStock from '../../components/LineBinStock';
 import {_getTimeDefaultFrom,_getTimeDefaultTo} from '../../helpers/device-height';
 
 
-//service api 
+//service api
 import getDetailFnsku from '../../services/products/detail';
 import getBinFnsku from '../../services/products/bin';
+import {translate} from "../../i18n/locales/IMLocalized";
 
 
 class DetailsProducts extends React.Component {
@@ -66,15 +65,15 @@ class DetailsProducts extends React.Component {
   };
 
   componentDidMount() {
-    const { navigation } = this.props;
+    const { params } = this.props;
     let avatar = null
-    if (navigation.getParam('list_images').length > 0){
-      avatar = navigation.getParam('list_images')[0].urls
+    if (params?.list_images.length > 0){
+      avatar = params?.list_images[0].urls
     }
     this.setState({
       image_product: avatar,
-      fnsku_code: navigation.getParam('fnsku_code'),
-      total_stock: navigation.getParam('total_stock')
+      fnsku_code: params?.fnsku_code,
+      total_stock: params?.total_stock
     });
     this.fadeInBrand()
     this.state.scrollY.addListener(({ value }) => {
@@ -87,11 +86,12 @@ class DetailsProducts extends React.Component {
   }
 
   UNSAFE_componentWillMount = async () =>{
-    await this._fetchDetailProductHandler(this.props.navigation.getParam('fnsku_code'),{
+    const { params } = this.props;
+    await this._fetchDetailProductHandler(params?.fnsku_code,{
       'from_time': _getTimeDefaultFrom(),
       'to_time': _getTimeDefaultTo()
     })
-    await this._fetchBinProductHandler(this.props.navigation.getParam('fnsku_code'));
+    await this._fetchBinProductHandler(params?.fnsku_code)
   }
 
   _fetchDetailProductHandler = async  (code,parram) =>{
@@ -101,7 +101,7 @@ class DetailsProducts extends React.Component {
       this.setState({
         fnsku_info:response.data.results,
         transaction_list : response.data.reports})
-    };
+    }
     this.setState({isloading:false});
   };
 
@@ -111,7 +111,7 @@ class DetailsProducts extends React.Component {
     if (response.status === 200){
       this.setState({
         location_list:response.data.results})
-    };
+    }
     this.setState({isloading:false});
   };
 
@@ -129,6 +129,7 @@ class DetailsProducts extends React.Component {
   }
 
   render() {
+    const { navigation } = this.props
     const {scrollY,
       image_product,
       total_stock,
@@ -139,15 +140,17 @@ class DetailsProducts extends React.Component {
       location_list
     } = this.state;
     const stickyArray = device.web ? [] : [0];
-    const { t } = this.props.screenProps;
     return (
       <View style={gStyle.container}>
         <View style={{ position: 'absolute', top: 0, width: '100%', zIndex: 10 }}>
-          <ScreenHeader title={t('screen.module.product.detail.text_header')} showBack={true} textAlign={'center'} />
+          <ScreenHeader
+              title={translate('screen.module.product.detail.text_header')}
+              showBack={true} textAlign={'center'}
+              navigation={navigation}/>
           {isloading && <ActivityIndicator/>}
         </View>
         <View style={styles.containerFixed}>
-            <Image  style={styles.imageReview} 
+            <Image  style={styles.imageReview}
               source={image_product ?
                 {uri:image_product}:
                 images['no_image_available']
@@ -155,10 +158,10 @@ class DetailsProducts extends React.Component {
             />
             <View style={[gStyle.flexRowSpace,{marginTop:5}]}>
               <Text style={{...gStyle.textBoxme14,color:colors.greyInactive}}>
-                {t('screen.module.product.detail.fnsku_code')} (fnsku)
+                {translate('screen.module.product.detail.fnsku_code')} (fnsku)
               </Text>
               <Text style={{...gStyle.textBoxme14,color:colors.greyInactive}}>
-              {t('screen.module.product.detail.barcode')}(barcode)
+              {translate('screen.module.product.detail.barcode')}(barcode)
               </Text>
             </View>
             <View style={[gStyle.flexRowSpace,{paddingTop:3}]}>
@@ -181,7 +184,7 @@ class DetailsProducts extends React.Component {
             <View style={{height:1,backgroundColor:colors.borderLight,marginVertical:8}}></View>
             <View style={gStyle.flexRowSpace}>
               <Text style={styles.fnskuInfo}>
-                {t('screen.module.product.detail.weight')}
+                {translate('screen.module.product.detail.weight')}
               </Text>
                 <Text style={styles.fnskuInfo}>
                 {fnsku_info.weight} (gram)
@@ -189,7 +192,7 @@ class DetailsProducts extends React.Component {
             </View>
             <View style={gStyle.flexRowSpace}>
               <Text style={styles.fnskuInfo}>
-                {t('screen.module.product.detail.volume')}
+                {translate('screen.module.product.detail.volume')}
               </Text>
                 <Text style={styles.fnskuInfo}>
                 {fnsku_info.volume} (cm)
@@ -197,17 +200,17 @@ class DetailsProducts extends React.Component {
             </View>
             <View style={gStyle.flexRowSpace}>
                 <Text style={[styles.fnskuInfo]}>
-                  {t("screen.module.product.detail.outbound_strange")}
+                  {translate("screen.module.product.detail.outbound_strange")}
                 </Text>
                 <Text style={[styles.fnskuInfo]} numberOfLines={1}>
                   {fnsku_info.outbound_type === 0 && 'fifo'}
                   {fnsku_info.outbound_type === 1 && 'lifo'}
                   {fnsku_info.outbound_type === 2 && 'fefo'}
-                  
+
                 </Text>
               </View>
             <View style={{height:1,backgroundColor:colors.borderLight,marginVertical:8}}></View>
-            
+
         </View>
 
         <Animated.ScrollView
@@ -223,7 +226,7 @@ class DetailsProducts extends React.Component {
           <View style={styles.containerSticky}>
           </View>
           <View style={styles.containerInfo}>
-            
+
             <View style={[gStyle.flexRow,{
                   backgroundColor:colors.boxmeBrand,
                   borderBottomLeftRadius:15,
@@ -236,13 +239,13 @@ class DetailsProducts extends React.Component {
                     ...gStyle.textBoxmeBold18,
                     color:colors.white}
                   }>
-                    {`${t('screen.module.product.stock')} ${total_stock}- ${t('screen.module.product.onhand')} · ${fnsku_info.total_hold}`}
+                    {`${translate('screen.module.product.stock')} ${total_stock}- ${translate('screen.module.product.onhand')} · ${fnsku_info.total_hold}`}
                 </Text>
             </View>
             <View style={[styles.row]}>
-              
+
               <Text style={styles.stockText}>
-                {view_bin_stock ? t('screen.module.product.detail.list_bin'):t('screen.module.product.detail.list_transaction')}
+                {view_bin_stock ? translate('screen.module.product.detail.list_bin'):translate('screen.module.product.detail.list_transaction')}
               </Text>
               <Switch
                 onValueChange={(val) => this.toggleViewByBin(val)}
@@ -261,7 +264,6 @@ class DetailsProducts extends React.Component {
                 <LineBinStock
                   key={index.toString()}
                   row={track}
-                  trans={t}
                 />
               ))}
           </View>
@@ -275,7 +277,7 @@ class DetailsProducts extends React.Component {
 DetailsProducts.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired
+
 };
 
 const styles = StyleSheet.create({
@@ -331,4 +333,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default withNavigation(DetailsProducts);
+export default DetailsProducts

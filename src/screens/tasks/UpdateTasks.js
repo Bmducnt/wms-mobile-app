@@ -1,27 +1,26 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { 
-    Alert, 
-    StyleSheet, 
-    Text, 
+import {
+    StyleSheet,
+    Text,
     View,
     ActivityIndicator,
     FlatList,
     KeyboardAvoidingView,
 } from 'react-native';
 import { Feather,FontAwesome5} from '@expo/vector-icons';
-import { colors, gStyle,device } from '../../constants';
+import { colors, gStyle } from '../../constants';
 
 // components
 import ModalHeader from '../../components/ModalHeader';
 import TextInputComponent from '../../components/TextInputComponent';
-import {_getTimeDefaultFrom,_getTimeDefaultTo} from '../../helpers/device-height';
 import {handleSoundScaner,permissionDenied,handleSoundOkScaner} from '../../helpers/async-storage';
 
 //service api
 
 import getDetailTaskBox from '../../services/tasks/material-detail';
 import addMaterialTask from '../../services/tasks/material-update';
+import {translate} from "../../i18n/locales/IMLocalized";
 
 
 class UpdateTasks extends React.Component {
@@ -40,12 +39,12 @@ class UpdateTasks extends React.Component {
 
 
     UNSAFE_componentWillMount = async () =>{
-        const { navigation } = this.props;
+        const { params } = this.props?.route;
         this.setState({
-            task_id: navigation.getParam('task_code')
+            task_id: params?.task_code
         });
-        this.findListBoxService(navigation.getParam('task_code'))
-        
+        await this.findListBoxService(params?.task_code)
+
     };
 
     findListBoxService = async (task_id) => {
@@ -57,7 +56,6 @@ class UpdateTasks extends React.Component {
 
     onUpdateQuantity = async (code_scan) => {
         this.setState({ isloading: true });
-        const { t } = this.props.screenProps;
         const response = await addMaterialTask(this.state.task_id, JSON.stringify({
             quantity_commit: this.state.quantity_commit,
             location_code: this.state.location_code,
@@ -72,10 +70,10 @@ class UpdateTasks extends React.Component {
                 item.activebg = colors.boxmeBrand;
             }
         } else if (response.status === 403) {
-            permissionDenied(this.props.navigation);
+            await permissionDenied(this.props.navigation);
         } else {
-            handleSoundScaner();
-        };
+            await handleSoundScaner();
+        }
         this.setState({ isloading: false });
     };
 
@@ -84,30 +82,29 @@ class UpdateTasks extends React.Component {
     _searchCameraBarcode = async (code) => {
         if (code){
             this.onUpdateQuantity(code);
-        };
+        }
     };
 
     _onSubmitEditingInput = async (code) => {
         if (code){
             await this.setState({quantity_commit : code});
-        };
+        }
     };
 
     _onSubmitEditingInputBin = async (code) => {
         if (code){
             await this.setState({location_code : code});
-        };
+        }
     };
 
 
     render() {
         const { navigation } = this.props;
-        const { 
+        const {
             isloading,
             list_material_code,
             location_code
         } = this.state;
-        const { t } = this.props.screenProps;
         return (
             <KeyboardAvoidingView
                 style={{ height: '100%', width: '100%' }}
@@ -117,13 +114,13 @@ class UpdateTasks extends React.Component {
                     <ModalHeader
                         left={<Feather color={colors.greyLight} name="chevron-down" />}
                         leftPress={() => this.props.navigation.goBack(null)}
-                        text={t('screen.module.taks.detail.text_update')}
+                        text={translate('screen.module.taks.detail.text_update')}
                     />
                     {location_code ? <View style={gStyle.flexRow}>
                         <View style={{width:'30%'}}>
                             <TextInputComponent
                                 navigation={navigation}
-                                textLabel = {t('screen.module.pickup.detail.quantity_out')}
+                                textLabel = {translate('screen.module.pickup.detail.quantity_out')}
                                 inputValue = {'1'}
                                 keyboardType={'numeric'}
                                 autoChange = {true}
@@ -139,10 +136,10 @@ class UpdateTasks extends React.Component {
                                 navigation={navigation}
                                 autoFocus={true}
                                 showSearch = {false}
-                                textLabel = {t('screen.module.pickup.detail.fnsku_code')}
+                                textLabel = {translate('screen.module.pickup.detail.fnsku_code')}
                                 onPressCamera = {this._searchCameraBarcode}
                                 onSubmitEditingInput = {this._searchCameraBarcode}
-                                textPlaceholder={t('screen.module.pickup.detail.fnsku_scan')}/>
+                                textPlaceholder={translate('screen.module.pickup.detail.fnsku_scan')}/>
                         </View>
                     </View>:
                     <View style={{width:'100%'}}>
@@ -150,15 +147,15 @@ class UpdateTasks extends React.Component {
                             navigation={navigation}
                             autoFocus={true}
                             showSearch = {true}
-                            textLabel = {t('screen.module.pickup.detail.bin_scan')}
+                            textLabel = {translate('screen.module.pickup.detail.bin_scan')}
                             onPressCamera = {this._onSubmitEditingInputBin}
                             onSubmitEditingInput = {this._onSubmitEditingInputBin}
-                            textPlaceholder={t('screen.module.pickup.detail.bin_scan')}/>
-                        
+                            textPlaceholder={translate('screen.module.pickup.detail.bin_scan')}/>
+
                     </View>
                     }
                     {isloading && <View style={gStyle.p3}><ActivityIndicator/></View>}
-                    <Text style={styles.sectionHeading}>{t('screen.module.pickup.detail.fnsku_list')}</Text>
+                    <Text style={styles.sectionHeading}>{translate('screen.module.pickup.detail.fnsku_list')}</Text>
                     <View style={styles.containerScroll}>
                         <FlatList
                             data={list_material_code}
@@ -175,7 +172,7 @@ class UpdateTasks extends React.Component {
                                         <Text style={{...gStyle.textBoxmeBold16,color:colors.white}}>{item.quantity_commit} / </Text>
                                         <Text style={{...gStyle.textBoxmeBold16,color:colors.boxmeBrand}}>{item.quantity_request}</Text>
                                     </View>
-                                    
+
                                 </View>
                             )}
                         />

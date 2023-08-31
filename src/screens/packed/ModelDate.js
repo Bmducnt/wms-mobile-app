@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { 
-    Modal, 
-    Text, 
-    TouchableOpacity, 
+import {
+    Modal,
+    Text,
+    TouchableOpacity,
     View,StyleSheet,
     ActivityIndicator,
     FlatList
 } from "react-native";
-import { 
+import {
     Feather,
     AntDesign,
     Ionicons
@@ -15,6 +15,7 @@ import {
 import DatePickerBase from '../../components/Datepicker';
 import {_getDatetimeToTimestamp,_convertDatetimeToTimestamp} from '../../helpers/device-height';
 import { colors, device, gStyle } from "../../constants";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 const list_date_search = [
     { "id": 0, "icon": "circle", "title": "screen.module.packed.time_now","tab" :86820,"colorActive" :"#ea6c45"},
@@ -34,7 +35,7 @@ const ModelDate = props => {
   const tabonConfirm = (code) =>{
     settabSelect(code);
     setfromTime(props.toTime-code)
-  }; 
+  };
   const onConfirm = (code) =>{
     if (code !== 'N/A' && code !== 'None'){
       if(isDatePickerVisiblex){
@@ -56,7 +57,7 @@ const ModelDate = props => {
           setisDatePickerVisibley(false);
         }
     }
-  
+
 }
 
   const renderObjDate = (obj) =>{
@@ -76,16 +77,16 @@ const ModelDate = props => {
                     borderRadius:6,
                     backgroundColor:tabSelect ===obj.tab ? colors.brandPrimary:colors.white}]}>
                 <View style={[gStyle.flexCenter]}>
-                    <Feather color={tabSelect ===obj.tab ? colors.white:colors.black70} 
+                    <Feather color={tabSelect ===obj.tab ? colors.white:colors.black70}
                         name={tabSelect ===obj.tab ?  'check-circle':obj.icon} size={14}/>
                 </View>
                 <View style={{paddingVertical:6,marginLeft:5}}>
                     <Text style={[styles.textValue,{color:tabSelect ===obj.tab ? colors.white:colors.black}]}>{props.t(obj.title)}</Text>
-                    
+
                 </View>
-                
+
             </View>
-            
+
         </TouchableOpacity>
       )
   }
@@ -100,7 +101,7 @@ const ModelDate = props => {
                 <View style={{
                     borderTopLeftRadius:20,
                     borderTopRightRadius:20,
-                    
+
                 }}>
                     <View style={[{
                         paddingVertical:15,
@@ -110,18 +111,18 @@ const ModelDate = props => {
                         backgroundColor:colors.whiteBg
                     }]}>
                         <View style={gStyle.flexRowSpace}>
-                            <TouchableOpacity 
+                            <TouchableOpacity
                                 onPress={() => props.onClose()}
                                 activeOpacity={gStyle.activeOpacity}
                             >
                                 <Ionicons color={colors.black70} name='close' size={24}/>
                             </TouchableOpacity>
-                            <Text style={[styles.textValue,{...gStyle.textBoxme16}]}>{props.t('screen.module.pickup.detail.time_filter')}</Text>
+                            <Text style={[styles.textValue,{...gStyle.textBoxme16}]}>{translate('screen.module.pickup.detail.time_filter')}</Text>
                             <Text style={[styles.textLabel]}></Text>
                         </View>
                     </View>
-                    <Text style={[styles.textLabel,{marginVertical:15,paddingHorizontal:10,...gStyle.textBoxmeBold14}]}>{props.t('screen.module.pickup.detail.time_filter_sugget')}</Text>
-                    
+                    <Text style={[styles.textLabel,{marginVertical:15,paddingHorizontal:10,...gStyle.textBoxmeBold14}]}>{translate('screen.module.pickup.detail.time_filter_sugget')}</Text>
+
                     <View>
                         <FlatList
                             numColumns={Math.ceil(listData.length / 2)}
@@ -133,15 +134,15 @@ const ModelDate = props => {
                                 renderObjDate(item)
                             )}
                         />
-                    </View>   
+                    </View>
                     <View style={{
                             paddingHorizontal:10,
                             marginTop:20
                         }}>
-                        <Text style={styles.textLabel}>{props.t('screen.module.pickup.detail.from_time')}</Text>
+                        <Text style={styles.textLabel}>{translate('screen.module.pickup.detail.from_time')}</Text>
                         <View style={[gStyle.flexRow]}>
-                            
-                            <TouchableOpacity 
+
+                            <TouchableOpacity
                                 onPress={() => setisDatePickerVisiblex(true)}
                                 activeOpacity={gStyle.activeOpacity}
                                 style={[gStyle.flexRowSpace,
@@ -163,9 +164,9 @@ const ModelDate = props => {
                                 <AntDesign color={colors.black70} name="calendar" size={24} />
                             </TouchableOpacity>
                         </View>
-                        <Text style={[styles.textLabel,{marginTop:10}]}>{props.t('screen.module.pickup.detail.to_time')}</Text>
+                        <Text style={[styles.textLabel,{marginTop:10}]}>{translate('screen.module.pickup.detail.to_time')}</Text>
                         <View style={[gStyle.flexRow]}>
-                            <TouchableOpacity 
+                            <TouchableOpacity
                                 onPress={() => setisDatePickerVisibley(true)}
                                 activeOpacity={gStyle.activeOpacity}
                                 style={[gStyle.flexRowSpace,
@@ -188,29 +189,27 @@ const ModelDate = props => {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    
+
                 </View>
                 <DatePickerBase
                     isDatePickerVisible = {isDatePickerVisiblex}
                     typeLoad = {isLoadTime}
-                    trans = {props.t}
-                    headerText ={props.t('screen.module.pickup.detail.from_time')}
+                    headerText ={translate('screen.module.pickup.detail.from_time')}
                     onCancel= {setisDatePickerVisiblex}
                     onConfirm={onConfirm}
                 />
                 <DatePickerBase
                     isDatePickerVisible = {isDatePickerVisibley}
                     typeLoad = {isLoadTime}
-                    trans = {props.t}
-                    headerText ={props.t('screen.module.pickup.detail.to_time')}
+                    headerText ={translate('screen.module.pickup.detail.to_time')}
                     onCancel= {setisDatePickerVisibley}
                     onConfirm={onConfirm}
                 />
                 <View style={[gStyle.flexCenter,styles.containerBottom]}>
-                    <TouchableOpacity style={[styles.bottomButton]} 
+                    <TouchableOpacity style={[styles.bottomButton]}
                         onPress={() => props.onSelect(fromTime,toTime)}>
                         {!props.isLoading ? <Text style={styles.textButton}>
-                            {props.t('base.search')}
+                            {translate('base.search')}
                         </Text>:<ActivityIndicator/>}
                     </TouchableOpacity>
                 </View>

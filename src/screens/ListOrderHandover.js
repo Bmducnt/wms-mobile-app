@@ -19,6 +19,8 @@ import {
   _getTimeDefaultFrom,
   _getTimeDefaultTo,
 } from "../helpers/device-height";
+import {translate} from "../i18n/locales/IMLocalized";
+import getOrderHandover from "../services/reports/handover";
 
 class ListOrderHandover extends React.Component {
   constructor(props) {
@@ -37,18 +39,18 @@ class ListOrderHandover extends React.Component {
   }
 
   componentDidMount() {
-    const { navigation } = this.props;
+    const { params } = this.props?.route;
     this.setState({
-      carrier_name: navigation.getParam("carrier_name"),
-      carrier_logo: navigation.getParam("carrier_logo"),
-      totals_orders: navigation.getParam("totals_orders"),
+      carrier_name: params.carrier_name,
+      carrier_logo: params.carrier_logo,
+      totals_orders: params.totals_orders
     });
   }
 
   UNSAFE_componentWillMount = async () => {
-    const { navigation } = this.props;
+    const { params } = this.props?.route;
     this._fetchListOrderHandler({
-      carrier_name: navigation.getParam("carrier_name"),
+      carrier_name: params?.carrier_name,
       type: 1,
       status: 2,
       type_order: 0,
@@ -111,7 +113,6 @@ class ListOrderHandover extends React.Component {
       outputRange: [0, 1],
       extrapolate: "clamp",
     });
-    const { t } = this.props.screenProps;
     return (
       <View style={gStyle.container}>
         <View style={styles.containerHeader}>
@@ -146,7 +147,7 @@ class ListOrderHandover extends React.Component {
           </View>
           <View style={styles.containerAlbum}>
             <Text style={styles.packingInfo}>
-              {t("screen.module.handoverd.await_handover")}
+              {translate("screen.module.handoverd.await_handover")}
               {` · ${totals_orders}`}
             </Text>
           </View>
@@ -175,8 +176,8 @@ class ListOrderHandover extends React.Component {
             <View style={styles.row}>
               <Text style={styles.toggleText}>
                 {view_by_status
-                  ? t("screen.module.handoverd.await_handover")
-                  : t("screen.module.handoverd.list_order")}
+                  ? translate("screen.module.handoverd.await_handover")
+                  : translate("screen.module.handoverd.list_order")}
               </Text>
               <Switch
                 onValueChange={(val) => this.toggleViewByStatus(val)}
@@ -189,7 +190,6 @@ class ListOrderHandover extends React.Component {
                   downloaded={view_by_status}
                   key={index.toString()}
                   onPress={this.detailOrder}
-                  t={t}
                   orderData={{
                     tracking_code: track.tracking_code,
                     status_name: track.order_status,
@@ -221,7 +221,6 @@ ListOrderHandover.propTypes = {
   // required
 
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({

@@ -16,7 +16,7 @@ import { colors, gStyle } from "../../constants";
 const ModelSellerPick = (props) => {
   const [listData, setlistData] = React.useState([]);
 
-  fetchListEmailConfig = async () => {
+  const fetchListEmailConfig = async () => {
     const response = await getListRulePickup({ key: "by_email" });
     if (response?.status === 200) {
       setlistData(response?.data?.results);
@@ -46,7 +46,6 @@ const ModelSellerPick = (props) => {
             style={{
               height: Dimensions.get("window").height - 150,
               width: Dimensions.get("window").width - 40,
-              borderTopLeftRadius: 3,
               borderTopRightRadius: 3,
               marginHorizontal: 10,
               marginBottom: 30,

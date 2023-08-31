@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { colors, device, gStyle } from "../../constants";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 const ItemInbound = ({
   navigation,
   inboundItem,
-  translate
 }) => {
   return (
     <View style={styles.container}>
@@ -53,11 +53,11 @@ const ItemInbound = ({
                   {inboundItem.status_id === 306 && <Text style={{ paddingLeft:5,color: '#fd0d37',...gStyle.textBoxme12}}>
                     Đã huỷ
                   </Text>}
-          
+
                 </TouchableOpacity>
               </View>
             </View>
-            
+
             <View style={styles.percentBar}></View>
             <View style={[gStyle.flexRowSpace,{marginTop:5}]}>
                 <Text style={styles.textLabel}>{translate('screen.module.pickup.list.time')}</Text>
@@ -65,8 +65,8 @@ const ItemInbound = ({
             </View>
           </View>
         </TouchableOpacity>
-        
-        
+
+
     </View>
   );
 };

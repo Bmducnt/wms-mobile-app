@@ -3,14 +3,14 @@ import PropTypes, { any } from 'prop-types';
 import {
   StyleSheet,
   View,
-  SafeAreaView, 
+  SafeAreaView,
   ScrollView,
   Text,
   RefreshControl,
   Dimensions,
   ActivityIndicator
 } from 'react-native';
-import { 
+import {
   Entypo
  } from '@expo/vector-icons';
 
@@ -38,6 +38,7 @@ import {_getTimeDefaultFrom,
   _getDatetimeToTimestamp,
   _convertDatetimeToTimestamp} from '../helpers/device-height';
   import {permissionDenied} from '../helpers/async-storage';
+import {translate} from "../i18n/locales/IMLocalized";
 
 class Home extends React.PureComponent {
   constructor(props) {
@@ -67,7 +68,7 @@ class Home extends React.PureComponent {
     this.onRefresh()
   };
 
-  
+
   onRefresh = async () => {
     const promises = [
       this.fetchReportHandoverAnalysis({ to_time: _getTimeDefaultTo() }),
@@ -78,7 +79,7 @@ class Home extends React.PureComponent {
       this.fetchReportPutaway({ to_time: _getTimeDefaultTo() }),
       this.fetchReportFFNOW({ to_time: _getTimeDefaultTo() })
     ];
-  
+
     await Promise.all(promises);
   };
 
@@ -95,7 +96,7 @@ class Home extends React.PureComponent {
       permissionDenied(this.props.navigation);
     };
   };
-  
+
 
   fetchReportFFNOW = async (parram) => {
     const response = await getAnanlysisFFNOW(parram);
@@ -111,14 +112,13 @@ class Home extends React.PureComponent {
 
   fetchReportHandoverAnalysis = async (parram) => {
     this.setState({loading : true});
-    const { t } = this.props.screenProps;
     const response = await getAnanlysisHandover(parram);
     if (response.status === 200){
       this.setState({
         handover_chart_data : [
           {
             id: 1,
-            name: t('screen.module.analysis.outbound_done'),
+            name: translate('screen.module.analysis.outbound_done'),
             color: colors.brandPrimary,
             expenses: [
                 {
@@ -129,7 +129,7 @@ class Home extends React.PureComponent {
           },
           {
             id: 2,
-            name: t('screen.module.analysis.outbound_awaiting'),
+            name: translate('screen.module.analysis.outbound_awaiting'),
             color: colors.boxmeBrand,
             expenses: [
                 {
@@ -140,7 +140,7 @@ class Home extends React.PureComponent {
           },
           {
             id: 4,
-            name: t('screen.module.analysis.outbound_reject'),
+            name: translate('screen.module.analysis.outbound_reject'),
             color: colors.red,
             expenses: [
                 {
@@ -151,7 +151,7 @@ class Home extends React.PureComponent {
           },
           {
             id: 3,
-            name: t('screen.module.analysis.outbound_rts'),
+            name: translate('screen.module.analysis.outbound_rts'),
             color: colors.purple,
             expenses: [
                 {
@@ -206,7 +206,7 @@ class Home extends React.PureComponent {
         this.setState({
           picking_chart : response.data.results});
       }
-      
+
     }else if (response.status === 403){
       this.setState({loading : false});
       permissionDenied(this.props.navigation);
@@ -215,7 +215,7 @@ class Home extends React.PureComponent {
 
 
   render() {
-    const { t } = this.props.screenProps;
+    const { navigation } = this.props
     const {
       handover_chart_data,
       handover_chart_carrier,
@@ -235,7 +235,7 @@ class Home extends React.PureComponent {
       total_order_ff_time,
       loading
     } = this.state;
-    
+
     const picking_chart_pk = picking_chart.map((point) => {
       const y = point.y1
       return { ...point, y };
@@ -244,7 +244,7 @@ class Home extends React.PureComponent {
     return (
       <SafeAreaView style={[gStyle.container]} >
         <View style={{ position: 'absolute', top: 0, width: '100%', zIndex: 10 }}>
-          <ScreenHeader title={t('screen.module.staff_report.header_text')} bgColor={colors.cardLight} textAlign={'center'} />
+          <ScreenHeader title={translate('screen.module.staff_report.header_text')} bgColor={colors.cardLight} textAlign={'center'}  navigation={navigation}/>
         </View>
         <ScrollView style={{paddingTop:device.iPhoneNotch ? 40 : 60 }}
           refreshControl={
@@ -256,86 +256,85 @@ class Home extends React.PureComponent {
         >
           {loading && <View style={[gStyle.flexCenter,{marginTop:"10%"}]}><ActivityIndicator animating={true}  style={{opacity:1}} color={colors.white} /></View>}
           <View style={gStyle.flexRowSpace}>
-            <Text style={styles.sectionHeading}>{t('screen.module.analysis.outbound')}</Text>
+            <Text style={styles.sectionHeading}>{translate('screen.module.analysis.outbound')}</Text>
             <Text style={styles.sectionHeadingRight}>{_getDatetimeToTimestamp(to_time)}</Text>
           </View>
           {handover_chart_data.length > 0 && <View style={[gStyle.flexRow,styles.containerCard]}>
             <ChartModule
               data={handover_chart_data}
-              trans ={t}
               bg={colors.cardLight}
-              text_info = {t("screen.module.staff_report.unit_item")}
+              text_info = {translate("screen.module.staff_report.unit_item")}
             />
           </View>}
           {handover_chart_carrier.length > 0 && <View style={[gStyle.flexRow,styles.containerCard]}>
-              <ListCarrierHandoverDay data={handover_chart_carrier} t={t}/>
+              <ListCarrierHandoverDay data={handover_chart_carrier}/>
           </View>}
-          
-          
-          <CardInfo t={t} value ={cycle_by_bin} icon={"add-location"}  bg={colors.boxmeBrand} top={5} name ={t('screen.module.analysis.cycle_bin')} />
-          <CardInfo t={t} value ={cycle_by_fnsku} icon={"beenhere"}  bg={colors.brandPrimary} top={0.5} name ={t('screen.module.analysis.cycle_fnsku')} />
-          
-          <CardInfo t={t} value ={total_fnsku_error_stock} icon={"message"}  bg={colors.purple} top={0.5} 
-              name ={t('screen.module.analysis.lost_stock_order')} 
-              unit={t('screen.module.analysis.lost_stock_order_unit')}/>
-          
-          <CardInfo t={t} value ={total_order_error_stock} icon={"block"}  bg={colors.boxmeBrand} top={0.5} 
-              name ={t('screen.module.analysis.lost_stock_fnsku')} 
-              unit={t('screen.module.analysis.lost_stock_fnsku_unit')}/>
+
+
+          <CardInfo value ={cycle_by_bin} icon={"add-location"}  bg={colors.boxmeBrand} top={5} name ={translate('screen.module.analysis.cycle_bin')} />
+          <CardInfo value ={cycle_by_fnsku} icon={"beenhere"}  bg={colors.brandPrimary} top={0.5} name ={translate('screen.module.analysis.cycle_fnsku')} />
+
+          <CardInfo value ={total_fnsku_error_stock} icon={"message"}  bg={colors.purple} top={0.5}
+              name ={translate('screen.module.analysis.lost_stock_order')}
+              unit={translate('screen.module.analysis.lost_stock_order_unit')}/>
+
+          <CardInfo value ={total_order_error_stock} icon={"block"}  bg={colors.boxmeBrand} top={0.5}
+              name ={translate('screen.module.analysis.lost_stock_fnsku')}
+              unit={translate('screen.module.analysis.lost_stock_fnsku_unit')}/>
           <View style={{marginTop:5}}/>
           {/* <POTReport t={t} /> */}
           <View style={gStyle.flexRowSpace}>
-            <Text style={styles.sectionHeading}>{t('screen.module.analysis.pickup')}</Text>
+            <Text style={styles.sectionHeading}>{translate('screen.module.analysis.pickup')}</Text>
             <Text style={styles.sectionHeadingRight}>{_getDatetimeToTimestamp(to_time)}</Text>
           </View>
           <View style={[gStyle.flexRow,styles.containerCard,{borderRadius:3}]}>
             <View style={[gStyle.flexCenter,{width:Dimensions.get("window").width/2}]}>
               <Entypo name="back-in-time" size={22} color={colors.white}/>
               <Text style={{...gStyle.textBoxme14,color:colors.white,paddingTop:5}}>
-                {picking_time} {t('screen.module.analysis.pickup_minute')} / {t('screen.module.analysis.pickup_code')}</Text>
+                {picking_time} {translate('screen.module.analysis.pickup_minute')} / {translate('screen.module.analysis.pickup_code')}</Text>
             </View>
             <View style={[gStyle.flexCenter,{width:Dimensions.get("window").width/2,paddingVertical:5}]}>
               <Entypo name="shopping-cart" size={22} color={colors.white}/>
-              <Text style={{...gStyle.textBoxme14,color:colors.white,paddingTop:5}}>{picking_total} {t('screen.module.analysis.pickup_code')}</Text>
+              <Text style={{...gStyle.textBoxme14,color:colors.white,paddingTop:5}}>{picking_total} {translate('screen.module.analysis.pickup_code')}</Text>
             </View>
           </View>
           <View style={gStyle.flexRowSpace}>
-            <Text style={styles.sectionHeading}>{t('screen.module.analysis.pickup_7')}</Text>
+            <Text style={styles.sectionHeading}>{translate('screen.module.analysis.pickup_7')}</Text>
           </View>
           <View style={[gStyle.flexCenter,{marginTop:5}]}>
-            {picking_chart.length > 0 && <LineChart t={t} data1={picking_chart.slice(6,14)} data2={picking_chart_pk.slice(6,14)}/>}
+            {picking_chart.length > 0 && <LineChart data1={picking_chart.slice(6,14)} data2={picking_chart_pk.slice(6,14)}/>}
           </View>
           <View style={gStyle.flexRowSpace}>
-            <Text style={styles.sectionHeading}>{t('screen.module.analysis.order_ff')}</Text>
+            <Text style={styles.sectionHeading}>{translate('screen.module.analysis.order_ff')}</Text>
             <Text style={styles.sectionHeadingRight}>{_getDatetimeToTimestamp(to_time)}</Text>
           </View>
           <View style={[gStyle.flexRow,styles.containerCard]}>
             <View style={[gStyle.flexCenter,{width:Dimensions.get("window").width/2}]}>
               <Entypo name="flag" size={22} color={colors.white}/>
-              <Text style={{...gStyle.textBoxme14,color:colors.white,paddingTop:5}}>{total_order_ff.toLocaleString()}  {t('screen.module.analysis.order_unit')}</Text>
+              <Text style={{...gStyle.textBoxme14,color:colors.white,paddingTop:5}}>{total_order_ff.toLocaleString()}  {translate('screen.module.analysis.order_unit')}</Text>
             </View>
             <View style={[gStyle.flexCenter,{width:Dimensions.get("window").width/2,minHeight:55}]}>
               <Entypo name="back-in-time" size={22} color={colors.white}/>
-              <Text style={{...gStyle.textBoxme14,color:colors.white,paddingTop:5}}>{total_order_ff_time}  {t('screen.module.analysis.pickup_minute')} /  {t('screen.module.analysis.order_unit')}</Text>
+              <Text style={{...gStyle.textBoxme14,color:colors.white,paddingTop:5}}>{total_order_ff_time}  {translate('screen.module.analysis.pickup_minute')} /  {translate('screen.module.analysis.order_unit')}</Text>
             </View>
           </View>
-          
+
           <View style={gStyle.flexRowSpace}>
-            <Text style={styles.sectionHeading}>{t('screen.module.analysis.inbound')}</Text>
+            <Text style={styles.sectionHeading}>{translate('screen.module.analysis.inbound')}</Text>
             <Text style={styles.sectionHeadingRight}>{_getDatetimeToTimestamp(to_time)}</Text>
           </View>
 
-          <CardInfo t={t} value ={total_putaway_done} icon={"radio-button-checked"}  bg={colors.brandPrimary} top={0.5} 
-              name ={t('screen.module.analysis.inbound_putaway')} unit={'pcs'} />
-          
-          <CardInfo t={t} value ={total_putaway_awaiting} icon={"approval"}  bg={colors.boxmeBrand} top={0.5} 
-              name ={t('screen.module.analysis.inbound_putaway_todo')} unit={'pcs'}/>
+          <CardInfo value ={total_putaway_done} icon={"radio-button-checked"}  bg={colors.brandPrimary} top={0.5}
+              name ={translate('screen.module.analysis.inbound_putaway')} unit={'pcs'} />
 
-          <CardInfo t={t} value ={total_shipment_awaiting} icon={"fact-check"}  bg={colors.purple} top={0.5} 
-              name ={t('screen.module.analysis.inbound_shipment_todo')}/>
-          
-          <CardInfo t={t} value ={total_shipment_overdue} icon={"error"}  bg={colors.red} top={0.5} 
-              name ={t('screen.module.analysis.inbound_shipment_overdue')}/> 
+          <CardInfo value ={total_putaway_awaiting} icon={"approval"}  bg={colors.boxmeBrand} top={0.5}
+              name ={translate('screen.module.analysis.inbound_putaway_todo')} unit={'pcs'}/>
+
+          <CardInfo value ={total_shipment_awaiting} icon={"fact-check"}  bg={colors.purple} top={0.5}
+              name ={translate('screen.module.analysis.inbound_shipment_todo')}/>
+
+          <CardInfo value ={total_shipment_overdue} icon={"error"}  bg={colors.red} top={0.5}
+              name ={translate('screen.module.analysis.inbound_shipment_overdue')}/>
 
           <View style={gStyle.spacer11} />
           <View style={gStyle.spacer11} />
@@ -348,7 +347,6 @@ class Home extends React.PureComponent {
 Home.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired
 };
 
 const styles = StyleSheet.create({

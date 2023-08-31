@@ -6,13 +6,12 @@ import {
   Dimensions,
   FlatList,
 } from 'react-native';
-import { 
-  colors, 
-  device, 
+import {
+  colors,
   gStyle ,
 } from '../../constants';
-import { AntDesign } from '@expo/vector-icons';
 import { SvgUri } from "react-native-svg";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 
 
@@ -22,12 +21,12 @@ const OutboundReport = props => {
     const sla = list_sla.find((element) => element.name === day);
     return sla ? sla.sla_value_fail : 0;
   }
-  
+
 
   return (
       <React.Fragment>
        {props.kpi_reports && <View style={gStyle.flexRowSpace}>
-            <Text style={[styles.sectionHeading]} numberOfLines={1}>{props.t('screen.module.home.report_order.text_header_sub')}</Text>
+            <Text style={[styles.sectionHeading]} numberOfLines={1}>{translate('screen.module.home.report_order.text_header_sub')}</Text>
             <Text style={{color:colors.white,...gStyle.textBoxmeBold14,paddingRight:15}}>
                 {props.kpi_total.toLocaleString()}
              </Text>
@@ -42,14 +41,14 @@ const OutboundReport = props => {
                   marginHorizontal:5,marginVertical:5,paddingVertical:10}]} key={item.carrier_name}>
                   <View><SvgUri width={35} height={35} uri={item.courier_logo} /></View>
                   <View style={{paddingHorizontal:6,width:Dimensions.get("window").width/3}}>
-                      
+
                       <View style={[gStyle.flexRowSpace]}>
                           <Text style={{...gStyle.textBoxme14,color:colors.white}} numberOfLines={1}>
                               {item.courier_name}
                           </Text>
                       </View>
                       <View style={gStyle.flexRowSpace}>
-                          <Text style={{...gStyle.textBoxme12,color:colors.greyInactive}}>{props.t('screen.module.home.report_order.awaiting')}</Text>
+                          <Text style={{...gStyle.textBoxme12,color:colors.greyInactive}}>{translate('screen.module.home.report_order.awaiting')}</Text>
                           <Text style={{...gStyle.textBoxme14,color:colors.white}}>
                           {item.total_awaiting_pickup.toLocaleString()}
                           </Text>

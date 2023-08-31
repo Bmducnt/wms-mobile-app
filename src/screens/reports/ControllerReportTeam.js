@@ -4,8 +4,8 @@ import {
   Text,
   View,
 } from 'react-native';
-import { 
-  colors, 
+import {
+  colors,
   gStyle ,
 } from '../../constants';
 import {_getTimeDefaultFrom,
@@ -13,17 +13,17 @@ import {_getTimeDefaultFrom,
     _getDatetimeToTimestamp,
     _getTimeDefaultFromOneDay,
     _convertDatetimeToTimestamp} from '../../helpers/device-height';
+import {translate} from "../../i18n/locales/IMLocalized";
 
 const ControllerReportTeam = props => {
-    const t = props.t;
-    
+
     return (
         <React.Fragment>
             <View style ={[{marginTop:10}]}>
 
                 <View >
                     <Text style={{...gStyle.textBoxme16,color:colors.white}}>
-                    {t('screen.module.staff_report.wh_controller')}
+                    {translate('screen.module.staff_report.wh_controller')}
                     </Text>
                 </View>
                 <View style ={[gStyle.flexRow,{marginTop:10}]}>
@@ -36,13 +36,13 @@ const ControllerReportTeam = props => {
                     width:"48%"
                 }}>
                     <View style={gStyle.flexCenter}>
-                        <Text style={{...gStyle.textBoxme14,color:colors.white}}>{t('screen.module.staff_report.kpi_pass')}</Text>
+                        <Text style={{...gStyle.textBoxme14,color:colors.white}}>{translate('screen.module.staff_report.kpi_pass')}</Text>
                     </View>
                     <View style={[gStyle.flexCenter,{paddingVertical:5}]}>
                         <Text style={{...gStyle.textBoxmeBold20,color:colors.brandPrimary}}>0%</Text>
                     </View>
                     <View style={gStyle.flexRowCenter}>
-                        <Text style={{...gStyle.textBoxme14,color:colors.greyInactive}}>{t('screen.module.staff_report.minimum_percent')}</Text>
+                        <Text style={{...gStyle.textBoxme14,color:colors.greyInactive}}>{translate('screen.module.staff_report.minimum_percent')}</Text>
                         <Text style={{...gStyle.textBoxme14,color:colors.boxmeBrand,paddingLeft:4}}>100%</Text>
                     </View>
                 </View>
@@ -55,13 +55,13 @@ const ControllerReportTeam = props => {
                     width:"50%"
                 }}>
                     <View style={gStyle.flexCenter}>
-                        <Text style={{...gStyle.textBoxme14,color:colors.white}}>{t('screen.module.staff_report.location_move')}</Text>
+                        <Text style={{...gStyle.textBoxme14,color:colors.white}}>{translate('screen.module.staff_report.location_move')}</Text>
                     </View>
                     <View style={[gStyle.flexCenter,{paddingVertical:5}]}>
                         <Text style={{...gStyle.textBoxmeBold20,color:colors.brandPrimary}}>0%</Text>
                     </View>
                     <View style={gStyle.flexRowCenter}>
-                        <Text style={{...gStyle.textBoxme14,color:colors.greyInactive}}>{t('screen.module.staff_report.minimum_percent')}</Text>
+                        <Text style={{...gStyle.textBoxme14,color:colors.greyInactive}}>{translate('screen.module.staff_report.minimum_percent')}</Text>
                         <Text style={{...gStyle.textBoxme14,color:colors.boxmeBrand,paddingLeft:4}}>99%</Text>
                     </View>
                 </View>

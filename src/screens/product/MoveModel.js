@@ -10,6 +10,7 @@ import { colors, gStyle} from '../../constants';
 
 // components
 import ModalHeader from '../../components/ModalHeader';
+import {translate} from "../../i18n/locales/IMLocalized";
 class MoveModel extends React.Component {
 
     constructor(props) {
@@ -21,18 +22,17 @@ class MoveModel extends React.Component {
     UNSAFE_componentWillMount = async () =>{
     }
 
-    
+
     render() {
         const { navigation } = this.props;
         const {
         } = this.state;
-        const { t } = this.props.screenProps;
         return (
             <View style={[gStyle.containerModel]}>
                 <ModalHeader
                     right={<Feather color={colors.white} name="x"/>}
                     rightPress={() => navigation.goBack(null)}
-                    text={t('screen.module.product.move.text_header')}
+                    text={translate('screen.module.product.move.text_header')}
                 />
                 <View style={{
                     marginTop:'5%',
@@ -43,27 +43,27 @@ class MoveModel extends React.Component {
                             color:colors.white,
                             paddingBottom:5
                         }}>
-                            {t('screen.module.product.move.move_1_fnsku')}
+                            {translate('screen.module.product.move.move_1_fnsku')}
                         </Text>
                     <View style={{
                         backgroundColor:'#282a2c',
                         padding:15,
                         borderTopLeftRadius:8
                     }}>
-                       
+
                         <Text style={{
                             color:colors.white,
                             paddingTop:3
                         }}>
-                            
-                            {t('screen.module.product.move.move_1_fnsku_2')}
+
+                            {translate('screen.module.product.move.move_1_fnsku_2')}
                         </Text>
                         <Text style={{
                             color:colors.white,
                             paddingTop:3
                         }}>
-                            
-                            {t('screen.module.product.move.move_1_fnsku_3')}
+
+                            {translate('screen.module.product.move.move_1_fnsku_3')}
                         </Text>
                     </View>
                     <Text style={{
@@ -71,7 +71,7 @@ class MoveModel extends React.Component {
                             color:colors.white,
                             paddingTop:5
                         }}>
-                            {t('screen.module.product.move.move_n_fnsku')}
+                            {translate('screen.module.product.move.move_n_fnsku')}
                         </Text>
                     <View style={{
                         backgroundColor:'#282a2c',
@@ -79,31 +79,31 @@ class MoveModel extends React.Component {
                         marginTop:10,
                         borderBottomLeftRadius:15
                     }}>
-                        
+
                         <Text style={{
                             color:colors.white,
                             paddingTop:3
                         }}>
-                            
-                            {t('screen.module.product.move.move_n_fnsku_1')}
+
+                            {translate('screen.module.product.move.move_n_fnsku_1')}
                         </Text>
                         <Text style={{
                             color:colors.white,
                             paddingTop:3
                         }}>
-                            
-                            {t('screen.module.product.move.move_n_fnsku_2')}
+
+                            {translate('screen.module.product.move.move_n_fnsku_2')}
                         </Text>
                         <Text style={{
                             color:colors.white,
                             paddingTop:3
                         }}>
-                            {t('screen.module.product.move.move_1_fnsku_3')}
+                            {translate('screen.module.product.move.move_1_fnsku_3')}
                         </Text>
                     </View>
                 </View>
                 <View style={styles.containerBottom}>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         activeOpacity={gStyle.activeOpacity}
                         hitSlop={{ top: 10, left: 10, bottom: 10, right: 10 }}
                         onPress={() => navigation.navigate("MoveProducts",{})}
@@ -120,7 +120,7 @@ class MoveModel extends React.Component {
                     }}>
                         <Feather color={colors.white} name="plus" size={16} />
                         <Text style={{...gStyle.textBoxmeBold16,color:colors.white,paddingLeft:10}}>
-                            {t('screen.module.product.move.btn_1_fnsku')}
+                            {translate('screen.module.product.move.btn_1_fnsku')}
                         </Text>
                     </TouchableOpacity>
                     <View style={[gStyle.flexCenter]}>
@@ -131,13 +131,13 @@ class MoveModel extends React.Component {
                             ...gStyle.textBoxme18,
                             color:colors.white
                             }}>
-                            {t('screen.module.product.move.text_or')}
+                            {translate('screen.module.product.move.text_or')}
                             </Text>
                         </View>
                     </View>
                     <TouchableOpacity
                         activeOpacity={gStyle.activeOpacity}
-                        onPress={() => navigation.navigate("MoveListProduct",{})}  
+                        onPress={() => navigation.navigate("MoveListProduct",{})}
                         style={{
                             borderColor:colors.boxmeBrand,
                             borderWidth:1,
@@ -150,7 +150,7 @@ class MoveModel extends React.Component {
                     }}>
                         <Feather color={colors.boxmeBrand} name="plus" size={16} />
                         <Text style={{...gStyle.textBoxmeBold16,color:colors.boxmeBrand,paddingLeft:10}}>
-                            {t('screen.module.product.move.btn_n_fnsku')}
+                            {translate('screen.module.product.move.btn_n_fnsku')}
                         </Text>
                         <TouchableOpacity
                         style={{
@@ -169,7 +169,7 @@ class MoveModel extends React.Component {
                             }}
                         >New</Text>
                         </TouchableOpacity>
-                        
+
                     </TouchableOpacity>
                 </View>
             </View>
@@ -212,6 +212,6 @@ const styles = StyleSheet.create({
         ...gStyle.textBoxme14,
         color:colors.white
     }
-  
+
 });
 export default MoveModel;

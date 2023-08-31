@@ -4,24 +4,24 @@ import {
   Text,
   View
 } from 'react-native';
-import { 
-  colors, 
+import {
+  colors,
   gStyle ,
 } from '../../constants';
 import getKPIHandoverReport from '../../services/reports/kpi_handover';
+import {translate} from "../../i18n/locales/IMLocalized";
 
 
 const HandoverReportTeam = props => {
-    const t = props.t;
-    
+
     const [data, setdata] = React.useState({});
     const [loading, setloading] = React.useState(false);
-    
+
     React.useEffect(() => {
         fetchReport()
-        
-      }, [data]);
-    
+
+      }, []);
+
 
     const fetchReport = async () =>{
         setloading(true);
@@ -40,7 +40,7 @@ const HandoverReportTeam = props => {
 
             <View >
                 <Text style={{...gStyle.textBoxme16,color:colors.white}}>
-                {t('screen.module.staff_report.handover')}
+                {translate('screen.module.staff_report.handover')}
                 </Text>
             </View>
             <View style ={[gStyle.flexRow,{marginTop:10}]}>
@@ -53,13 +53,13 @@ const HandoverReportTeam = props => {
                 width:"48%"
             }}>
                 <View style={gStyle.flexCenter}>
-                    <Text style={{...gStyle.textBoxme14,color:colors.white}}>{t('screen.module.staff_report.kpi_pass')}</Text>
+                    <Text style={{...gStyle.textBoxme14,color:colors.white}}>{translate('screen.module.staff_report.kpi_pass')}</Text>
                 </View>
                 <View style={[gStyle.flexCenter,{paddingVertical:5}]}>
                     <Text style={{...gStyle.textBoxmeBold20,color:colors.brandPrimary}}>{data?.sla_commit}%</Text>
                 </View>
                 <View style={gStyle.flexRowCenter}>
-                    <Text style={{...gStyle.textBoxme14,color:colors.greyInactive}}>{t('screen.module.staff_report.minimum_percent')}</Text>
+                    <Text style={{...gStyle.textBoxme14,color:colors.greyInactive}}>{translate('screen.module.staff_report.minimum_percent')}</Text>
                     <Text style={{...gStyle.textBoxme14,color:colors.boxmeBrand,paddingLeft:4}}>99%</Text>
                 </View>
             </View>
@@ -72,13 +72,13 @@ const HandoverReportTeam = props => {
                 width:"50%"
             }}>
                 <View style={gStyle.flexCenter}>
-                    <Text style={{...gStyle.textBoxme14,color:colors.white}}>{t('screen.module.staff_report.process_correct')}</Text>
+                    <Text style={{...gStyle.textBoxme14,color:colors.white}}>{translate('screen.module.staff_report.process_correct')}</Text>
                 </View>
                 <View style={[gStyle.flexCenter,{paddingVertical:5}]}>
                     <Text style={{...gStyle.textBoxmeBold20,color:colors.brandPrimary}}>{data?.percent}%</Text>
                 </View>
                 <View style={gStyle.flexRowCenter}>
-                    <Text style={{...gStyle.textBoxme14,color:colors.greyInactive}}>{t('screen.module.staff_report.minimum_percent')}</Text>
+                    <Text style={{...gStyle.textBoxme14,color:colors.greyInactive}}>{translate('screen.module.staff_report.minimum_percent')}</Text>
                     <Text style={{...gStyle.textBoxme14,color:colors.boxmeBrand,paddingLeft:4}}>96%</Text>
                 </View>
             </View>

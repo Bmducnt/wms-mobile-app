@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { 
-    Modal, 
-    Text, 
-    TouchableOpacity, 
+import {
+    Modal,
+    Text,
+    TouchableOpacity,
     View,StyleSheet,
     FlatList,
     TouchableWithoutFeedback,
@@ -11,6 +11,7 @@ import {
 import moment from 'moment';
 import { Ionicons,Feather} from '@expo/vector-icons';
 import { colors, device, gStyle } from "../../constants";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 const ModelListTracking = props => {
   const [listData,setlistData] = useState(props.listData);
@@ -27,7 +28,7 @@ const ModelListTracking = props => {
                 marginHorizontal:10,
                 borderRadius:3,
                 backgroundColor:colors.whiteBg,
-                
+
             }]}
         >
             <View style={[{paddingVertical:15,paddingHorizontal:10 }]}>
@@ -58,7 +59,7 @@ const ModelListTracking = props => {
                     </Text>
                 </View>
                 <View style={[gStyle.flexRowSpace]}>
-                    <Text style={styles.textLabel}>{props.t('screen.module.pickup.list.time')}</Text>
+                    <Text style={styles.textLabel}>{translate('screen.module.pickup.list.time')}</Text>
                     <Text style={[styles.textValue,{...gStyle.textBoxme16}]} numberOfLines={1} >
                         {moment(obj.rma_time).fromNow()}
                     </Text>
@@ -74,11 +75,11 @@ const ModelListTracking = props => {
                     }]}
                 >
                     <Text style={{ color: colors.white,...gStyle.textBoxme14,paddingLeft:4 }}>
-                        {props.t('screen.module.handover.rma_btn_push')}
+                        {translate('screen.module.handover.rma_btn_push')}
                     </Text>
               </TouchableOpacity> }
             </View>
-            
+
         </TouchableOpacity>
       )
   }
@@ -91,12 +92,12 @@ const ModelListTracking = props => {
         <TouchableWithoutFeedback
             >
             <View style={{
-                flex: 1, 
-                alignItems: 'center', 
+                flex: 1,
+                alignItems: 'center',
                 justifyContent: 'center',
                 position:'absolute',
                 bottom:0,
-                
+
             }}>
                 <View style={{
                     height: device.iPhoneNotch ? Dimensions.get("window").height -100 : Dimensions.get("window").height -50,
@@ -114,17 +115,17 @@ const ModelListTracking = props => {
                         borderBottomWidth:1.5,
                         backgroundColor:colors.whiteBg
                     }]}>
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             onPress={() => props.onClose()}
                             activeOpacity={gStyle.activeOpacity}
                             style={gStyle.flexCenter}
                         >
                             <Feather color={colors.black70} name='chevron-down' size={20}/>
-                            <Text>{props.t('screen.module.handover.rma_header_text')}</Text>
+                            <Text>{translate('screen.module.handover.rma_header_text')}</Text>
                         </TouchableOpacity>
-                    
+
                     </View>
-                    
+
                     <View style={[gStyle.flexRow,{paddingBottom:50}]}>
                         <FlatList
                             data={listData}

@@ -25,6 +25,7 @@ import putErrorPutawayInbound from '../../services/putaway/error-check';
 import getListPutawayRMA from '../../services/putaway/rma';
 import EmptySearch from "../../components/EmptySearch";
 import ModelException from "./ModelException";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 class RMAList extends React.PureComponent {
 
@@ -75,9 +76,9 @@ class RMAList extends React.PureComponent {
   }
 
   componentWillUnmount() {
-    this.willFocusSubscription.remove();
+    this.willFocusSubscription();
   };
-  
+
   _fetchListRMAHandler = async  (parram,tab_id) =>{
     await this.setState({isloading:true,list_rmas:[]
       ,tab_id : tab_id,code_scan : parram.q});
@@ -91,7 +92,6 @@ class RMAList extends React.PureComponent {
   };
   _putErrorLostItem = async (quantity,error_code) =>{
     this.setState({isloading:true});
-    const {t} = this.props;
     const response = await putErrorPutawayInbound(JSON.stringify({
         bsin: this.state.bsin,
         tracking_code: this.state.tracking_code,
@@ -102,7 +102,7 @@ class RMAList extends React.PureComponent {
     if (response.status === 200){
         Alert.alert(
           '',
-          t('screen.module.putaway.text_ok'),
+          translate('screen.module.putaway.text_ok'),
           [
             {
               text: t("base.confirm"),
@@ -173,39 +173,38 @@ class RMAList extends React.PureComponent {
         'v2':1
       },code)
     }
-    
+
   }
   render_sticky_header = ()=>{
-    const {t} = this.props;
     return (
         <View style={[gStyle.flexRow,{position:"absolute",bottom:0,backgroundColor:colors.borderLight,zIndex:100}]}>
             <TouchableOpacity
-              onPress={() => this.onchangeTab(3)} 
-              activeOpacity={gStyle.activeOpacity} 
+              onPress={() => this.onchangeTab(3)}
+              activeOpacity={gStyle.activeOpacity}
               style={[gStyle.flexRowSpace,{paddingVertical:17,width:'25%',paddingHorizontal:10}]}
           >
-                <Text style={{color:this.state.tab_id===3 ?colors.boxmeBrand:colors.greyInactive,...gStyle.textBoxme14}}>{t('screen.module.putaway.report_stock_level')} A</Text>
+                <Text style={{color:this.state.tab_id===3 ?colors.boxmeBrand:colors.greyInactive,...gStyle.textBoxme14}}>{translate('screen.module.putaway.report_stock_level')} A</Text>
                 <Text style={{color:this.state.tab_id===3 ?colors.boxmeBrand:colors.greyInactive,...gStyle.textBoxme14}}>{this.state.reports.goods_a}</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onchangeTab(5)}  
+            <TouchableOpacity onPress={() => this.onchangeTab(5)}
               activeOpacity={gStyle.activeOpacity} style={[gStyle.flexRowSpace,{
                 paddingVertical:17,width:'25%',paddingHorizontal:10
                   }]}>
-                <Text style={{color:this.state.tab_id===5 ?colors.boxmeBrand:colors.greyInactive,...gStyle.textBoxme14}}>{t('screen.module.putaway.report_stock_level')} D1</Text>
+                <Text style={{color:this.state.tab_id===5 ?colors.boxmeBrand:colors.greyInactive,...gStyle.textBoxme14}}>{translate('screen.module.putaway.report_stock_level')} D1</Text>
                 <Text style={{color:this.state.tab_id===5 ?colors.boxmeBrand:colors.greyInactive,...gStyle.textBoxme14}}>{this.state.reports.goods_d1}</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onchangeTab(6)}  
+            <TouchableOpacity onPress={() => this.onchangeTab(6)}
               activeOpacity={gStyle.activeOpacity} style={[gStyle.flexRowSpace,{
                 paddingVertical:17,width:'25%',paddingHorizontal:10
                   }]}>
-                <Text style={{color:this.state.tab_id===6 ?colors.boxmeBrand:colors.greyInactive,...gStyle.textBoxme14}}>{t('screen.module.putaway.report_stock_level')} D2</Text>
+                <Text style={{color:this.state.tab_id===6 ?colors.boxmeBrand:colors.greyInactive,...gStyle.textBoxme14}}>{translate('screen.module.putaway.report_stock_level')} D2</Text>
                 <Text style={{color:this.state.tab_id===6 ?colors.boxmeBrand:colors.greyInactive,...gStyle.textBoxme14}}>{this.state.reports.goods_d2}</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onchangeTab(7)}  
+            <TouchableOpacity onPress={() => this.onchangeTab(7)}
               activeOpacity={gStyle.activeOpacity} style={[gStyle.flexRowSpace,{
                 paddingVertical:17,width:'25%',paddingHorizontal:10
                   }]}>
-                <Text style={{color:this.state.tab_id===7 ?colors.boxmeBrand:colors.greyInactive,...gStyle.textBoxme14}}>{t('screen.module.putaway.report_stock_level')} D3</Text>
+                <Text style={{color:this.state.tab_id===7 ?colors.boxmeBrand:colors.greyInactive,...gStyle.textBoxme14}}>{translate('screen.module.putaway.report_stock_level')} D3</Text>
                 <Text style={{color:this.state.tab_id===7 ?colors.boxmeBrand:colors.greyInactive,...gStyle.textBoxme14}}>{this.state.reports.goods_d3}</Text>
             </TouchableOpacity>
         </View>
@@ -222,10 +221,10 @@ class RMAList extends React.PureComponent {
     const {t,navigation} = this.props;
     return (
       <View style={[gStyle.container]}>
-            {isloading && 
+            {isloading &&
             <View style={[gStyle.flexCenter,{marginTop:"20%"}]}><ActivityIndicator animating={true}  style={{opacity:1}} color={colors.white} /></View>}
-            {list_rmas.length === 0 ? 
-              <EmptySearch t={t}/>:
+            {list_rmas.length === 0 ?
+              <EmptySearch/>:
               <View>
               <FlatList
                 data={list_rmas}
@@ -233,7 +232,6 @@ class RMAList extends React.PureComponent {
                 renderItem={({ item }) => (
                     <ListItemsPutaway
                       navigation = {navigation}
-                      translate ={t}
                       itemInfo={{
                           'time_created': item.created_date,
                           'created_by': item.staff_id,
@@ -261,10 +259,10 @@ class RMAList extends React.PureComponent {
                     />
                 )}
                 /></View>}
-                
+
                 {this.render_sticky_header()}
-              <ModelException onClose={this.onPressModel} visible ={open_model} t={t} navigation={navigation} onSubmit={this._putErrorLostItem}/>
-            
+              <ModelException onClose={this.onPressModel} visible ={open_model} navigation={navigation} onSubmit={this._putErrorLostItem}/>
+
             <View style={gStyle.spacer11} />
             <View style={gStyle.spacer11} />
       </View>

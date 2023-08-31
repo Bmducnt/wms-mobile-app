@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { 
-    Modal, 
-    Text, 
-    TouchableOpacity, 
+import {
+    Modal,
+    Text,
+    TouchableOpacity,
     View,StyleSheet,
     FlatList,
     TouchableWithoutFeedback,
@@ -33,23 +33,23 @@ const ModelLocationSugget = props => {
                         marginRight:5
                     }]}>
                     <Text style={{...gStyle.textBoxmeBold16,color:colors.black}}>{obj.quantity-obj.quantity_outbound}</Text>
-                    <Text style={[styles.textLabel,{...gStyle.textboxme10}]}>{props.t('screen.module.product.move.status_stock')}</Text>
+                    <Text style={[styles.textLabel,{...gStyle.textboxme10}]}>{translate('screen.module.product.move.status_stock')}</Text>
                 </View>
                 <View style={{width:Dimensions.get("window").width-90,paddingVertical:8}}>
                     <View style={[gStyle.flexRowSpace]}>
                         <View>
                             <Text style={styles.textValue}>{obj.location.location}</Text>
-                            <Text style={[styles.textLabel,{color:colors.black}]}>{props.t('screen.module.product.move.location_stock')} {obj.created_date.substring(0,10)}</Text>
+                            <Text style={[styles.textLabel,{color:colors.black}]}>{translate('screen.module.product.move.location_stock')} {obj.created_date.substring(0,10)}</Text>
                         </View>
-                        
-                        
+
+
                         <Text style={styles.textValue}>{obj.location.warehouse_zone}</Text>
                     </View>
-                    
+
                 </View>
-                
+
             </View>
-            
+
         </TouchableOpacity>
       )
   }
@@ -63,8 +63,8 @@ const ModelLocationSugget = props => {
         <TouchableWithoutFeedback
             >
             <View style={{
-                flex: 1, 
-                alignItems: 'center', 
+                flex: 1,
+                alignItems: 'center',
                 justifyContent: 'center',
                 position:'absolute',
                 bottom:0,
@@ -85,17 +85,17 @@ const ModelLocationSugget = props => {
                         borderBottomWidth:1.5,
                         backgroundColor:colors.whiteBg
                     }]}>
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             onPress={() => props.onClose()}
                             activeOpacity={gStyle.activeOpacity}
                             style={gStyle.flexCenter}
                         >
-                            
-                            <Text>{props.t('screen.module.product.move.btn_view_location')}</Text>
+
+                            <Text>{translate('screen.module.product.move.btn_view_location')}</Text>
                             <Feather color={colors.black70} name='chevron-down' size={16}/>
                         </TouchableOpacity>
                     </View>
-                    
+
                     {listData.length > 0 ? <View style={[gStyle.flexRow,{paddingBottom:20}]}>
                         <FlatList
                             data={listData}
@@ -105,7 +105,7 @@ const ModelLocationSugget = props => {
                             )}
                         />
                     </View>:<View style={[gStyle.flexCenter,{paddingTop:30}]}>
-                        <EmptySearch t={props.t}/>
+                        <EmptySearch/>
                 </View>}
                 </View>
             </View>

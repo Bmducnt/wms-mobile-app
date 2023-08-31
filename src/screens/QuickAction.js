@@ -7,10 +7,10 @@ import {
   Alert,
   ActivityIndicator
 } from "react-native";
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import LottieView from 'lottie-react-native';
-import { 
+import {
   Entypo,
   FontAwesome5,
   Feather,
@@ -18,8 +18,8 @@ import {
   Fontisto
 } from "@expo/vector-icons";
 import QRCode from 'react-native-qrcode-svg';
-import { 
-  colors, 
+import {
+  colors,
   gStyle,
   device,
   images
@@ -36,6 +36,7 @@ import ModelListPart from './pickups/ModelListPart';
 import ScreenHeader from "../components/ScreenHeader";
 import putErrorPickup from '../services/pickup/log';
 import ModelConfirmXE from '../screens/pickups/ModelConfirmXE';
+import {translate} from "../i18n/locales/IMLocalized";
 
 
 class ModalQickAction extends React.Component {
@@ -56,14 +57,13 @@ class ModalQickAction extends React.Component {
     };
   }
 
-  
+
   UNSAFE_componentWillMount = async () => {
     let email_login = await AsyncStorage.getItem('staff_profile');
     this.setState({role_id:JSON.parse(email_login).role});
   };
 
   _putComfirmError = async (status_code)=>{
-    const { t } = this.props.screenProps;
     this.setState({isloading:true,list_pickup:[],isVisible :false});
     const response = await putErrorPickup(this.state.code_scan,JSON.stringify({
         staff_error: this.state.staff_error,
@@ -74,10 +74,10 @@ class ModalQickAction extends React.Component {
       handleSoundOkScaner();
       Alert.alert(
           '',
-          t('screen.module.putaway.text_ok'),
+          translate('screen.module.putaway.text_ok'),
           [
             {
-              text: t('base.confirm'),
+              text: translate('base.confirm'),
               onPress: () => {this.props.navigation.goBack(null)},
             }
           ],
@@ -91,7 +91,6 @@ class ModalQickAction extends React.Component {
   _fetchListPickupHandler = async  (parram) =>{
     this.setState({isloading:true,list_pickup:[]});
     const response = await getListPickup(parram);
-    const { t } = this.props.screenProps;
     if (response.status === 200){
       if (response.data.results.length > 0){
         handleSoundOkScaner();
@@ -108,15 +107,15 @@ class ModalQickAction extends React.Component {
               staff_error:response.data.results[0].assigner_by.email
             });
           }
-          
-          
+
+
         }else{
           this.setState({
             pickup_info:response.data.results,
             staff_error:response.data.results[0].assigner_by.email
           });
         }
-        
+
       }else{
 
         handleSoundScaner();
@@ -128,7 +127,6 @@ class ModalQickAction extends React.Component {
   };
 
   _putComfirmError = async (status_code)=>{
-    const { t } = this.props.screenProps;
     this.setState({isloading:true,list_pickup:[],isVisible :false});
     const response = await putErrorPickup(this.state.code_scan,JSON.stringify({
         staff_error: this.state.staff_error,
@@ -137,13 +135,13 @@ class ModalQickAction extends React.Component {
         part_id : this.state.part_id
     }));
     if (response.status === 200) {
-      handleSoundOkScaner();
+      await handleSoundOkScaner();
       Alert.alert(
           '',
-          t('screen.module.putaway.text_ok'),
+          translate('screen.module.putaway.text_ok'),
           [
             {
-              text: t('base.confirm'),
+              text: translate('base.confirm'),
               onPress: () => {this.props.navigation.goBack(null)},
             }
           ],
@@ -153,34 +151,33 @@ class ModalQickAction extends React.Component {
     this.setState({isloading:false});
   }
 
-  
+
 
   _confirmPackingByStaff = async ()=>{
-    const { t } = this.props.screenProps;
     var role_action = []
     if(this.state.role_id === 8){
       role_action = [
         {
-          text: t('screen.module.pickup.detail.exception_btn_fail'),
+          text: translate('screen.module.pickup.detail.exception_btn_fail'),
           onPress: () => {this.setState({isVisible : true})},
         }
     ]
     }else{
       role_action = [
           {
-            text: t('screen.module.pickup.detail.exception_btn_ok'),
+            text: translate('screen.module.pickup.detail.exception_btn_ok'),
             onPress: () => {this._putComfirmError('OK')},
           },
           {
-            text: t('screen.module.pickup.detail.exception_btn_fail'),
+            text: translate('screen.module.pickup.detail.exception_btn_fail'),
             onPress: () => {this.setState({isVisible : true})},
           }
       ]
     }
-    
+
     Alert.alert(
       '',
-      t('screen.module.pickup.detail.exception_alert'),
+      translate('screen.module.pickup.detail.exception_alert'),
       role_action,
       {cancelable: false},
     );
@@ -190,24 +187,24 @@ class ModalQickAction extends React.Component {
   _searchCameraBarcode = async (code) => {
     if (code){
         await this.setState({code_scan:code})
-        this._fetchListPickupHandler({
-          'status':407,
-          'is_approved_packed':1,
-          'q' : code,
-          'is_error' : 0
+        await this._fetchListPickupHandler({
+          'status': 407,
+          'is_approved_packed': 1,
+          'q': code,
+          'is_error': 0
         })
-    };
+    }
   };
 
   onSubmit = async (part_id) => {
     if (part_id){
       await this.setState({part_id:part_id})
-      this._fetchListPickupHandler({
-        'status':407,
-        'is_approved_packed':1,
-        'q' : this.state.code_scan,
-        'part_id' : part_id,
-        'is_error' : 0
+      await this._fetchListPickupHandler({
+        'status': 407,
+        'is_approved_packed': 1,
+        'q': this.state.code_scan,
+        'part_id': part_id,
+        'is_error': 0
       })
     };
   };
@@ -221,7 +218,7 @@ class ModalQickAction extends React.Component {
   }
 
   render() {
-    const { t } = this.props.screenProps;
+    const { navigation } = this.props
     const {
       isloading,
       isVisible,
@@ -232,8 +229,8 @@ class ModalQickAction extends React.Component {
     return (
       <React.Fragment>
         <View style={[gStyle.container]}>
-          <ScreenHeader 
-            title={t('screen.module.putaway.list')}
+          <ScreenHeader
+            title={translate('screen.module.putaway.list')}
             showBack={true}
             iconLeft={"chevron-down"}
             showInput = {true}
@@ -241,17 +238,17 @@ class ModalQickAction extends React.Component {
             inputValueSend ={null}
             onPressCamera={this._searchCameraBarcode}
             onSubmitEditingInput= {this._searchCameraBarcode}
-            textPlaceholder={t("screen.module.pickup.list.search_text")}
-          />
+            textPlaceholder={translate("screen.module.pickup.list.search_text")}
+           navigation={navigation}/>
           {isloading && <ActivityIndicator/>}
           {pickup_info.length === 0 && <View style={[gStyle.flexCenter]}>
               <LottieView style={{
                         width: 150,
                         height: 100,
                       }} source={require('../assets/icons/qr-scan')} autoPlay loop />
-              <Text style={{...gStyle.textBoxme14,color:colors.white}}>{t('screen.module.pickup.detail.exception_help_1')}</Text>
-              <Text style={{...gStyle.textBoxme14,color:colors.white}}>{t('screen.module.pickup.detail.exception_help_2')}</Text>
-              <Text style={{...gStyle.textBoxme14,color:colors.white}}>{t('screen.module.pickup.detail.exception_help_3')}</Text> 
+              <Text style={{...gStyle.textBoxme14,color:colors.white}}>{translate('screen.module.pickup.detail.exception_help_1')}</Text>
+              <Text style={{...gStyle.textBoxme14,color:colors.white}}>{translate('screen.module.pickup.detail.exception_help_2')}</Text>
+              <Text style={{...gStyle.textBoxme14,color:colors.white}}>{translate('screen.module.pickup.detail.exception_help_3')}</Text>
           </View>}
           <ScrollView
             contentContainerStyle={[gStyle.flex1, gStyle.pB80]}
@@ -261,7 +258,7 @@ class ModalQickAction extends React.Component {
             {pickup_info.length > 0 && <View style={[gStyle.flex1,{marginHorizontal:10}]}>
               <View style={[gStyle.flexCenter,{marginTop:5}]}>
                 <Text style={{...gStyle.textBoxme14,color:colors.white}}>
-                  {t('screen.module.pickup.detail.exception_detail_text')} {pickup_info[0].pickup_id.pickup_code}
+                  {translate('screen.module.pickup.detail.exception_detail_text')} {pickup_info[0].pickup_id.pickup_code}
                 </Text>
               </View>
               <View style={[gStyle.flexCenter,{marginTop:5}]}>
@@ -283,7 +280,7 @@ class ModalQickAction extends React.Component {
                   <View style ={[gStyle.flexCenter,{marginHorizontal:10,paddingTop:5}]}>
                     <Text style={{...gStyle.textBoxmeBold18,color:colors.white}}>{pickup_info[0].pickup_id.total_items}</Text>
                     <Text style={{...gStyle.textBoxme12,color:colors.greyInactive,paddingBottom:10}}>
-                        {t('screen.module.pickup.detail.exception_product_text')}
+                        {translate('screen.module.pickup.detail.exception_product_text')}
                     </Text>
                     <FontAwesome name="long-arrow-down" size={22} color={colors.white} />
                   </View>
@@ -304,7 +301,7 @@ class ModalQickAction extends React.Component {
                     <Entypo name="back-in-time" size={18} color={colors.white} />
                     <View style={{marginLeft:8}}>
                       <Text style={{...gStyle.textBoxmeBold18,color:colors.white}}>{pickup_info[0].time_process}</Text>
-                      <Text style={{...gStyle.textBoxme14,color:colors.white}}>{t('screen.module.pickup.detail.exception_time')}</Text>
+                      <Text style={{...gStyle.textBoxme14,color:colors.white}}>{translate('screen.module.pickup.detail.exception_time')}</Text>
                     </View>
                   </View>
                 </View>
@@ -313,48 +310,48 @@ class ModalQickAction extends React.Component {
                     <FontAwesome5 name="location-arrow" size={17} color={colors.white} />
                     <View style={{marginLeft:8}}>
                       <Text style={{...gStyle.textBoxmeBold18,color:colors.white}}>{pickup_info[0].list_bin_id}</Text>
-                      <Text style={{...gStyle.textBoxme14,color:colors.white}}>{t('screen.module.pickup.detail.exception_bin')}</Text>
+                      <Text style={{...gStyle.textBoxme14,color:colors.white}}>{translate('screen.module.pickup.detail.exception_bin')}</Text>
                     </View>
                   </View>
                 </View>
               </View>
               <View style={[{marginTop:8,borderTopWidth:0.5,borderTopColor:colors.borderLight}]}>
                 <View style={[gStyle.flexRowSpace,{marginTop:5}]}>
-                  <Text style={{...gStyle.textBoxme14,color:colors.greyInactive}}>{t('screen.module.pickup.list.created_by')}</Text>
+                  <Text style={{...gStyle.textBoxme14,color:colors.greyInactive}}>{translate('screen.module.pickup.list.created_by')}</Text>
                   <Text style={{...gStyle.textBoxme14,color:colors.white}}>{pickup_info[0].created_by.email}</Text>
                 </View>
                 <View style={[gStyle.flexRowSpace]}>
-                  <Text style={{...gStyle.textBoxme14,color:colors.greyInactive}}>{t('screen.module.pickup.detail.exception_picker_by')}</Text>
+                  <Text style={{...gStyle.textBoxme14,color:colors.greyInactive}}>{translate('screen.module.pickup.detail.exception_picker_by')}</Text>
                   <Text style={{...gStyle.textBoxme14,color:colors.white}}>{pickup_info[0].assigner_by.email}</Text>
                 </View>
                 <View style={[gStyle.flexRowSpace]}>
-                  <Text style={{...gStyle.textBoxme14,color:colors.greyInactive}}>{t('screen.module.packed.packed_by')}</Text>
+                  <Text style={{...gStyle.textBoxme14,color:colors.greyInactive}}>{translate('screen.module.packed.packed_by')}</Text>
                   <Text style={{...gStyle.textBoxme14,color:colors.white}}>N/A</Text>
                 </View>
                 <View style={[gStyle.flexRow,{backgroundColor:colors.cardLight,paddingVertical:12,paddingHorizontal:6,marginTop:10}]}>
                   <Feather name="check-square" size={14} color={colors.white} />
                   <Text style={{...gStyle.textBoxme14,color:colors.white,paddingLeft:5}}>
-                    {t('screen.module.handover.sla_text_1')}{" "}{pickup_info[0].total_orders_sla}{" "}
-                    {t('screen.module.handover.sla_text_2')}
+                    {translate('screen.module.handover.sla_text_1')}{" "}{pickup_info[0].total_orders_sla}{" "}
+                    {translate('screen.module.handover.sla_text_2')}
                   </Text>
                 </View>
                 <View style={[gStyle.flexRow,{backgroundColor:colors.cardLight,paddingVertical:12,paddingHorizontal:6,marginTop:10}]}>
                   <Feather name="check-square" size={14} color={colors.white} />
-                  <Text style={{...gStyle.textBoxme14,color:colors.white,paddingLeft:5}}>{t('screen.module.pickup.detail.exception_confirm_stock')}</Text>
+                  <Text style={{...gStyle.textBoxme14,color:colors.white,paddingLeft:5}}>{translate('screen.module.pickup.detail.exception_confirm_stock')}</Text>
                 </View>
               </View>
             </View>}
-            {pickup_info.length > 0 && 
-              
+            {pickup_info.length > 0 &&
+
             <View style={[gStyle.flexRowCenter,styles.containerBottom]}>
                 <ButtonSwiper
                   isLeftToRight={true} // set false to move slider Right to Left
                   childrenContainer={{ backgroundColor: 'rgba(255,255,255,0.0)'}}
                   slideOverStyle={{backgroundColor:'#c4f8e4',
-                    borderBottomLeftRadius:0, 
-                    borderBottomRightRadius: 5, 
-                    borderTopLeftRadius: 0, 
-                    borderTopRightRadius: 5 
+                    borderBottomLeftRadius:0,
+                    borderBottomRightRadius: 5,
+                    borderTopLeftRadius: 0,
+                    borderTopRightRadius: 5
                   }}
                   onEndReached={() => this._confirmPackingByStaff(true)}
                   isOpacityChangeOnSlide={true}
@@ -381,19 +378,18 @@ class ModalQickAction extends React.Component {
                     </View>
                   }
               >
-                <Text style={{fontWeight: '600'}}>{t('screen.module.pickup.detail.exception_approved')}</Text>
+                <Text style={{fontWeight: '600'}}>{translate('screen.module.pickup.detail.exception_approved')}</Text>
               </ButtonSwiper>
             </View>}
 
-            {isVisible &&  pickup_info.length > 0 && <ModelConfirmXE 
-                t={t} 
-                onClose={this.onCloseModel} 
-                onSubmit ={null} 
+            {isVisible &&  pickup_info.length > 0 && <ModelConfirmXE
+                onClose={this.onCloseModel}
+                onSubmit ={null}
                 pickup_id ={pickup_info[0].pickupbox_id}
                 pickup_code ={pickup_info[0].pickup_id.pickup_code}
                 index ={0}
             />}
-            {isVisibleB2B && <ModelListPart data={pickup_b2b} onClose={this.onCloseModelB2B} onSubmit={this.onSubmit} t={t} />}
+            {isVisibleB2B && <ModelListPart data={pickup_b2b} onClose={this.onCloseModelB2B} onSubmit={this.onSubmit} />}
           </ScrollView>
         </View>
       </React.Fragment>

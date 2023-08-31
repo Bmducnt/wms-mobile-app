@@ -15,34 +15,34 @@ import getListCarrier from "../../services/handover/courier";
 import addRulePickup from "../../services/pickup/add-rule";
 import getListRulePickup from "../../services/pickup/list-rule";
 import removeRulePickup from "../../services/pickup/remove_rule";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 const ByCarrierConfig = (props) => {
-  const t = props.t;
 
   const [listCarrier, setlistCarrier] = React.useState([]);
   const [carrierSelelct, setcarrierSelelct] = React.useState(null);
   const [carrier, setcarrier] = React.useState(null);
 
-  fetchListCarrierHandler = async () => {
+  const fetchListCarrierHandler = async () => {
     const response = await getListCarrier({});
     if (response.status === 200) {
       setlistCarrier(response?.data?.results);
     }
   };
 
-  fetchConfig = async () => {
+  const fetchConfig = async () => {
     const response = await getListRulePickup({ key: "by_carrier" });
     if (response?.status === 200) {
       setcarrier(response?.data?.results);
     }
   };
 
-  removeCarrierConfig = async () => {
+  const removeCarrierConfig = async () => {
     await removeRulePickup(JSON.stringify({ rule_type: "by_carrier" }));
     setcarrier(null);
   };
 
-  addRuleCarrier = async () => {
+  const addRuleCarrier = async () => {
     if (carrierSelelct) {
       const response = await addRulePickup(
         JSON.stringify({
@@ -53,10 +53,10 @@ const ByCarrierConfig = (props) => {
       if (response?.status === 200) {
         Alert.alert(
           "",
-          t("screen.module.pickup_rule.add_ok"),
+          translate("screen.module.pickup_rule.add_ok"),
           [
             {
-              text: t("base.confirm"),
+              text: translate("base.confirm"),
               onPress: () => onClose(),
             },
           ],
@@ -68,7 +68,7 @@ const ByCarrierConfig = (props) => {
     }
   };
 
-  onSelectSource = async (source) => {
+  const onSelectSource = async (source) => {
     let is_submmit = false;
     let updatedList = listCarrier.map((item) => {
       if (item.courier_name === source) {
@@ -94,7 +94,7 @@ const ByCarrierConfig = (props) => {
     fetchConfig();
   }, []);
 
-  onClose = async () => {
+  const onClose = async () => {
     props.onClose(false);
     props.onReload();
   };
@@ -116,7 +116,7 @@ const ByCarrierConfig = (props) => {
               },
             ]}
           >
-            <Text>{t("screen.module.pickup_rule.by_carrier_title")}</Text>
+            <Text>{translate("screen.module.pickup_rule.by_carrier_title")}</Text>
             <TouchableOpacity
               onPress={() => onClose()}
               style={gStyle.flexRowSpace}
@@ -131,7 +131,7 @@ const ByCarrierConfig = (props) => {
           </View>
           <View>
             <Text style={{ paddingHorizontal: 15, paddingVertical: 13 }}>
-              {t("screen.module.pickup_rule.by_carrier_title_sub")}
+              {translate("screen.module.pickup_rule.by_carrier_title_sub")}
             </Text>
           </View>
 
@@ -143,7 +143,7 @@ const ByCarrierConfig = (props) => {
               marginVertical: 5,
             }}
           >
-            <Text>{t("screen.module.pickup_rule.by_carrier_list")}</Text>
+            <Text>{translate("screen.module.pickup_rule.by_carrier_list")}</Text>
             {carrier && (
               <View
                 style={[
@@ -172,7 +172,7 @@ const ByCarrierConfig = (props) => {
                   <Text
                     style={{ color: colors.darkgreen, ...gStyle.textBoxme14 }}
                   >
-                    {t("screen.module.pickup_rule.prioritize")}
+                    {translate("screen.module.pickup_rule.prioritize")}
                   </Text>
                   <TouchableOpacity
                     style={gStyle.flexRowCenterAlign}
@@ -249,7 +249,7 @@ const ByCarrierConfig = (props) => {
               onPress={() => addRuleCarrier()}
             >
               <Text style={styles.textButton}>
-                {t("screen.module.pickup_rule.btn_submit")}
+                {translate("screen.module.pickup_rule.btn_submit")}
               </Text>
             </TouchableOpacity>
           </View>

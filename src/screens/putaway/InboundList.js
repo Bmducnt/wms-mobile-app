@@ -14,8 +14,6 @@ import { colors, gStyle } from '../../constants';
 import ListItemsPutaway from '../../components/ListItemsPutaway';
 import {_getTimeDefaultFrom,
   _getTimeDefaultTo,
-  _getDatetimeToTimestamp,
-  _convertDatetimeToTimestamp,
   handleSoundScaner
 } from '../../helpers/device-height';
 import {permissionDenied} from '../../helpers/async-storage';
@@ -24,6 +22,7 @@ import putErrorPutawayInbound from '../../services/putaway/error-check';
 import getListPutawayInbound from '../../services/putaway/inbound';
 import EmptySearch from "../../components/EmptySearch";
 import ModelException from "./ModelException";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 
 
@@ -52,11 +51,11 @@ class InboundList extends React.PureComponent {
 
   UNSAFE_componentWillMount = async () =>{
     this.setState({from_time : this.props.fromTime,to_time : this.props.toTime})
-    this._fetchListPutawayHandler({
-      'status':this.state.tab_id,
-      'q' : this.props.code,
-      'v2':1
-    },this.state.tab_id)
+    await this._fetchListPutawayHandler({
+        'status': this.state.tab_id,
+        'q': this.props.code,
+        'v2': 1
+    }, this.state.tab_id)
   }
 
   componentDidMount() {
@@ -74,7 +73,7 @@ class InboundList extends React.PureComponent {
   }
 
   componentWillUnmount() {
-    this.willFocusSubscription.remove();
+    this.willFocusSubscription();
   };
 
   _fetchListPutawayHandler = async  (parram,tab_id) =>{
@@ -83,14 +82,13 @@ class InboundList extends React.PureComponent {
     if (response.status === 200){
       this.setState({list_inbounds:response.data.results,reports :response.data.reports});
     }else if (response.status === 403){
-      permissionDenied(this.props.navigation);
+      await permissionDenied(this.props.navigation);
     }
     this.setState({isloading:false});
   };
 
-  _putErrorLostItem = async (quantity,error_code) =>{
+  _putErrorLostItem = async (quantity,error_code) => {
     this.setState({isloading:true});
-    const {t} = this.props;
     const response = await putErrorPutawayInbound(JSON.stringify({
         bsin: this.state.bsin,
         tracking_code: this.state.tracking_code,
@@ -101,7 +99,7 @@ class InboundList extends React.PureComponent {
     if (response.status === 200){
         Alert.alert(
           '',
-          t('screen.module.putaway.text_ok'),
+          translate('screen.module.putaway.text_ok'),
           [
             {
               text: t("base.confirm"),
@@ -118,13 +116,13 @@ class InboundList extends React.PureComponent {
     this.setState({isloading:false});
 };
 
-  
+
   onchangeTab =async (code) =>{
-    this._fetchListPutawayHandler({
-        'status':code,
-        'q' : this.props.code,
-        'v2':1
-      },code)
+    await this._fetchListPutawayHandler({
+        'status': code,
+        'q': this.props.code,
+        'v2': 1
+    }, code)
   }
 
   onPressModel = async (code) => {
@@ -137,32 +135,31 @@ class InboundList extends React.PureComponent {
       bsin:bsin,
       box:box,
     })
-    this.onPressModel(true)
+    await this.onPressModel(true)
   };
 
   render_sticky_header = ()=>{
-      const {t} = this.props;
       return (
         <View style={[gStyle.flexRow,{position:"absolute",bottom:0,zIndex:100,backgroundColor:colors.borderLight}]}>
               <TouchableOpacity
-                onPress={() => this.onchangeTab(0)} 
-                activeOpacity={gStyle.activeOpacity} 
+                onPress={() => this.onchangeTab(0)}
+                activeOpacity={gStyle.activeOpacity}
                 style={[gStyle.flexRowSpace,{paddingVertical:17,width:'50%',paddingHorizontal:10,
                 }]}
             >
-                  <Text style={{color:this.state.tab_id==0 ?colors.boxmeBrand:colors.greyInactive,...gStyle.textBoxme14}} numberOfLines={1}>
-                    {t('screen.module.putaway.report_a')}
+                  <Text style={{color:this.state.tab_id===0 ?colors.boxmeBrand:colors.greyInactive,...gStyle.textBoxme14}} numberOfLines={1}>
+                    {translate('screen.module.putaway.report_a')}
                   </Text>
-                  <Text style={{color:this.state.tab_id==0 ?colors.boxmeBrand:colors.greyInactive,...gStyle.textBoxme14}}>{this.state.reports.goods_a}</Text>
+                  <Text style={{color:this.state.tab_id===0 ?colors.boxmeBrand:colors.greyInactive,...gStyle.textBoxme14}}>{this.state.reports.goods_a}</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.onchangeTab(1)}  
+              <TouchableOpacity onPress={() => this.onchangeTab(1)}
                 activeOpacity={gStyle.activeOpacity} style={[gStyle.flexRowSpace,{
                     paddingVertical:17,width:'50%',paddingHorizontal:10,
                     }]}>
-                  <Text style={{color:this.state.tab_id==1 ?colors.boxmeBrand:colors.greyInactive,...gStyle.textBoxme14}} numberOfLines={1}>
-                    {t('screen.module.putaway.report_d')}
+                  <Text style={{color:this.state.tab_id===1 ?colors.boxmeBrand:colors.greyInactive,...gStyle.textBoxme14}} numberOfLines={1}>
+                    {translate('screen.module.putaway.report_d')}
                   </Text>
-                  <Text style={{color:this.state.tab_id==1 ?colors.boxmeBrand:colors.greyInactive,...gStyle.textBoxme14}}>{this.state.reports.goods_d}</Text>
+                  <Text style={{color:this.state.tab_id===1 ?colors.boxmeBrand:colors.greyInactive,...gStyle.textBoxme14}}>{this.state.reports.goods_d}</Text>
               </TouchableOpacity>
           </View>
       )
@@ -177,19 +174,18 @@ class InboundList extends React.PureComponent {
     const {t,navigation} = this.props;
     return (
       <View style={[gStyle.container,{marginTop:0}]}>
-          
-          {isloading && 
+
+          {isloading &&
           <View style={[gStyle.flexCenter,{marginTop:"20%"}]}>
             <ActivityIndicator animating={true}  style={{opacity:1}} color={colors.white} /></View>}
-          {list_inbounds.length === 0 && 
-            <EmptySearch t={t}/>}
+          {list_inbounds.length === 0 &&
+            <EmptySearch/>}
           {list_inbounds.length > 0 &&<FlatList
             data={list_inbounds}
             keyExtractor={({ dr_id }) => dr_id.toString()}
             renderItem={({ item }) => (
               <ListItemsPutaway
                 navigation = {navigation}
-                translate ={t}
                 itemInfo={{
                   'time_created': item.created_date,
                   'created_by': item.staff_id,
@@ -211,7 +207,7 @@ class InboundList extends React.PureComponent {
                   'storage_type' : item.fnsku_info.storage_type,
                   'location_code' : item.location_code,
                   'update_by' : item.update_by,
-                  'fnsku_barcode' : item.fnsku_info.barcode ? item.fnsku_info.barcode  : item.fnsku_info.bsin 
+                  'fnsku_barcode' : item.fnsku_info.barcode ? item.fnsku_info.barcode  : item.fnsku_info.bsin
                 }}
                 onPressModel = {this.onSelectBoxError}
                 disableRightSide={false}
@@ -219,7 +215,7 @@ class InboundList extends React.PureComponent {
             )}
           />}
           {this.render_sticky_header()}
-          <ModelException onClose={this.onPressModel} visible ={open_model} t={t} navigation={navigation} onSubmit={this._putErrorLostItem}/>
+          <ModelException onClose={this.onPressModel} visible ={open_model} navigation={navigation} onSubmit={this._putErrorLostItem}/>
       </View>
     );
   }

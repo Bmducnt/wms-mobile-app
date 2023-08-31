@@ -57,7 +57,7 @@ const ModelOptionPickup = (props) => {
           </View>
           <View style={{ width: Dimensions.get("window").width - 90 }}>
             <View style={[gStyle.flexRowSpace]}>
-              <Text style={styles.textValue}>{props.t(obj.title)}</Text>
+              <Text style={styles.textValue}>{translate(obj.title)}</Text>
               <TouchableOpacity
                 style={{
                   backgroundColor:
@@ -78,7 +78,7 @@ const ModelOptionPickup = (props) => {
             </View>
             <View style={[gStyle.flexRowSpace]}>
               <Text style={[styles.textLabel, { width: "80%" }]}>
-                {props.t(obj.sub)}
+                {translate(obj.sub)}
               </Text>
             </View>
           </View>
@@ -96,7 +96,7 @@ const ModelOptionPickup = (props) => {
             marginBottom: -10,
           }}
         >
-          {props.t("screen.module.pickup.create.tracking_code")}
+          {translate("screen.module.pickup.create.tracking_code")}
         </Text>
         <TextInputComponent
           navigation={props.navigation}
@@ -125,7 +125,7 @@ const ModelOptionPickup = (props) => {
             onPress={() => props.onSelect("by_tracking", trackingCode)}
           >
             <Text style={styles.textButton}>
-              {props.t("screen.module.pickup.create.btn_create")}
+              {translate("screen.module.pickup.create.btn_create")}
             </Text>
           </TouchableOpacity>
         </View>
@@ -161,7 +161,7 @@ const ModelOptionPickup = (props) => {
               ]}
             >
               <Text>
-                {props.t("screen.module.pickup.create.text_select_pickup")}
+                {translate("screen.module.pickup.create.text_select_pickup")}
               </Text>
               <TouchableOpacity
                 onPress={() => props.onClose()}
@@ -203,7 +203,7 @@ const ModelOptionPickup = (props) => {
                     color: !showBytracking ? colors.white : colors.black,
                   }}
                 >
-                  {props.t("screen.module.pickup.create.by_order_type")}
+                  {translate("screen.module.pickup.create.by_order_type")}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -224,7 +224,7 @@ const ModelOptionPickup = (props) => {
                     color: showBytracking ? colors.white : colors.black,
                   }}
                 >
-                  {props.t("screen.module.pickup.create.by_tracking_code")}
+                  {translate("screen.module.pickup.create.by_tracking_code")}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -243,7 +243,7 @@ const ModelOptionPickup = (props) => {
                           paddingHorizontal: 10,
                         }}
                       >
-                        {props.t(track.title)}
+                        {translate(track.title)}
                       </Text>
                       {track.data.map((element, kindex) =>
                         renderPickupType(element, kindex)
@@ -258,7 +258,6 @@ const ModelOptionPickup = (props) => {
           </View>
           {openSeller && (
             <ModelSellerPick
-              trans={props.t}
               onClose={setopenSeller}
               onSubmit={onSubmitSeller}
             />

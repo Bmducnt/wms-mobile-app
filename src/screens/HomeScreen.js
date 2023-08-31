@@ -6,18 +6,18 @@ import {
   View,
   Image,
 } from 'react-native';
-import { 
+import {
   Entypo,
   Feather
 } from '@expo/vector-icons';
 import LinearGradient from "../components/LinearGradient";
 
 import ActionButton from 'react-native-action-button';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { 
-  colors, 
-  device, 
+import {
+  colors,
+  device,
   gStyle ,
   images
 } from '../constants';
@@ -71,7 +71,7 @@ class HomeScreen extends React.PureComponent {
       imageAvartar: JSON.parse(email_login).avatar,
       warehouse_code: JSON.parse(email_login).warehouse_id.name
     });
-    
+
   };
 
   iconActionFind = async () => {
@@ -98,8 +98,7 @@ class HomeScreen extends React.PureComponent {
       from_time
     } = this.state;
     const { navigation} = this.props;
-    const { t } = this.props.screenProps;
-    
+
     return (
       <React.Fragment>
         <View style={[gStyle.container]}>
@@ -138,27 +137,26 @@ class HomeScreen extends React.PureComponent {
           showsVerticalScrollIndicator={false}
           style={[gStyle.container]}
         >
-          
-          
-          <OrderFailSLAHandover t={t} from_time={from_time} to_time ={to_time} navigation={navigation} />
 
 
-          <StaffReport t={t} navigation={navigation} />
+          <OrderFailSLAHandover from_time={from_time} to_time ={to_time} navigation={navigation} />
 
 
-          <TaskReceived t={t} navigation={navigation} />
-          
-          <ReportAdmin t={t} to_time ={to_time} />
-          
-          <OrderPending t={t} />
-          
+          <StaffReport navigation={navigation} />
+
+
+          <TaskReceived navigation={navigation} />
+
+          <ReportAdmin to_time ={to_time} />
+
+          <OrderPending />
+
           <View style={gStyle.spacer11} />
           <View style={gStyle.spacer11} />
         </Animated.ScrollView>
        </View>
 
         <MenuHorizontal
-          trans = {t}
           navigation={navigation}
           isVisible={isVisibleMenu}
           onClose={this.onLoadMenu}
@@ -170,11 +168,11 @@ class HomeScreen extends React.PureComponent {
             outRangeScale = {0}
             size={50}
             renderIcon={() =><Image source={images["main_menu"]} style={{width:26,height:26,}} />}
-            
+
             onPress={() => this.onLoadMenu(true)}
         />
-        
-        
+
+
       </React.Fragment>
     );
   }

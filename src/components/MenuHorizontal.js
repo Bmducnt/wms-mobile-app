@@ -11,8 +11,8 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { withNavigation } from "react-navigation";
 import { colors, gStyle, images, device } from "../constants";
+import {translate} from "../i18n/locales/IMLocalized";
 const MenuHorizontal = (props) => {
   const [data, setdata] = React.useState(props.data);
   const [navigation, setnavigation] = React.useState(props.navigation);
@@ -49,7 +49,7 @@ const MenuHorizontal = (props) => {
                 numberOfLines={2}
                 ellipsizeMode="tail"
               >
-                {props.trans(`${item.title}`)}
+                {translate(`${item.title}`)}
               </Text>
             </TouchableOpacity>
           );
@@ -94,7 +94,7 @@ const MenuHorizontal = (props) => {
                 },
               ]}
             >
-              <Text>{props.trans("screen.module.home.menu")}</Text>
+              <Text>{translate("screen.module.home.menu")}</Text>
               <TouchableOpacity
                 onPress={() => props.onClose(false)}
                 style={gStyle.flexCenter}
@@ -149,4 +149,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withNavigation(MenuHorizontal);
+export default MenuHorizontal

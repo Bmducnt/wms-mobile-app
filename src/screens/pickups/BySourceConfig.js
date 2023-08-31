@@ -13,9 +13,9 @@ import { colors, gStyle, device } from "../../constants";
 import addRulePickup from "../../services/pickup/add-rule";
 import getListRulePickup from "../../services/pickup/list-rule";
 import removeRulePickup from "../../services/pickup/remove_rule";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 const BySourceConfig = (props) => {
-  const t = props.t;
 
   const [listSource, setlistSource] = React.useState([
     {
@@ -66,24 +66,24 @@ const BySourceConfig = (props) => {
   const [sourceSelect, setsourceSelect] = React.useState(null);
   const [source, setsource] = React.useState(null);
 
-  fetchConfig = async () => {
+  const fetchConfig = async () => {
     const response = await getListRulePickup({ key: "by_source" });
     if (response?.status === 200) {
       setsource(response?.data?.results);
     }
   };
 
-  removeSourceConfig = async () => {
+  const removeSourceConfig = async () => {
     await removeRulePickup(JSON.stringify({ rule_type: "by_source" }));
     setsource(null);
   };
 
-  onClose = async () => {
+  const onClose = async () => {
     props.onClose(false);
     props.onReload();
   };
 
-  addRuleSource = async () => {
+  const addRuleSource = async () => {
     if (sourceSelect) {
       const response = await addRulePickup(
         JSON.stringify({
@@ -94,10 +94,10 @@ const BySourceConfig = (props) => {
       if (response?.status === 200) {
         Alert.alert(
           "",
-          t("screen.module.pickup_rule.add_ok"),
+          translate("screen.module.pickup_rule.add_ok"),
           [
             {
-              text: t("base.confirm"),
+              text: translate("base.confirm"),
               onPress: () => onClose(),
             },
           ],
@@ -109,7 +109,7 @@ const BySourceConfig = (props) => {
     }
   };
 
-  onSelectSource = async (source) => {
+  const onSelectSource = async (source) => {
     let is_submmit = false;
     let updatedList = listSource.map((item) => {
       if (item.source_name === source) {
@@ -149,7 +149,7 @@ const BySourceConfig = (props) => {
               },
             ]}
           >
-            <Text>{t("screen.module.pickup_rule.by_source_title")}</Text>
+            <Text>{translate("screen.module.pickup_rule.by_source_title")}</Text>
             <TouchableOpacity
               onPress={() => onClose()}
               style={gStyle.flexRowSpace}
@@ -164,7 +164,7 @@ const BySourceConfig = (props) => {
           </View>
           <View>
             <Text style={{ paddingHorizontal: 15, paddingVertical: 13 }}>
-              {t("screen.module.pickup_rule.by_source_title_sub")}
+              {translate("screen.module.pickup_rule.by_source_title_sub")}
             </Text>
           </View>
           <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
@@ -176,7 +176,7 @@ const BySourceConfig = (props) => {
                 marginVertical: 5,
               }}
             >
-              <Text>{t("screen.module.pickup_rule.by_source_list")}</Text>
+              <Text>{translate("screen.module.pickup_rule.by_source_list")}</Text>
               {source && (
                 <View
                   style={[
@@ -205,7 +205,7 @@ const BySourceConfig = (props) => {
                     <Text
                       style={{ color: colors.darkgreen, ...gStyle.textBoxme14 }}
                     >
-                      {t("screen.module.pickup_rule.prioritize")}
+                      {translate("screen.module.pickup_rule.prioritize")}
                     </Text>
                     <TouchableOpacity
                       style={gStyle.flexRowCenterAlign}
@@ -274,7 +274,7 @@ const BySourceConfig = (props) => {
               onPress={() => addRuleSource()}
             >
               <Text style={styles.textButton}>
-                {t("screen.module.pickup_rule.btn_submit")}
+                {translate("screen.module.pickup_rule.btn_submit")}
               </Text>
             </TouchableOpacity>
           </View>

@@ -1,37 +1,31 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
 // screens
 import PickupsLists from '../screens/pickups/ListPickup';
 import PickupDetails from '../screens/pickups/DetailPickup';
 import PickupRules from '../screens/pickups/PickupRules'
-// icons
-import SvgTabPicked from '../components/icons/Svg.Picked';
 
-const Icon = ({ focused }) => <SvgTabPicked active={focused} />;
+const Stack = createStackNavigator();
 
-Icon.propTypes = {
-  // required
-  focused: PropTypes.bool.isRequired
-};
-
-export default createStackNavigator(
-  {
-    PickupMain: {
-      screen: PickupsLists,
-      navigationOptions: {
-        cardStyle: { backgroundColor: 'transparent' , opacity: 1}
-      }
-    },
-    PickupDetails,
-    PickupRules
-  },
-  {
-    headerMode: 'none',
-    navigationOptions: ({ screenProps: { t } }) => ({
-      tabBarLabel: t('screen.menu.pickup'),
-      tabBarIcon: Icon
-    })
-  }
-);
+const StackPickupNavigator = ()=> {
+    return (
+        <Stack.Navigator
+            initialRouteName="PickupsLists"
+            screenOptions={{
+                gestureEnabled: true,
+                gestureDirection: 'horizontal',
+                headerShown: false,
+            }}>
+            <Stack.Screen name="PickupsLists">
+                {props => <PickupsLists {...props}/>}
+            </Stack.Screen>
+            <Stack.Screen name="PickupDetails">
+                {props => <PickupDetails {...props}/>}
+            </Stack.Screen>
+            <Stack.Screen name="PickupRules">
+                {props => <PickupRules {...props}/>}
+            </Stack.Screen>
+        </Stack.Navigator>
+    )
+}
+export default StackPickupNavigator

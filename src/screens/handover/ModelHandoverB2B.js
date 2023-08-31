@@ -21,6 +21,8 @@ import {
 	permissionDenied,
 	handleSoundOkScaner,
 } from "../../helpers/async-storage"
+import {translate} from "../../i18n/locales/IMLocalized";
+
 //service api
 import getListBoxB2BHandover from '../../services/handover/b2b-get';
 import confirmBoxB2BHandover from '../../services/handover/b2b-put';
@@ -43,21 +45,20 @@ class ModelHandoverB2B extends React.PureComponent {
     };
 
     componentDidMount() {
-        const {navigation} = this.props
+        const {params} = this.props?.route
 		this.setState({
-			tracking_code: navigation.getParam("tracking_code")
+			tracking_code: params?.tracking_code
 		})
-		
+
 	}
 
     UNSAFE_componentWillMount = async () =>{
-        const {navigation} = this.props
-        this.fetchOrderB2B(navigation.getParam("tracking_code"));
+        const {params} = this.props?.route
+        await this.fetchOrderB2B(params?.tracking_code);
     }
 
     fetchOrderB2B = async (tracking_code) => {
 		this.setState({is_loading: true});
-        const { t } = this.props.screenProps;
         const response = await getListBoxB2BHandover({
             'tracking_code' : tracking_code
         });
@@ -67,10 +68,10 @@ class ModelHandoverB2B extends React.PureComponent {
                 if (response.data?.success === false){
                     Alert.alert(
                         '',
-                        t("screen.module.handover.b2b_document_submit_error"),
+                        translate("screen.module.handover.b2b_document_submit_error"),
                         [
                           {
-                            text: t("base.confirm"),
+                            text: translate("base.confirm"),
                             onPress: () => this.props.navigation.goBack(null),
                           }
                         ],
@@ -84,7 +85,7 @@ class ModelHandoverB2B extends React.PureComponent {
                         is_loading: false,
                     })
                 }
-                
+
             }else{
                 this.setState({
                     total_box_done: response.data.total_box_done,
@@ -94,8 +95,8 @@ class ModelHandoverB2B extends React.PureComponent {
                     is_loading: false,
                 })
             }
-			
-			
+
+
 		} else if (response.status === 403) {
 			permissionDenied(this.props.navigation)
 		} else {
@@ -111,7 +112,6 @@ class ModelHandoverB2B extends React.PureComponent {
 
     submitOrderB2B = async (code,is_submit_invoice) => {
 		this.setState({is_loading: true});
-        const { t } = this.props.screenProps;
 
 		const response = await confirmBoxB2BHandover({
 			tracking_code: this.state.tracking_code,
@@ -123,10 +123,10 @@ class ModelHandoverB2B extends React.PureComponent {
             if(response.data?.is_submit_invoice === true){
                 Alert.alert(
                     '',
-                    t("screen.module.handover.b2b_document_submit_ok"),
+                    translate("screen.module.handover.b2b_document_submit_ok"),
                     [
                       {
-                        text: t("base.confirm"),
+                        text: translate("base.confirm"),
                         onPress: () => this.props.navigation.goBack(null),
                       }
                     ],
@@ -140,8 +140,8 @@ class ModelHandoverB2B extends React.PureComponent {
                     is_loading: false,
                 })
             }
-			
-			
+
+
 		} else if (response.status === 403) {
 			permissionDenied(this.props.navigation)
 		} else {
@@ -203,18 +203,18 @@ class ModelHandoverB2B extends React.PureComponent {
                             ...gStyle.textBoxme14,
                             paddingTop:5,
                             color:colors.white
-                    }}>{t("screen.module.handover.b2b_box_de")}</Text>
+                    }}>{translate("screen.module.handover.b2b_box_de")}</Text>
                 </View>
                 <View >
                     <TextInputComponent
                         navigation={navigation}
-                        textLabel={t("screen.module.handover.b2b_box_label")}
+                        textLabel={translate("screen.module.handover.b2b_box_label")}
                         inputValue={box_code_scan}
                         autoFocus={true}
                         is_close={false}
                         onPressCamera={this.onSubmitEditingInput}
                         onSubmitEditingInput={this.onSubmitEditingInput}
-                        textPlaceholder={t("screen.module.handover.b2b_box_input")}
+                        textPlaceholder={translate("screen.module.handover.b2b_box_input")}
                     />
 				</View>
                 <View style={[styles.container]}>
@@ -224,7 +224,7 @@ class ModelHandoverB2B extends React.PureComponent {
                             color:colors.white,
                             paddingBottom:5
                         }}>
-                            {t("screen.module.handover.b2b_box_awaiting")}
+                            {translate("screen.module.handover.b2b_box_awaiting")}
                         </Text>
                         <Text style={{
                             ...gStyle.textBoxme14,
@@ -249,7 +249,7 @@ class ModelHandoverB2B extends React.PureComponent {
 
                                     <View style={gStyle.flexRowSpace}>
                                         <View >
-                                            
+
                                             <Text style={{
                                                 color:colors.white,
                                                 ...gStyle.textBoxme14
@@ -258,10 +258,10 @@ class ModelHandoverB2B extends React.PureComponent {
                                             style={{
                                                 color:colors.white,
                                                 ...gStyle.textBoxme14
-                                            }}>{t("screen.module.handover.b2b_box_qt")} {item.overpack_quantity}</Text>
+                                            }}>{translate("screen.module.handover.b2b_box_qt")} {item.overpack_quantity}</Text>
                                         </View>
                                         <Badge
-                                            name={`${t("screen.module.handover.b2b_box_status")}`}
+                                            name={`${translate("screen.module.handover.b2b_box_status")}`}
                                             style={{
                                                 backgroundColor: colors.cardLight,
                                                 color: colors.boxmeBrand,
@@ -283,7 +283,7 @@ class ModelHandoverB2B extends React.PureComponent {
                         disabled={list_box_awaiting_confirm.length > 0}
                         onPress={() => this.onSubmit()}>
                         <Text style={styles.textButton} numberOfLines={1} ellipsizeMode="tail">
-                        {t("screen.module.handover.b2b_btn_submit")}
+                        {translate("screen.module.handover.b2b_btn_submit")}
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -309,11 +309,11 @@ class ModelHandoverB2B extends React.PureComponent {
                                 ...gStyle.textBoxme16,
                                 paddingTop:5,
                                 color:colors.black
-                            }}>{t("screen.module.handover.b2b_document_attach")}</Text>
+                            }}>{translate("screen.module.handover.b2b_document_attach")}</Text>
                                 <Text style={{
                                 ...gStyle.textBoxme12,
                                 color:colors.black40
-                            }}>{t("screen.module.handover.b2b_document_attach_sub")}</Text>
+                            }}>{translate("screen.module.handover.b2b_document_attach_sub")}</Text>
                         </View>
                         <Text style={{
                             ...gStyle.textBoxmeBold26,
@@ -330,14 +330,14 @@ class ModelHandoverB2B extends React.PureComponent {
                             color:colors.white,
                             paddingBottom:5
                         }}>
-                            {t("screen.module.handover.b2b_document_list")}
+                            {translate("screen.module.handover.b2b_document_list")}
                         </Text>
                         <Text style={{
                             ...gStyle.textBoxme12,
                             color:colors.greyInactive,
                             paddingBottom:10
                         }}>
-                            {t("screen.module.handover.b2b_document_alert")}
+                            {translate("screen.module.handover.b2b_document_alert")}
                         </Text>
                     </View>
                     <FlatList
@@ -370,7 +370,7 @@ class ModelHandoverB2B extends React.PureComponent {
                                                 ...gStyle.textBoxme16,
                                                 paddingTop:5,
                                                 color:colors.black50
-                                            }}>{t("screen.module.handover.b2b_document_quantity")} {item.quantity}</Text>
+                                            }}>{translate("screen.module.handover.b2b_document_quantity")} {item.quantity}</Text>
                                     </View>
                                 </View>
                                 <View >
@@ -384,7 +384,7 @@ class ModelHandoverB2B extends React.PureComponent {
                                         onPress={() => this._printPdf(item.url)}>
                                             <Feather color={colors.white} name='printer' size={16}/>
                                     </TouchableOpacity>
-                                    
+
                                 </View>
                             </View>
                         )}
@@ -398,7 +398,7 @@ class ModelHandoverB2B extends React.PureComponent {
                         }]}
                         onPress={() => this.submitOrderB2B(this.state.tracking_code,1)}>
                         <Text style={styles.textButton} numberOfLines={1} ellipsizeMode="tail">
-                            {t("screen.module.handover.b2b_btn_submit_printer")}
+                            {translate("screen.module.handover.b2b_btn_submit_printer")}
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -417,13 +417,12 @@ class ModelHandoverB2B extends React.PureComponent {
             total_invoice_copy,
             is_awaiting_invocie
         } = this.state;
-        const { t } = this.props.screenProps;
         return (
             <View style={gStyle.containerModel}>
                 <ModalHeader
                     right={<Feather color={colors.white} name="x" />}
                     rightPress={() => navigation.goBack(null)}
-                    text={t("screen.module.handover.b2b_header")}
+                    text={translate("screen.module.handover.b2b_header")}
                 />
                 {is_awaiting_invocie ? this.render_document_print(t,list_document,total_invoice_copy) : this.render_box_scan(
                     t,
@@ -474,6 +473,6 @@ const styles = StyleSheet.create({
         color:colors.white,
         ...gStyle.textBoxmeBold14,
     }
-  
+
 });
 export default React.memo(ModelHandoverB2B);

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { 
-    Modal, 
-    Text, 
-    TouchableOpacity, 
+import {
+    Modal,
+    Text,
+    TouchableOpacity,
     View,StyleSheet,
     ActivityIndicator,
     FlatList,
@@ -19,6 +19,7 @@ import { colors, gStyle } from "../constants";
 
 //
 import findDetailFnskuMove from '../services/products/find';
+import {translate} from "../i18n/locales/IMLocalized";
 
 const BottomModal = props => {
   const [isDatePickerVisibley,setisDatePickerVisibley] = useState(false);
@@ -49,10 +50,10 @@ const BottomModal = props => {
           if(_convertDatetimeToTimestamp(new Date(code)) <= _getTimeDefaultTo()){
             Alert.alert(
                 '',
-                props.t('screen.module.pickup.detail.expire_date_err'),
+                translate('screen.module.pickup.detail.expire_date_err'),
                 [
                   {
-                    text: props.t("base.confirm"),
+                    text: translate("base.confirm"),
                     onPress: () => setisDatePickerVisibley(false),
                   },
                 ],
@@ -63,9 +64,9 @@ const BottomModal = props => {
             setexpireDate(_convertDatetimeToTimestamp(new Date(code)));
             setisDatePickerVisibley(false);
           }
-          
+
       }
-    
+
   }
 
   const onSubmit = async (expire_date) => {
@@ -73,10 +74,10 @@ const BottomModal = props => {
         if(!batchControlCode){
             Alert.alert(
                 '',
-                props.t('screen.module.pickup.detail.lot_err'),
+                translate('screen.module.pickup.detail.lot_err'),
                 [
                   {
-                    text: props.t("base.confirm"),
+                    text: translate("base.confirm"),
                     onPress: null,
                   },
                 ],
@@ -90,10 +91,10 @@ const BottomModal = props => {
             if(expire_date <= _getTimeDefaultTo()){
                 Alert.alert(
                     '',
-                    props.t('screen.module.pickup.detail.expire_date_err'),
+                    translate('screen.module.pickup.detail.expire_date_err'),
                     [
                       {
-                        text: props.t("base.confirm"),
+                        text: translate("base.confirm"),
                         onPress: null,
                       },
                     ],
@@ -107,7 +108,7 @@ const BottomModal = props => {
       }else{
         props.onSubmit(expire_date,batchControlCode)
       }
-    
+
   }
 
   const onSelectDateSugget = async (tab_m) => {
@@ -134,22 +135,22 @@ const BottomModal = props => {
                     borderRadius:6,
                     backgroundColor:colors.white}]}>
                 <View style={[gStyle.flexCenter]}>
-                    <Feather color={tabSelect ===item.expire_date ? colors.darkgreen:colors.black70} 
+                    <Feather color={tabSelect ===item.expire_date ? colors.darkgreen:colors.black70}
                         name={tabSelect ===item.expire_date ?  'check-circle':'circle'} size={14}/>
                 </View>
                 <View style={{paddingVertical:6,marginLeft:5}}>
                     <Text style={[styles.textValue,{color:colors.black}]}>
                         {item.expire_date}
                     </Text>
-                    
+
                 </View>
-                
+
             </View>
-            
+
         </TouchableOpacity>
       )
   };
-  
+
   return (
     <Modal
         animationType="slide"
@@ -173,21 +174,21 @@ const BottomModal = props => {
                         borderBottomWidth:1.5,
                         backgroundColor:colors.whiteBg
                     }]}>
-                        <Text style={{color:colors.blackBlur}}>{props.t('screen.module.pickup.detail.list_expried')}</Text>
-                        <TouchableOpacity 
+                        <Text style={{color:colors.blackBlur}}>{translate('screen.module.pickup.detail.list_expried')}</Text>
+                        <TouchableOpacity
                             onPress={() => props.onCloseModel()}
                             activeOpacity={gStyle.activeOpacity}
                             style={gStyle.flexCenter}
                         >
                             <Feather color={colors.blackBlur} name='chevron-down' size={20}/>
-                            
+
                         </TouchableOpacity>
                     </View>
                     <View style={{marginTop:10}}>
                         <Text style={[styles.textLabel,{
                             paddingHorizontal:15,
                             marginBottom:-10
-                        }]}>{props.t('screen.module.cycle_check.update.label_quantity')}</Text>
+                        }]}>{translate('screen.module.cycle_check.update.label_quantity')}</Text>
                         <TextInputComponent
                             navigation={props.navigation}
                             textLabel = {null}
@@ -202,7 +203,7 @@ const BottomModal = props => {
                             textPlaceholder={''}
                         />
                     </View>
-                    {batchControl === 1 && 
+                    {batchControl === 1 &&
                     <View style={{marginTop:10}}>
                         <Text style={[styles.textLabel,{
                             paddingHorizontal:15,
@@ -226,7 +227,7 @@ const BottomModal = props => {
                         marginTop:10
                     }}>
                         {listData.length > 0 && <View >
-                            <Text style={[styles.textLabel,{marginTop:10}]}>{props.t('screen.module.pickup.detail.list_expried')}(YYYY-MM-DD)</Text>
+                            <Text style={[styles.textLabel,{marginTop:10}]}>{translate('screen.module.pickup.detail.list_expried')}(YYYY-MM-DD)</Text>
                             <FlatList
                                 numColumns={Math.ceil(listData.length / 2)}
                                 showsVerticalScrollIndicator={false}
@@ -238,9 +239,9 @@ const BottomModal = props => {
                                 )}
                             />
                         </View> }
-                        <Text style={[styles.textLabel,{marginTop:10}]}>{props.t('screen.module.pickup.detail.expire_date')}</Text>
+                        <Text style={[styles.textLabel,{marginTop:10}]}>{translate('screen.module.pickup.detail.expire_date')}</Text>
                         <View style={[gStyle.flexRow]}>
-                            <TouchableOpacity 
+                            <TouchableOpacity
                                 onPress={() => onOpenDatimePicker()}
                                 activeOpacity={gStyle.activeOpacity}
                                 style={[gStyle.flexRowSpace,
@@ -266,17 +267,16 @@ const BottomModal = props => {
                     <DatePickerBase
                         isDatePickerVisible = {isDatePickerVisibley}
                         typeLoad = {isLoadTime}
-                        trans = {props.t}
-                        headerText ={props.t('screen.module.pickup.detail.expire_date')}
+                        headerText ={translate('screen.module.pickup.detail.expire_date')}
                         onCancel= {setisDatePickerVisibley}
                         onConfirm={onConfirm}
                     />
 
                     <View style={[gStyle.flexRow,{marginTop:20,paddingHorizontal:15}]}>
-                        <TouchableOpacity style={[styles.bottomButton,{backgroundColor:colors.darkgreen}]} 
+                        <TouchableOpacity style={[styles.bottomButton,{backgroundColor:colors.darkgreen}]}
                             onPress={() => onSubmit(expireDate)}>
                             {!props.isLoading ? <Text style={styles.textButton}>
-                                {props.t('screen.module.pickup.detail.btn_accept')}
+                                {translate('screen.module.pickup.detail.btn_accept')}
                             </Text>:<ActivityIndicator/>}
                         </TouchableOpacity>
                     </View>

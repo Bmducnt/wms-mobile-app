@@ -10,10 +10,10 @@ import {
   Alert,
 } from "react-native";
 import LottieView from 'lottie-react-native';
-import { 
-  colors, 
-  gStyle, 
-  device 
+import {
+  colors,
+  gStyle,
+  device
 } from "../../constants";
 import ListFnskuInventoryBin from "../../components/ListFnskuInventoryBin";
 import {
@@ -28,6 +28,7 @@ import ScreenHeader from "../../components/ScreenHeader";
 //service
 import getStockBin from "../../services/rack/stock-bin";
 import addNewInventoryCheck from "../../services/rack/add-bin-check";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 class CreateResquest extends React.PureComponent {
   constructor() {
@@ -44,22 +45,22 @@ class CreateResquest extends React.PureComponent {
   }
 
   UNSAFE_componentWillMount = async () =>{
-    if (this.props.navigation.getParam("fnsku_code")){
-      await this.setState({code_scan : this.props.navigation.getParam("fnsku_code")});
-      this._fetchDetailLocation(this.props.navigation.getParam("fnsku_code"));
-    };
+    const { params } = this.props?.route
+    if (params?.fnsku_code){
+      await this.setState({code_scan : params?.fnsku_code});
+      await this._fetchDetailLocation(params?.fnsku_code);
+    }
   }
 
   _onSubmitEditingInput = async (code) => {
     if (code) {
       this.setState({ code_scan: code });
-      this._fetchDetailLocation(code);
+      await this._fetchDetailLocation(code);
     }
   };
 
   _fetchDetailLocation = async (code) => {
     this.setState({ is_loading: true ,bin_info :{},type_cycle : 2});
-    const { t } = this.props.screenProps;
     const response = await getStockBin(JSON.stringify({ location: code }));
     if (response.status === 200) {
       handleSoundOkScaner();
@@ -73,10 +74,10 @@ class CreateResquest extends React.PureComponent {
       if (response.data.error_code === 1){
         Alert.alert(
           "",
-          t('screen.module.cycle_check.add.alert_block'),
+          translate('screen.module.cycle_check.add.alert_block'),
           [
             {
-              text: t("base.confirm"),
+              text: translate("base.confirm"),
               onPress: () => null,
             },
           ],
@@ -85,10 +86,10 @@ class CreateResquest extends React.PureComponent {
       }if (response.data.error_code === 3){
         Alert.alert(
           "",
-          t('screen.module.cycle_check.add.alert_block_staff'),
+          translate('screen.module.cycle_check.add.alert_block_staff'),
           [
             {
-              text: t("base.confirm"),
+              text: translate("base.confirm"),
               onPress: () => null,
             },
           ],
@@ -97,17 +98,17 @@ class CreateResquest extends React.PureComponent {
       }else{
         Alert.alert(
           "",
-          t('screen.module.cycle_check.add.alert_empty_bin'),
+          translate('screen.module.cycle_check.add.alert_empty_bin'),
           [
             {
-              text: t("base.confirm"),
+              text: translate("base.confirm"),
               onPress: () => null,
             },
           ],
           { cancelable: false }
         );
       }
-      
+
     } else if (response.status === 403) {
       permissionDenied(this.props.navigation);
     }
@@ -117,7 +118,6 @@ class CreateResquest extends React.PureComponent {
 
   _postRequestCheckLocation = async () => {
     this.setState({ is_loading: true });
-    const { t } = this.props.screenProps;
     const response = await addNewInventoryCheck(
       JSON.stringify({
         location: this.state.code_scan,
@@ -128,7 +128,7 @@ class CreateResquest extends React.PureComponent {
       })
     );
     if (response.status === 200) {
-      handleSoundOkScaner();
+      await handleSoundOkScaner();
       this.props.navigation.navigate('DetailResquest',{
         'tracking_code' : response.data.results.tracking_code,
         'status_id' : response.data.results.status_id,
@@ -144,13 +144,12 @@ class CreateResquest extends React.PureComponent {
 
   render() {
     const { navigation } = this.props;
-    const { bin_info, is_loading, bin_item_stock,type_cycle} = this.state;
-    const { t } = this.props.screenProps;
+    const { is_loading, bin_item_stock,type_cycle} = this.state;
     return (
       <React.Fragment>
         <View style={gStyle.container}>
-          <ScreenHeader 
-            title={t('screen.module.cycle_check.add.header')}
+          <ScreenHeader
+            title={translate('screen.module.cycle_check.add.header')}
             showBack={true}
             iconLeft={"chevron-down"}
             autoFocus={true}
@@ -158,8 +157,8 @@ class CreateResquest extends React.PureComponent {
             inputValueSend ={null}
             onPressCamera={this._onSubmitEditingInput}
             onSubmitEditingInput= {this._onSubmitEditingInput}
-            textPlaceholder={t("screen.module.cycle_check.add.input_location_text")}
-          />
+            textPlaceholder={translate("screen.module.cycle_check.add.input_location_text")}
+           navigation={navigation}/>
           {is_loading && <ActivityIndicator />}
           {type_cycle === 2 && (<View style={[gStyle.flexCenter,{marginHorizontal:15}]}>
                   <LottieView    style={{
@@ -167,9 +166,9 @@ class CreateResquest extends React.PureComponent {
                         height: 200,
                       }} source={require('../../assets/icons/check-list.json')} autoPlay loop />
                   <View style={[gStyle.flexCenter,{paddingHormarizontal:15}]}>
-                    <Text style={{...gStyle.textBoxme14,color:colors.white}}>{t('screen.module.cycle_check.add.helper_text1')}</Text>
-                    <Text style={{...gStyle.textBoxme14,color:colors.white}}>{t('screen.module.cycle_check.add.helper_text2')}</Text>
-                    <Text style={{...gStyle.textBoxme14,color:colors.white}}>{t('screen.module.cycle_check.add.helper_text3')}</Text>
+                    <Text style={{...gStyle.textBoxme14,color:colors.white}}>{translate('screen.module.cycle_check.add.helper_text1')}</Text>
+                    <Text style={{...gStyle.textBoxme14,color:colors.white}}>{translate('screen.module.cycle_check.add.helper_text2')}</Text>
+                    <Text style={{...gStyle.textBoxme14,color:colors.white}}>{translate('screen.module.cycle_check.add.helper_text3')}</Text>
                   </View>
               </View>
           )}
@@ -178,11 +177,11 @@ class CreateResquest extends React.PureComponent {
                 <Text
                     style={[
                       styles.sectionHeading,
-                      
+
                     ]}
                     numberOfLines={1}
                   >
-                    {t('screen.module.cycle_check.detail.text_list_product')}
+                    {translate('screen.module.cycle_check.detail.text_list_product')}
                 </Text>
             </View>
             {bin_item_stock.length > 0 ?<FlatList
@@ -205,16 +204,15 @@ class CreateResquest extends React.PureComponent {
                     fnsku_stock_check : 0
                   }}
                   staff_role={1}
-                  trans={t}
                   disableRightSide={true}
                 />
               )}
             />:
             <View style={styles.helperBox}>
               <Text style={{...gStyle.textBoxme16,color:colors.white}}>
-                {t('screen.module.cycle_check.add.alert_empty1')} </Text>
+                {translate('screen.module.cycle_check.add.alert_empty1')} </Text>
               <Text style={{...gStyle.textBoxme16,color:colors.white}}>
-                {t('screen.module.cycle_check.add.alert_empty2')}
+                {translate('screen.module.cycle_check.add.alert_empty2')}
               </Text>
               </View>
             }
@@ -225,7 +223,7 @@ class CreateResquest extends React.PureComponent {
                 style={[styles.bottomButton]}
                 onPress={() => this._postRequestCheckLocation()}
               >
-                <Text style={styles.textButton}>{t('screen.module.cycle_check.add.btn_add')}</Text>
+                <Text style={styles.textButton}>{translate('screen.module.cycle_check.add.btn_add')}</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -238,7 +236,6 @@ class CreateResquest extends React.PureComponent {
 CreateResquest.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({

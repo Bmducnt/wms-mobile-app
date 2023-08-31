@@ -10,6 +10,7 @@ import {
 import { Feather } from "@expo/vector-icons";
 import { SvgUri } from "react-native-svg";
 import { colors, gStyle ,device} from "../constants";
+import {translate} from "../i18n/locales/IMLocalized";
 const LineOrderOubound = ({
   logo_carrier,
   code,
@@ -55,8 +56,8 @@ const LineOrderOubound = ({
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
-                  
-                  {trans('screen.module.handover.update_by')}
+
+                  {translate('screen.module.handover.update_by')}
                 </Text>
                 <Text
                   style={styles.textInfo}
@@ -72,15 +73,15 @@ const LineOrderOubound = ({
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
-                  {trans('screen.module.handover.tracking_status')}
+                  {translate('screen.module.handover.tracking_status')}
                 </Text>
                 <TouchableOpacity
                 onPress={() => null}
               >
                 {is_error ?<Text style={{ color: colors.boxmeBrand,...gStyle.textBoxme14 }} numberOfLines={1}>
                   <Feather color={colors.boxmeBrand} name="x-circle" size={12} />{" "}
-                  {trans('screen.module.handover.btn_remove')}
-                </Text> : 
+                  {translate('screen.module.handover.btn_remove')}
+                </Text> :
                 <Text style={{ color: colors.brandPrimary,...gStyle.textBoxme14 }} numberOfLines={1}>
                     {status_code}
                   </Text>
@@ -93,7 +94,7 @@ const LineOrderOubound = ({
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
-                  {trans('screen.module.handover.reason_note')}
+                  {translate('screen.module.handover.reason_note')}
                 </Text>
                 <Text style={{ color: colors.brandPrimary,...gStyle.textBoxme14 }} numberOfLines={1}>
                     {reason_note}
@@ -104,7 +105,7 @@ const LineOrderOubound = ({
           <View style={[styles.percentBar]}></View>
         </View>
       </TouchableOpacity>
-      
+
     </View>
   );
 };

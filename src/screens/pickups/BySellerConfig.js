@@ -10,11 +10,11 @@ import {
   KeyboardAvoidingView,
   ScrollView
 } from 'react-native';
-import { 
+import {
     AntDesign,
-  } from '@expo/vector-icons'; 
-import { 
-  colors, 
+  } from '@expo/vector-icons';
+import {
+  colors,
   gStyle ,
   device
 } from '../../constants';
@@ -23,17 +23,16 @@ import addRulePickup from "../../services/pickup/add-rule";
 import getListRulePickup from "../../services/pickup/list-rule";
 import removeRulePickup from "../../services/pickup/remove_rule";
 import SellerOptions from "./SellerOptions";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 
 const BySellerConfig = props => {
-
-    const t = props.t;
 
     const [email, setEmail] = React.useState(null);
     const [listEmail, setlistEmail] = React.useState([]);
     const [filterConfig, setfilterConfig] = React.useState(false);
 
-    fetchListEmailConfig = async () => {
+    const fetchListEmailConfig = async () => {
         const response = await getListRulePickup({key : 'by_email'});
         if (response?.status === 200) {
             console.log(response?.data?.results)
@@ -41,21 +40,21 @@ const BySellerConfig = props => {
         }
     };
 
-    removeEmailConfig = async (seller_email) => {
+    const removeEmailConfig = async (seller_email) => {
         const response = await removeRulePickup(JSON.stringify({seller_email : seller_email}));
     };
 
-    onLoadAfterSb = async() =>{
+    const onLoadAfterSb = async() =>{
         fetchListEmailConfig();
         setfilterConfig(false);
     }
-    
-    onClose = async ()=>{
+
+    const onClose = async ()=>{
         props.onClose(false);
         props.onReload();
     }
 
-    addRuleSeller = async (pick_by_order,combo_name,quantity) => {
+    const addRuleSeller = async (pick_by_order,combo_name,quantity) => {
         if(email){
             const response = await addRulePickup(JSON.stringify({
                 rule_type: 'by_email',
@@ -67,7 +66,7 @@ const BySellerConfig = props => {
             if (response?.status === 200) {
                 Alert.alert(
                     '',
-                    t('screen.module.pickup_rule.add_ok'),
+                    translate('screen.module.pickup_rule.add_ok'),
                     [
                     {
                         text: t("base.confirm"),
@@ -110,20 +109,20 @@ const BySellerConfig = props => {
                     }]}>
 
                         <Text >
-                            {t('screen.module.pickup_rule.by_seller_title')}
+                            {translate('screen.module.pickup_rule.by_seller_title')}
                         </Text>
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             onPress={() => onClose()}
                             style={gStyle.flexRowSpace}
                             activeOpacity={gStyle.activeOpacity}
                         >
                             <AntDesign name="closecircle" size={22} color={colors.greyInactive} />
                         </TouchableOpacity>
-                        
+
                     </View>
                     <View >
                         <Text style={{paddingHorizontal:15,
-                        paddingVertical:13,}}>{t('screen.module.pickup_rule.by_seller_title_sub')}</Text>
+                        paddingVertical:13,}}>{translate('screen.module.pickup_rule.by_seller_title_sub')}</Text>
                         <TextInputComponent
                             navigation={props.navigation}
                             labeView={true}
@@ -136,11 +135,11 @@ const BySellerConfig = props => {
                             autoChange={true}
                             onPressCamera={setEmail}
                             onSubmitEditingInput={setEmail}
-                            textPlaceholder={t('screen.module.pickup_rule.by_seller_email')}
-                            textLabel={t('screen.module.pickup_rule.by_seller_email_input')}
+                            textPlaceholder={translate('screen.module.pickup_rule.by_seller_email')}
+                            textLabel={translate('screen.module.pickup_rule.by_seller_email_input')}
                         />
                     </View>
-                    
+
                     <View style={{marginTop:10}} >
                         <TouchableOpacity
                             disabled={!email}
@@ -148,7 +147,7 @@ const BySellerConfig = props => {
                             onPress={() => setfilterConfig(true)}
                         >
                             <Text style={styles.textButton}>
-                            {t('screen.module.pickup_rule.btn_submit')}
+                            {translate('screen.module.pickup_rule.btn_submit')}
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -157,7 +156,7 @@ const BySellerConfig = props => {
                         paddingVertical:13,
                         marginHorizontal:5,
                         marginVertical:5}}>
-                        <Text>{t('screen.module.pickup_rule.by_seller_list')}</Text>
+                        <Text>{translate('screen.module.pickup_rule.by_seller_list')}</Text>
                         <ScrollView
                             contentContainerStyle={{ paddingBottom: 100 }}>
                             <View style={{
@@ -177,28 +176,28 @@ const BySellerConfig = props => {
                                             <View>
                                                 <Text key={track} style={{paddingRight : 15}}>{track.email}</Text>
 
-                                                {track?.combo_name && <Text>{t('screen.module.pickup_rule.by_seller_combo_prioritize')} {track?.combo_name}</Text>}
-                                                {/* {track?.quantity && <Text>{t('screen.module.pickup_rule.by_seller_quantity_prioritize')} {track?.quantity}</Text>} */}
+                                                {track?.combo_name && <Text>{translate('screen.module.pickup_rule.by_seller_combo_prioritize')} {track?.combo_name}</Text>}
+                                                {/* {track?.quantity && <Text>{translate('screen.module.pickup_rule.by_seller_quantity_prioritize')} {track?.quantity}</Text>} */}
                                                 {track?.pick_by_order && <View style={gStyle.flexRowCenterAlign}>
-                                                    <Text style={{color:colors.boxmeBrand}}><AntDesign name="star" size={16} color={colors.boxmeBrand} /> {t('screen.module.pickup_rule.by_seller_by_order')}</Text>
+                                                    <Text style={{color:colors.boxmeBrand}}><AntDesign name="star" size={16} color={colors.boxmeBrand} /> {translate('screen.module.pickup_rule.by_seller_by_order')}</Text>
                                                 </View>}
                                             </View>
                                             <AntDesign name="closecircle" size={16} color={colors.greyInactive} />
                                         </TouchableOpacity>
-                                    
+
                                 )):
                                         <View style={gStyle.flexCenter}>
-                                            <Text style={{color:colors.greyInactive,paddingVertical:12}}>{t('screen.module.pickup_rule.by_seller_empty')}</Text>
+                                            <Text style={{color:colors.greyInactive,paddingVertical:12}}>{translate('screen.module.pickup_rule.by_seller_empty')}</Text>
                                         </View>
                                 }
                             </View>
                         </ScrollView>
                     </View>
                 </View>
-                {filterConfig && <SellerOptions t={t} onClose={onLoadAfterSb}  onSubmit= {addRuleSeller} emailLoad={email}/>}
+                {filterConfig && <SellerOptions onClose={onLoadAfterSb}  onSubmit= {addRuleSeller} emailLoad={email}/>}
             </KeyboardAvoidingView>
         </Modal>
-        
+
       </React.Fragment>
     );
   }

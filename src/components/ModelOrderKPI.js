@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { 
-    Modal, 
-    Text, 
-    TouchableOpacity, 
+import React from "react";
+import {
+    Modal,
+    Text,
+    TouchableOpacity,
     View,
     FlatList
 } from "react-native";
 import { Feather} from '@expo/vector-icons';
-import {_getTimeDefaultFrom,_getTimeDefaultTo} from '../helpers/device-height';
 import LineOrderTracking from './LineOrderTracking';
 import EmptySearch from './EmptySearch';
 import { colors, device, gStyle } from "../constants";
+import {translate} from "../i18n/locales/IMLocalized";
 
 
 const ModelOrderKPI = props => {
@@ -29,7 +29,7 @@ const ModelOrderKPI = props => {
                 visible={props.isVisible}
             >
                 <View style={[gStyle.container]}>
-                    
+
                     <View style={[gStyle.flexRowSpace,{
                             paddingVertical:15,
                             paddingHorizontal:15,
@@ -37,22 +37,22 @@ const ModelOrderKPI = props => {
                             borderBottomWidth:1.5,
                             backgroundColor:colors.cardLight
                         }]}>
-                        <Text style={{color:colors.white}}>{props.t('screen.module.home.handover_list')}</Text>
-                        <TouchableOpacity 
+                        <Text style={{color:colors.white}}>{translate('screen.module.home.handover_list')}</Text>
+                        <TouchableOpacity
                             onPress={() => props.onClose()}
                             activeOpacity={gStyle.activeOpacity}
                             style={gStyle.flexCenter}
                         >
                             <Feather color={colors.white} name='chevron-down' size={20}/>
-                            
+
                         </TouchableOpacity>
-                    
+
                     </View>
-                    
-                    
+
+
                     <View style={[gStyle.flexCenter,{marginTop:10,paddingBottom:50}]}>
                         {props.data.length === 0  ? (
-                        <EmptySearch t={props.t}/>
+                        <EmptySearch/>
                         ):
                         <FlatList
                             data={props.data}
@@ -62,7 +62,6 @@ const ModelOrderKPI = props => {
                                     downloaded={false}
                                     key={item.tracking_code.toString()}
                                     onPress={detailOrder}
-                                    t={props.t}
                                     orderData={{
                                         tracking_code: item.tracking_code,
                                         status_name: item.order_status,
@@ -85,7 +84,7 @@ const ModelOrderKPI = props => {
                          }
                     </View>
                 </View>
-                
+
             </Modal>
         </React.Fragment>
     );

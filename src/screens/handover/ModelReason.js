@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { 
-    Modal, 
-    Text, 
-    TouchableOpacity, 
+import {
+    Modal,
+    Text,
+    TouchableOpacity,
     View,StyleSheet,
     FlatList,
     TouchableWithoutFeedback,
     Dimensions
 } from "react-native";
-import { 
+import {
     FontAwesome5,
     Feather
 } from '@expo/vector-icons';
-import { 
-    colors, 
-    device, 
-    gStyle 
+import {
+    colors,
+    device,
+    gStyle
 } from "../../constants";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 const ModelReason = props => {
   const [listData,setlistData] = useState(props.listData);
@@ -48,9 +49,9 @@ const ModelReason = props => {
                         marginTop:8
                     }}></View>
                 </View>
-                
+
             </View>
-            
+
         </TouchableOpacity>
       )
   }
@@ -63,12 +64,12 @@ const ModelReason = props => {
         <TouchableWithoutFeedback
             >
             <View style={{
-                flex: 1, 
-                alignItems: 'center', 
+                flex: 1,
+                alignItems: 'center',
                 justifyContent: 'center',
                 position:'absolute',
                 bottom:0,
-                
+
             }}>
                 <View style={{
                     height: device.iPhoneNotch ? Dimensions.get("window").height -360 : Dimensions.get("window").height -200,
@@ -86,18 +87,18 @@ const ModelReason = props => {
                         borderBottomWidth:1.5,
                         backgroundColor:colors.whiteBg
                     }]}>
-                        <Text>{props.t("screen.module.handover.hvc_refused")}</Text>
-                        <TouchableOpacity 
+                        <Text>{translate("screen.module.handover.hvc_refused")}</Text>
+                        <TouchableOpacity
                             onPress={() => props.onClose()}
                             activeOpacity={gStyle.activeOpacity}
                             style={gStyle.flexCenter}
                         >
                             <Feather color={colors.black70} name='chevron-down' size={20}/>
-                            
+
                         </TouchableOpacity>
-                    
+
                     </View>
-                    
+
                     <View style={[gStyle.flexRow,{paddingBottom:50}]}>
                         <FlatList
                             data={listData}

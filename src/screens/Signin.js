@@ -1,16 +1,16 @@
 import * as React from 'react';
 import axios from 'axios';
-import { 
-  StyleSheet, 
-  Text, 
-  View, 
-  TextInput, 
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
   TouchableOpacity,
   Alert,
   Linking,
   Dimensions} from 'react-native';
 import * as Device from 'expo-device';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   KeyboardAwareScrollView
 } from 'react-native-keyboard-aware-scrollview';
@@ -24,22 +24,23 @@ import loginService from '../services/auth/login';
 import updateTokenApp from '../services/auth/update';
 import ComponentButton from '../components/Button';
 import TextAnimator from '../components/TextAnimator';
-import { 
-  colors, 
-  device, 
+import {
+  colors,
+  device,
   gStyle
 
 } from '../constants';
+import {translate} from "../i18n/locales/IMLocalized";
 
 export default class SignInScreen extends React.Component {
 
   constructor(props) {
       super(props);
       this.state = {
-          email: null, 
+          email: null,
           password: null,
           token_app : null,
-          isloading: false, 
+          isloading: false,
           error: false
       };
       this._signInHandler = this._signInHandler.bind(this);
@@ -77,11 +78,10 @@ export default class SignInScreen extends React.Component {
     }else{
       Linking.openURL('market://details?id=id=asia.boxme.wms');
     }
-      
+
   };
 
   _signInHandler = async () =>{
-    const {t,setLocale} = this.props.screenProps;
     this.loadingButtonLogin.showLoading(true);
     const { email, password } = this.state;
     const response = await loginService({
@@ -109,10 +109,10 @@ export default class SignInScreen extends React.Component {
       if (response.data.error_code === 3){
         Alert.alert(
           '',
-          t('screen.module.authen.text_update'),
+          translate('screen.module.authen.text_update'),
           [
             {
-              text: t('screen.module.authen.btn_update'),
+              text: translate('screen.module.authen.btn_update'),
               onPress: () => this._openAppUpdate(),
             },
           ],
@@ -121,29 +121,29 @@ export default class SignInScreen extends React.Component {
       }else{
         Alert.alert(
           '',
-          t('screen.module.authen.error_wrong_info'),
+          translate('screen.module.authen.error_wrong_info'),
           [
             {
-              text: t('base.confirm'),
+              text: translate('base.confirm'),
               onPress: async () => {
-                this.props.navigation.goBack();
+                // this.props.navigation.goBack();
               },
             },
           ],
           {cancelable: false},
         );
       }
-      
+
     }
     else {
       Alert.alert(
         '',
-        t('screen.module.authen.error_wrong_info'),
+        translate('screen.module.authen.error_wrong_info'),
         [
           {
-            text: t('base.confirm'),
+            text: translate('base.confirm'),
             onPress: async () => {
-              this.props.navigation.goBack();
+              // this.props.navigation.goBack();
             },
           },
         ],
@@ -177,22 +177,20 @@ export default class SignInScreen extends React.Component {
   };
 
   _forgotPass = () =>{
-    const { t } = this.props.screenProps;
     Alert.alert(
       '',
-      t('screen.module.authen.text_fogot_pass'),
+      translate('screen.module.authen.text_fogot_pass'),
       [
         {
-          text: t('base.confirm'),
+          text: translate('base.confirm'),
           onPress: null,
         },
       ],
       {cancelable: false},
     );
   };
-  
+
   render(){
-    const { t } = this.props.screenProps;
     const {is_text}  = this.state;
     return (
       <KeyboardAwareScrollView
@@ -205,16 +203,16 @@ export default class SignInScreen extends React.Component {
         enableAutomaticScroll={true}>
           <View style={[styles.container]}>
             <View style={{width:Dimensions.get("window").width-60}}>
-              
-              <Text style={[styles.textLogo,{marginBottom:0}]}>{t('screen.module.authen.welcome')}</Text>
-              <Text style={styles.textLogo}>{t('screen.module.authen.back')}</Text>
-              <TextAnimator 
-                content={t('screen.module.authen.welcome_text')}
+
+              <Text style={[styles.textLogo,{marginBottom:0}]}>{translate('screen.module.authen.welcome')}</Text>
+              <Text style={styles.textLogo}>{translate('screen.module.authen.back')}</Text>
+              <TextAnimator
+                content={translate('screen.module.authen.welcome_text')}
                 textStyle={{
                   ...gStyle.textBoxmeBold14,
                   color:colors.white,
                   marginBottom:4,
-                  
+
                 }}
                 style={{
                   paddingLeft:device.iPhoneNotch ? 5:8,
@@ -226,25 +224,25 @@ export default class SignInScreen extends React.Component {
             </View>
             <View style={{alignItems:"center",justifyContent:"center",}}>
               <View style={styles.inputView} >
-                <TextInput  
+                <TextInput
                   style={styles.inputText}
                   value={this.state.email}
-                  placeholder={t('screen.module.authen.placeholder_email')}
+                  placeholder={translate('screen.module.authen.placeholder_email')}
                   placeholderTextColor="#003f5c"
                   autoCapitalize="none"
                   onChangeText={text => this.setState({email:text})}/>
               </View>
               <View style={styles.inputView} >
-                <TextInput  
+                <TextInput
                   secureTextEntry
                   value={this.state.password}
                   style={styles.inputText}
-                  placeholder={t('screen.module.authen.placeholder_password')}
+                  placeholder={translate('screen.module.authen.placeholder_password')}
                   placeholderTextColor="#003f5c"
                   onChangeText={text => this.setState({password:text})}/>
               </View>
               <TouchableOpacity onPress={() => this._forgotPass()}>
-                <Text style={styles.forgot}>{t('screen.module.authen.text_forgot')}</Text>
+                <Text style={styles.forgot}>{translate('screen.module.authen.text_forgot')}</Text>
               </TouchableOpacity>
 
               <View style={styles.loginBtn}>
@@ -252,7 +250,7 @@ export default class SignInScreen extends React.Component {
                   ref={c => (this.loadingButtonLogin = c)}
                   width={Dimensions.get("window").width-60}
                   height={50}
-                  title={t('screen.module.authen.btn')}
+                  title={translate('screen.module.authen.btn')}
                   titleFontSize={16}
                   titleColor="rgb(255,255,255)"
                   backgroundColor={colors.boxmeBrand}

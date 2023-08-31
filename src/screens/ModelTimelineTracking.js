@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import LottieView from 'lottie-react-native';
 import { SvgUri } from "react-native-svg";
-import { 
+import {
   FontAwesome5
 } from "@expo/vector-icons";
 import Timeline from "react-native-timeline-flatlist";
@@ -22,6 +22,7 @@ import { colors, gStyle } from "../constants";
 import ScreenHeader from "../components/ScreenHeader";
 import getJourneyOrder from "../services/handover/journey-order";
 import {handleSoundScaner,permissionDenied} from '../helpers/async-storage';
+import {translate} from "../i18n/locales/IMLocalized";
 
 
 class ModelTimelineTracking extends React.PureComponent {
@@ -47,32 +48,30 @@ class ModelTimelineTracking extends React.PureComponent {
   };
 
   UNSAFE_componentWillMount = async () => {
-    const { navigation } = this.props;
-    const { t } = this.props.screenProps;
+    const { params } = this.props?.route;
     this.setState({
-      code_scan: navigation.getParam("tracking_code"),
-      is_show: navigation.getParam("is_show"),
+      code_scan: params.tracking_code,
+      is_show: params.is_show,
     });
-    if (navigation.getParam("tracking_code")) {
-      this._fetchJourneyOrder(navigation.getParam("tracking_code"));
+    if (params.tracking_code) {
+      await this._fetchJourneyOrder(params.tracking_code);
     }
-    
+
   };
 
   _fetchJourneyOrder = async (code) => {
     this.setState({ is_loading: true, data: [], order_info: {}, order_items: [] });
-    const { t } = this.props.screenProps;
     const response = await getJourneyOrder(code);
     if (response.status === 200) {
       const list_datas = response.data?.results?.journey_list.map((element, index) => ({
         time: element.status_id,
-        code: element.carrier_tracking_code, 
+        code: element.carrier_tracking_code,
         is_show_table: element?.is_show_table ?? false,
         title: element.staff_email,
         description: element.created_date,
         circleColor: index === 0 ? colors.boxmeBrand : undefined,
-        is_show_image : element?.status_code === 116 ? true : false,
-        text_show_image: t("screen.module.handover.btn_photo_handover")
+        is_show_image : element?.status_code === 116,
+        text_show_image: translate("screen.module.handover.btn_photo_handover")
       }));
       this.setState({
         data: list_datas,
@@ -108,7 +107,7 @@ class ModelTimelineTracking extends React.PureComponent {
       <View style={[gStyle.flex1,{marginTop:-10}]}>
         <View style={gStyle.flexRowSpace}>
           <Text style={{...gStyle.textBoxmeBold14,color:colors.white}}>{rowData.time}</Text>
-          {rowData.is_show_table && 
+          {rowData.is_show_table &&
           <Text style={{...gStyle.textBoxme14,color:colors.greyInactive}}>{rowData.code}</Text>}
         </View>
         <View stylest={gStyle.flexRowSpace}>
@@ -129,11 +128,11 @@ class ModelTimelineTracking extends React.PureComponent {
 
 
   render() {
-    const { t } = this.props.screenProps;
-    const { 
+    const {
       data,
       is_loading
     } = this.state;
+    const { navigation } = this.props;
 
     return (
       <React.Fragment>
@@ -144,7 +143,7 @@ class ModelTimelineTracking extends React.PureComponent {
         >
           <View style={gStyle.container}>
             <ScreenHeader
-                title={t("screen.module.putaway.list")}
+                title={translate("screen.module.putaway.list")}
                 showBack={true}
                 isOpenCamera={false}
                 iconLeft={"chevron-down"}
@@ -153,28 +152,28 @@ class ModelTimelineTracking extends React.PureComponent {
                 inputValueSend={null}
                 onPressCamera={this._onSubmitEditingInput}
                 onSubmitEditingInput={this._onSubmitEditingInput}
-                textPlaceholder={t("screen.module.camera.tracking_code")}
-              />
+                textPlaceholder={translate("screen.module.camera.tracking_code")}
+               navigation={navigation}/>
             <SafeAreaView>
                 {is_loading && <ActivityIndicator />}
                 {data.length === 0  ? <View style={[gStyle.flexCenter]}><LottieView style={{
                             width: 150,
                             height: 100,
                           }} source={require('../assets/icons/qr-scan')} autoPlay loop />
-                        <Text style={{...gStyle.textBoxmeBold14,color:colors.white}}>{t('screen.module.pickup.detail.find_tracking')}</Text>
-                    <Text style={{...gStyle.textBoxmeBold14,color:colors.white}}>{t('screen.module.pickup.detail.find_fnsku')}</Text>
-                    <Text style={{...gStyle.textBoxmeBold14,color:colors.white}}>{t('screen.module.pickup.detail.find_location')}</Text> 
+                        <Text style={{...gStyle.textBoxmeBold14,color:colors.white}}>{translate('screen.module.pickup.detail.find_tracking')}</Text>
+                    <Text style={{...gStyle.textBoxmeBold14,color:colors.white}}>{translate('screen.module.pickup.detail.find_fnsku')}</Text>
+                    <Text style={{...gStyle.textBoxmeBold14,color:colors.white}}>{translate('screen.module.pickup.detail.find_location')}</Text>
                 </View>
                 : (
-                  <View style={[{ 
+                  <View style={[{
                     paddingHorizontal: 10}]}>
                     <View style={gStyle.flexRowSpace}>
                       <Text style={[styles.sectionHeading]}>
-                        {t("screen.module.journey.info")}
+                        {translate("screen.module.journey.info")}
                       </Text>
                     </View>
 
-                    
+
                     {this.state.data.length > 0 && (
                       <View style={[gStyle.flexRow,{
                         backgroundColor :colors.transparent,paddingHorizontal:5,paddingVertical:10,borderRadius:6}]}>
@@ -204,12 +203,12 @@ class ModelTimelineTracking extends React.PureComponent {
                             <FontAwesome5 name="barcode" size={16} color={colors.white} />{" "}{this.state.order_info.carrier_tracking_code}
                           </Text>
                         </View>
-                        
+
                       </View>
-                      
+
                     )}
                     <Text style={[styles.sectionHeading]}>
-                      {t("screen.module.journey.header")}
+                      {translate("screen.module.journey.header")}
                     </Text>
                     <View style={[gStyle.flexRow, { marginTop: 5,backgroundColor:colors.transparent,padding:5}]}>
                       <Timeline
@@ -250,7 +249,6 @@ class ModelTimelineTracking extends React.PureComponent {
 ModelTimelineTracking.propTypes = {
   // required
   navigation: PropTypes.object.isRequired,
-  screenProps: PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({

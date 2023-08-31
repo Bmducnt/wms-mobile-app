@@ -1,22 +1,23 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { 
-  StyleSheet, 
-  Text, 
-  TouchableOpacity, 
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
   View,
   ActivityIndicator
  } from 'react-native';
-import { Feather,Entypo } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 import moment from 'moment';
 import { colors, gStyle } from '../constants';
+
 import Badge from './Badge';
 import Avatar from './Avatar';
+import {translate} from "../i18n/locales/IMLocalized";
 
 const ListPickupItems = ({
   navigation,
   itemInfo,
-  translate,
   disableRightSide,
   onPress
 }) => {
@@ -49,7 +50,7 @@ const ListPickupItems = ({
               <View style={gStyle.flexRowCenterAlign}>
                   <Text selectable={true} style={[styles.textCode,
                     { color:itemInfo.total_items_pick ===itemInfo.quantity ? colors.white : colors.white,paddingRight:5}]} numberOfLines={1} ellipsizeMode="tail">
-                    
+
                     {itemInfo.pickup_code}
                   </Text>
                   {itemInfo.pickup_type === 'b2b' && <Badge
@@ -118,7 +119,7 @@ const ListPickupItems = ({
             <View style={styles.percentBar}></View>
             <View style={[gStyle.flexRowSpace,{marginVertical:5}]}>
               <TouchableOpacity
-                
+
               >
                 <View style={gStyle.flexRowCenterAlign}>
                     <View
@@ -131,8 +132,8 @@ const ListPickupItems = ({
                         }}
                     />
                       <Text style={{ color: colors.white,...gStyle.textboxme12}}>
-                        {itemInfo.status_id === 400 ? translate('screen.module.pickup.list.status_await') : itemInfo.status_id === 407 ? 
-                        translate('screen.module.packed.status_awaiting'): 
+                        {itemInfo.status_id === 400 ? translate('screen.module.pickup.list.status_await') : itemInfo.status_id === 407 ?
+                        translate('screen.module.packed.status_awaiting'):
                         translate('screen.module.pickup.list.status_doing')}
                     </Text>
                 </View>
@@ -147,7 +148,7 @@ const ListPickupItems = ({
                       }}
                   />
                     <Text style={{ color: itemInfo.pickup_kpi_flat ? colors.white:colors.white,...gStyle.textboxme12}}>
-                      {itemInfo.pickup_kpi_flat ? 
+                      {itemInfo.pickup_kpi_flat ?
                       `${translate('screen.module.pickup.detail.kpi_text_ok')} ${itemInfo.pickup_kpi_left} ${translate('screen.module.pickup.detail.kpi_text_unit')}` :
                        `${translate('screen.module.pickup.detail.kpi_text_fail')} ${itemInfo.pickup_kpi_left} ${translate('screen.module.pickup.detail.kpi_text_unit')}`}
                   </Text>
@@ -228,7 +229,7 @@ const ListPickupItems = ({
               </View>
               <Avatar left={30} image={itemInfo.assigner_by_img} value={itemInfo.assigner_by_avatar} />
               <Avatar left={-10} image={itemInfo.created_by_img} value={itemInfo.created_by_avatar} />
-              
+
             </View>
             {itemInfo.quantity_bin === 0 && <View style={gStyle.flexRow}>
                 <ActivityIndicator color={colors.white} size="small" />
@@ -237,8 +238,8 @@ const ListPickupItems = ({
             </View> }
           </View>
         </TouchableOpacity>
-        
-        
+
+
     </View>
   );
 };

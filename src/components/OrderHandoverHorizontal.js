@@ -9,13 +9,13 @@ import {
   View
 } from 'react-native';
 import {SvgUri} from 'react-native-svg';
-import { withNavigation } from 'react-navigation';
+import { NavigationContainer } from '@react-navigation/native';
 import { colors, gStyle, images } from '../constants';
 
-const OrderHandoverHorizontal = ({ data, heading, navigation, tagline,t,on_view,image_size}) => {
+const OrderHandoverHorizontal = ({ data, heading, navigation, tagline,on_view,image_size}) => {
   const onPressView = (item) => {
     if (on_view){
-      navigation.navigate('ListOrderHandover', { 
+      navigation.navigate('ListOrderHandover', {
         carrier_name: item.tracking_code__carrier_name,
         carrier_logo : item.carrier_logo,
         totals_orders : item.totals_orders
@@ -79,7 +79,6 @@ OrderHandoverHorizontal.propTypes = {
   // required
   data: PropTypes.array.isRequired,
   navigation: PropTypes.object.isRequired,
-  t: PropTypes.func.isRequired,
   on_view : PropTypes.bool.isRequired,
   image_size : PropTypes.number,
   // optional
@@ -138,4 +137,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default withNavigation(OrderHandoverHorizontal);
+export default OrderHandoverHorizontal

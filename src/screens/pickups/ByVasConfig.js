@@ -8,28 +8,27 @@ import {
   Switch,
   Alert
 } from 'react-native';
-import { 
+import {
     AntDesign,
-  } from '@expo/vector-icons'; 
-import { 
-  colors, 
+  } from '@expo/vector-icons';
+import {
+  colors,
   gStyle ,
   device
 } from '../../constants';
 import addRulePickup from "../../services/pickup/add-rule";
 import getListRulePickup from "../../services/pickup/list-rule";
+import {translate} from "../../i18n/locales/IMLocalized";
 
 
 const ByVasConfig = props => {
-
-    const t = props.t;
 
     const [byVas, setbyVas] = React.useState(false);
 
 
     const toggleSwitch = () => setbyVas(previousState => !previousState);
 
-    fetchConfig = async () => {
+    const fetchConfig = async () => {
         const response = await getListRulePickup({key : 'by_vas'});
         if (response?.status === 200) {
             console.log(response?.data)
@@ -37,7 +36,7 @@ const ByVasConfig = props => {
         }
     };
 
-    addRuleVas= async () => {
+    const addRuleVas= async () => {
         const response = await addRulePickup(JSON.stringify({
             rule_type: 'by_vas',
             is_vas: byVas
@@ -45,7 +44,7 @@ const ByVasConfig = props => {
         if (response?.status === 200) {
             Alert.alert(
                 '',
-                t('screen.module.pickup_rule.add_ok'),
+                translate('screen.module.pickup_rule.add_ok'),
                 [
                 {
                     text: t("base.confirm"),
@@ -55,7 +54,7 @@ const ByVasConfig = props => {
                 {cancelable: false},
             );
         }
-        
+
     };
 
 
@@ -78,20 +77,20 @@ const ByVasConfig = props => {
                 }]}>
 
                     <Text >
-                    {t('screen.module.pickup_rule.by_vas_title')}
+                    {translate('screen.module.pickup_rule.by_vas_title')}
                     </Text>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         onPress={() => props.onClose(false)}
                         style={gStyle.flexRowSpace}
                         activeOpacity={gStyle.activeOpacity}
                     >
                         <AntDesign name="closecircle" size={22} color={colors.greyInactive} />
                     </TouchableOpacity>
-                    
+
                 </View>
                 <View >
                     <Text style={{paddingHorizontal:15,
-                    paddingVertical:13,}}>{t('screen.module.pickup_rule.by_vas_title_sub')}</Text>
+                    paddingVertical:13,}}>{translate('screen.module.pickup_rule.by_vas_title_sub')}</Text>
                 </View>
                 <View style={[gStyle.flexRowSpace,{
                     backgroundColor : colors.whiteBg,
@@ -100,7 +99,7 @@ const ByVasConfig = props => {
                     marginHorizontal:15,
                     marginVertical:10
                 }]}>
-                    <Text>{t('screen.module.pickup_rule.by_vas_prioritize')}</Text>
+                    <Text>{translate('screen.module.pickup_rule.by_vas_prioritize')}</Text>
                     <Switch
                         trackColor={{false: colors.cardLight, true: colors.brandPrimary}}
                         ios_backgroundColor="#3e3e3e"
@@ -114,13 +113,13 @@ const ByVasConfig = props => {
                         onPress={() => addRuleVas()}
                     >
                         <Text style={styles.textButton}>
-                            {t('screen.module.pickup_rule.btn_submit')}
+                            {translate('screen.module.pickup_rule.btn_submit')}
                         </Text>
                     </TouchableOpacity>
                     </View>
             </View>
         </Modal>
-        
+
       </React.Fragment>
     );
   }

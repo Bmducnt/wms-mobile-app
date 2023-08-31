@@ -10,6 +10,7 @@ import {
 import { Feather, AntDesign } from '@expo/vector-icons';
 import { SvgUri } from 'react-native-svg';
 import { colors, gStyle, device, images } from '../constants';
+import {translate} from "../i18n/locales/IMLocalized";
 
 const ListCarrierName = ({
   logo_carrier,
@@ -18,7 +19,6 @@ const ListCarrierName = ({
   onPress,
   quantity,
   is_select,
-  trans,
   text_note1,
   text_note2,
   avarta_name,
@@ -50,7 +50,7 @@ const ListCarrierName = ({
               </Text>
               {is_show_note && <View style={styles.containerStatus}>
                 <Text style={[styles.textRight, { ...gStyle.textBoxme14 }]} numberOfLines={1}>
-                  {`${trans(text_note1)} ${quantity.toLocaleString()} ${trans(text_note2)}`}
+                  {`${translate(text_note1)} ${quantity.toLocaleString()} ${translate(text_note2)}`}
                 </Text>
                 {text_note3 && <Text style={[styles.textRight, { ...gStyle.textBoxme14,color:colors.white }]} numberOfLines={1}>
                   {text_note3}
