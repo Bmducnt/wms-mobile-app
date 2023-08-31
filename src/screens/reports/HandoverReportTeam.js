@@ -20,7 +20,7 @@ const HandoverReportTeam = props => {
     React.useEffect(() => {
         fetchReport()
 
-      }, [data]);
+      }, []);
 
 
     const fetchReport = async () =>{

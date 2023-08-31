@@ -16,6 +16,7 @@ import postPutawayInbound from '../../services/putaway/update_inbound';
 import postPutawayPA from '../../services/putaway/update_rma';
 import getListPutawayRMA from '../../services/putaway/rma';
 import confirmRollbackBinException from '../../services/putaway/reback-bin-put';
+import {translate} from "../../i18n/locales/IMLocalized";
 
 class ModalPutawayUpdate extends React.Component {
 
@@ -99,10 +100,10 @@ class ModalPutawayUpdate extends React.Component {
             handleSoundOkScaner();
             Alert.alert(
                 '',
-                t('screen.module.putaway.text_ok'),
+                translate('screen.module.putaway.text_ok'),
                 [
                   {
-                    text: t("base.confirm"),
+                    text: translate("base.confirm"),
                     onPress: () => {this.props.navigation.goBack(null)},
                   }
                 ],
@@ -116,7 +117,7 @@ class ModalPutawayUpdate extends React.Component {
             if (response.data.error_code === 2){
                 Alert.alert(
                     '',
-                    t('screen.module.putaway.location_fail'),
+                    translate('screen.module.putaway.location_fail'),
                     [
                       {
                         text: t("base.confirm"),
@@ -128,7 +129,7 @@ class ModalPutawayUpdate extends React.Component {
             }else{
                 Alert.alert(
                     '',
-                    t('screen.module.putaway.fnsku_fail'),
+                    translate('screen.module.putaway.fnsku_fail'),
                     [
                       {
                         text: 'ok',
@@ -151,7 +152,7 @@ class ModalPutawayUpdate extends React.Component {
             handleSoundOkScaner();
             Alert.alert(
                 '',
-                t('screen.module.putaway.text_ok'),
+                translate('screen.module.putaway.text_ok'),
                 [
                   {
                     text: t("base.confirm"),
@@ -168,7 +169,7 @@ class ModalPutawayUpdate extends React.Component {
             if (response.data.error_code === 2){
                 Alert.alert(
                     '',
-                    t('screen.module.putaway.location_fail'),
+                    translate('screen.module.putaway.location_fail'),
                     [
                       {
                         text: t("base.confirm"),
@@ -180,7 +181,7 @@ class ModalPutawayUpdate extends React.Component {
             }else{
                 Alert.alert(
                     '',
-                    t('screen.module.putaway.fnsku_fail'),
+                    translate('screen.module.putaway.fnsku_fail'),
                     [
                       {
                         text: t("base.confirm"),
@@ -211,7 +212,7 @@ class ModalPutawayUpdate extends React.Component {
             });
             Alert.alert(
                 '',
-                t('screen.module.putaway.text_ok'),
+                translate('screen.module.putaway.text_ok'),
                 [
                   {
                     text: t("base.confirm"),
@@ -228,7 +229,7 @@ class ModalPutawayUpdate extends React.Component {
             if (response.data.error_code === 2){
                 Alert.alert(
                     '',
-                    t('screen.module.putaway.location_fail'),
+                    translate('screen.module.putaway.location_fail'),
                     [
                       {
                         text: t("base.confirm"),
@@ -240,7 +241,7 @@ class ModalPutawayUpdate extends React.Component {
             }else{
                 Alert.alert(
                     '',
-                    t('screen.module.putaway.fnsku_fail'),
+                    translate('screen.module.putaway.fnsku_fail'),
                     [
                       {
                         text: t("base.confirm"),
@@ -278,7 +279,7 @@ class ModalPutawayUpdate extends React.Component {
                 handleSoundScaner();
                 Alert.alert(
                     '',
-                    t('screen.module.putaway.fnsku_fail'),
+                    translate('screen.module.putaway.fnsku_fail'),
                     [
                       {
                         text: t("base.confirm"),
@@ -294,7 +295,7 @@ class ModalPutawayUpdate extends React.Component {
             handleSoundScaner();
             Alert.alert(
                 '',
-                t('screen.module.putaway.fnsku_fail'),
+                translate('screen.module.putaway.fnsku_fail'),
                 [
                   {
                     text: t("base.confirm"),
@@ -314,7 +315,7 @@ class ModalPutawayUpdate extends React.Component {
                 if (this.state.list_id_commit.length === 0){
                     Alert.alert(
                         '',
-                        t('screen.module.putaway.putaway_exp_select'),
+                        translate('screen.module.putaway.putaway_exp_select'),
                         [
                           {
                             text: t("base.confirm"),
@@ -409,13 +410,13 @@ class ModalPutawayUpdate extends React.Component {
                 {fnsku_code && <View style={gStyle.p3}>
                     {fnsku_fefo_urgent && <View style={[gStyle.flexRowCenterAlign,{marginBottom:8}]}>
                         <MaterialIcons name="notifications-on" size={14} color={colors.boxmeBrand} />
-                        <Text style={{color:colors.boxmeBrand,...gStyle.textBoxme14,paddingLeft : 6}}>{t('screen.module.putaway.near_expiration_date')}
+                        <Text style={{color:colors.boxmeBrand,...gStyle.textBoxme14,paddingLeft : 6}}>{translate('screen.module.putaway.near_expiration_date')}
                         </Text>
                     </View>}
                     <View style={[gStyle.flexRowSpace, styles.containerDetails]}>
                         <View style={styles.containerProduct}>
                             <View >
-                                <Text style={styles.productMore}>{t('screen.module.putaway.text_fnsku_code')}</Text>
+                                <Text style={styles.productMore}>{translate('screen.module.putaway.text_fnsku_code')}</Text>
                                 <Text style={styles.productName}>{box_info.fnsku_barcode}</Text>
                             </View>
                             <Text numberOfLines={3} style={styles.productInfoName}>{box_info.fnsku_name}</Text>
@@ -423,13 +424,13 @@ class ModalPutawayUpdate extends React.Component {
                         </View>
                         <View style={styles.separator}></View>
                         <View style={gStyle.flexCenter}>
-                            <Text style={styles.productMore}>{t('screen.module.putaway.text_quantity')}</Text>
+                            <Text style={styles.productMore}>{translate('screen.module.putaway.text_quantity')}</Text>
                             <Text style={[styles.productName,{color:colors.white}]}>{box_info.quantity_box}</Text>
                         </View>
                     </View>
                     {summary_expire_date.length > 0 && <View style={[{marginTop:5}]}>
                             <Text style={{color:colors.white,...gStyle.textBoxme14,paddingVertical:5}}>
-                                {t('screen.module.putaway.putaway_exp_select')}
+                                {translate('screen.module.putaway.putaway_exp_select')}
                             </Text>
                             {summary_expire_date.map((prop,key) => {
                                 return (
@@ -447,11 +448,11 @@ class ModalPutawayUpdate extends React.Component {
                                             <View style={gStyle.flexRowSpace}>
                                                 <View>
                                                     <View style={gStyle.flexRow}>
-                                                        <Text style={styles.productMore}>{t('screen.module.putaway.putaway_exp_date')} </Text>
+                                                        <Text style={styles.productMore}>{translate('screen.module.putaway.putaway_exp_date')} </Text>
                                                         <Text style={styles.productName}>{prop.expire_date}</Text>
                                                     </View>
                                                     <View style={gStyle.flexRow}>
-                                                        <Text style={styles.productMore}>{t('screen.module.putaway.putaway_exp_quantity')} </Text>
+                                                        <Text style={styles.productMore}>{translate('screen.module.putaway.putaway_exp_quantity')} </Text>
                                                         <Text style={styles.productName}>{prop.total_putaway}</Text>
                                                     </View>
                                                 </View>
@@ -461,8 +462,8 @@ class ModalPutawayUpdate extends React.Component {
                                                     borderRadius:3,
                                                 }}>
                                                     <Text style={{color:colors.white,...gStyle.textBoxme14}}>
-                                                        {list_id_commit === prop.list_id_commit ? t('screen.module.putaway.putaway_exp_tick') :
-                                                        t('screen.module.putaway.putaway_exp_tick_not') }
+                                                        {list_id_commit === prop.list_id_commit ? translate('screen.module.putaway.putaway_exp_tick') :
+                                                        translate('screen.module.putaway.putaway_exp_tick_not') }
                                                     </Text>
                                                 </View>
                                             </View>
@@ -473,7 +474,7 @@ class ModalPutawayUpdate extends React.Component {
                     </View>}
                     <View style={[gStyle.flexRow,{marginTop:5}]}>
                             {storage_type !== 0 && <Badge
-                                name={storage_type ===1 ? t('screen.module.putaway.default_room') : t('screen.module.putaway.cold_room')}
+                                name={storage_type ===1 ? translate('screen.module.putaway.default_room') : translate('screen.module.putaway.cold_room')}
                                 style={{
                                     backgroundColor: colors.borderLight,
                                     color: colors.white,
@@ -499,10 +500,10 @@ class ModalPutawayUpdate extends React.Component {
                     <TextInputComponent
                         navigation={navigation}
                         autoFocus={true}
-                        textLabel = {t('screen.module.putaway.input_bin')}
+                        textLabel = {translate('screen.module.putaway.input_bin')}
                         onPressCamera = {this._searchCameraBarcode}
                         onSubmitEditingInput = {this._searchCameraBarcode}
-                        textPlaceholder={t('screen.module.putaway.input_bin')}>
+                        textPlaceholder={translate('screen.module.putaway.input_bin')}>
                     </TextInputComponent>
                 </View>}
                 {!fnsku_code && <View style={[gStyle.flexRowSpace,{marginLeft:7}]}>
@@ -510,10 +511,10 @@ class ModalPutawayUpdate extends React.Component {
                         navigation={navigation}
                         is_close={true}
                         autoFocus={true}
-                        textLabel = {t('screen.module.putaway.input_fnsku')}
+                        textLabel = {translate('screen.module.putaway.input_fnsku')}
                         onPressCamera = {this._onSubmitEditingInput}
                         onSubmitEditingInput = {this._onSubmitEditingInput}
-                        textPlaceholder={t('screen.module.putaway.input_fnsku')}>
+                        textPlaceholder={translate('screen.module.putaway.input_fnsku')}>
                     </TextInputComponent>
                 </View>}
             </View>

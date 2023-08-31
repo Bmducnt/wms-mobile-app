@@ -86,6 +86,7 @@ const ListHandoverItem = ({
         is_verify : 1
       }));
     } catch (error) {
+      console.log('error333: ', error)
       await confirmOBSend(code,JSON.stringify({
         is_verify_send : 1,
         is_verify : 0

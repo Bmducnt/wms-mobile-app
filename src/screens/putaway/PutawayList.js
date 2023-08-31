@@ -70,7 +70,6 @@ class PutawayLists extends React.PureComponent {
     const {
       navigation
     } = this.props;
-    console.log('nana: ', navigation)
     const {
       codescan,
       isDatePickerVisible,

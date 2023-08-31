@@ -11,10 +11,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { colors, gStyle } from "../../constants";
 import { FontAwesome5 } from "@expo/vector-icons";
 import ListPickupItems from "../../components/ListPickupItems";
-import {
-  _getTimeDefaultFrom,
-  _getTimeDefaultTo,
-} from "../../helpers/device-height";
 import { permissionDenied } from "../../helpers/async-storage";
 
 // mock
@@ -59,8 +55,8 @@ class PickupItemTabAwaiting extends React.PureComponent {
       role_id: JSON.parse(staff_info).role,
       pickup_rule_total: 0,
     });
-    this._fetchListRules();
-    this._fetchListPickupHandler({
+    await this._fetchListRules();
+    await this._fetchListPickupHandler({
       status: this.props.status_id,
       q: this.props.code !== null ? this.props.code : "",
       is_error: 0,
@@ -117,7 +113,7 @@ class PickupItemTabAwaiting extends React.PureComponent {
         <View>
           {role_id < 3 && !isloading && (
             <LinearGradient
-              colors={["#22c1c3", "#fdbb2d"]}
+              colors={["#242e3d", "#213557"]}
               style={[
                 gStyle.flexCenter,
                 { paddingVertical: 10, marginHorizontal: 10 },

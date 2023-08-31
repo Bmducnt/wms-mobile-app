@@ -20,15 +20,12 @@ const InboundReportTeam = props => {
     const [data, setdata] = React.useState({});
 
     React.useEffect( () => {
-        fetchReport()
-
-      }, [data]);
-
+        fetchReport().then(() => {})
+      }, []);
 
     const fetchReport = async () =>{
         const response = await getKPIIboundReport({
         });
-
         if (response.status === 200){
             setdata(response.data.results)
         }

@@ -126,7 +126,7 @@ export default class SignInScreen extends React.Component {
             {
               text: translate('base.confirm'),
               onPress: async () => {
-                this.props.navigation.goBack();
+                // this.props.navigation.goBack();
               },
             },
           ],
@@ -143,7 +143,7 @@ export default class SignInScreen extends React.Component {
           {
             text: translate('base.confirm'),
             onPress: async () => {
-              this.props.navigation.goBack();
+              // this.props.navigation.goBack();
             },
           },
         ],
